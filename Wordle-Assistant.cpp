@@ -15,11 +15,12 @@ int main(){
     ifstream fin("five_words.txt");
     
     vector<string> strs;
-     string myString = getline(fin, strs);
+    string myString = "";
+    getline(fin, myString);
     int i= 0;
     while(strs != fin.eof()){
         strs[i] = myString;
-        myString = getline(fin, strs);
+        getline(fin, myString);
         ++i;
     }
     for(auto i : strs){
