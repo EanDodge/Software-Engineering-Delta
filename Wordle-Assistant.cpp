@@ -44,7 +44,7 @@ int main(){
     string result = "";
     //cin >> result;
     int i = 0, j = 0;
-    while(j != 6){
+    while(j != 5){
         cout << "this is your guess '" << guess << "'"<<endl;
         cin >> result;
         if(result[0] == '!' && result[2] == '!' && result[4] == '!' 
@@ -86,6 +86,7 @@ int main(){
             guess = strs[1];
         
     }
+    print(strs);
     cout<<"our last try '"<< guess << "'"<<endl;
 }
 
