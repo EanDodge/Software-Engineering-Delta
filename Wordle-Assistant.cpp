@@ -22,7 +22,7 @@ void myEraseplace(vector<string> &, const char &, const int &);                 
 void print(vector<string>);
 int main()
 {
-    ifstream fin("words.txt");
+    ifstream fin("five_words.txt");
     if (fin.fail())
     { // made to exit program if file 1 not found
         cout << "failed to open file 1" << endl;
@@ -39,7 +39,8 @@ int main()
         getline(fin, myString);
     }
     // cout << strs.size();
-    string guess = "notes"; // always start with notes
+    int counter = 0;
+    string guess = "glyph"; // always start with glyph
     // myErase(strs, 'a');
     // cout << strs.size();
     //  for(auto i: strs){
@@ -101,6 +102,18 @@ int main()
         else
             // we need to be sure we are not repeating the same word
             guess = strs.size() > 1 ? strs[1] : strs[0];
+
+        for (auto a : strs)
+        {
+            cout << a << endl;
+        }
+
+        if (j == 1)
+            guess = "brick";
+        if (j == 2)
+            guess = "mound";
+        if (j == 3)
+            guess = "fates";
     }
     print(strs);
     cout << "our last try '" << guess << "'" << endl;
@@ -156,4 +169,18 @@ void print(vector<string> strs)
     {
         cout << i << endl;
     }
+}
+
+// helper function to calculate letter frequencies
+std::vector<int> calcFreq(const vector<string> &strs)
+{
+    std::vector<int> freq(26, 0); // only 26 letters in the alphabet
+    for (const auto &word : strs)
+    {
+        for (const char &ch : word)
+        {
+            freq[ch - 'a']++;
+        }
+    }
+    return freq;
 }
