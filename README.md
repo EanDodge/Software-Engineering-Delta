@@ -8,6 +8,7 @@ Once downloaded, install the C++ extension.
 
 Bash commands:
 To run the program, use:
+
 "g++ Wordle_Assistant.cpp -std=c++20 -o game"
 
 "./game"
