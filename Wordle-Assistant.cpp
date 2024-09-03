@@ -12,8 +12,8 @@
 using std::cout; using std::endl; using std::cin;
 using std::vector; using std::string; 
 using std::ifstream; using std::ofstream;
-void myErasenot(vector<string>&, const char&); //will delete every word that has letter in it
-void myErasehave(vector<string>&, const char&); // will delete every word that doesnt have letter in it
+void myErasenot(vector<string>&, vector<char>&, const char&, const int& place); //will delete every word that has letter in it
+void myErasehave(vector<string>&, const char&, const int&); // will delete every word that doesnt have letter in it
 void myEraseplace(vector<string>&, const char&, const int&); // will delete word if letter not in right place
 void print(vector<string>);
 int main(){
@@ -42,6 +42,7 @@ int main(){
     // }
     //.(not found), #(found, not in right place), !(in right place)
     string result = "";
+    vector<char> bank;
     //cin >> result;
     int i = 0, j = 0;
     while(j != 5){
@@ -57,15 +58,17 @@ int main(){
         while (i!=10){
             //cout << result[i]<<endl;
             switch(result[i]){ 
-            case '.':
-                myErasenot(strs, result[i+1]);   //will delete every word that has the letter not used
+            case '.': //grey
+                myErasenot(strs, bank, result[i+1], i/2);   //will delete every word that has the letter not used
                 //cout << "case 1"<<endl;;
                 break;
-            case '#':
-                myErasehave(strs, result[i+1]);  // will delete every word that doesnt have letter
+            case '#': //yellow
+                bank.push_back(result[i+1]);
+                myErasehave(strs, result[i+1], i/2);  // will delete every word that doesnt have letter
                 //cout << "case 2"<<endl;
                 break;
-            case '!':
+            case '!': //green
+                bank.push_back(result[i+1]);
                 myEraseplace(strs, result[i+1], i/2 ); //will delete every word that doesnt have letter in place
                 //cout << "case 3"<<endl;
                 //cout << i/2 << endl;
@@ -92,13 +95,27 @@ int main(){
 
 
 
-void myErasenot(vector<string>& strs, const char& a){
+void myErasenot(vector<string>& strs, vector<char>& bank, const char& a,const int& place){
+    bool flag = false;
+    for(auto i: bank){
+        if (a == i) //if a is in the word bank, do not delete it from word, just delete words that have it in that spot
+            flag = true;
+    }
+    if(flag){
+        strs.erase(remove_if(strs.begin(), strs.end(),[&a, place](string str)
+   {return str[place] == a;}),strs.end());
+    }
+    else{
     strs.erase(remove_if(strs.begin(), strs.end(),[&a](string str)
    {return str.find(a) != string::npos;}),strs.end());
+    }
 }
-void myErasehave(vector<string>& strs, const char& a){
+void myErasehave(vector<string>& strs, const char& a, const int& place){
+    strs.erase(remove_if(strs.begin(), strs.end(),[&a, place](string str)
+   {return str[place] == a;}),strs.end());
     strs.erase(remove_if(strs.begin(), strs.end(),[&a](string str)
    {return str.find(a) == string::npos;}),strs.end());
+   
 }
 void myEraseplace(vector<string>& strs, const char& a, const int& place){
     //myErasehave(strs,a);
