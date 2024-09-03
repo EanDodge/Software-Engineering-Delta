@@ -99,7 +99,8 @@ int main()
         if (guess != strs[0])
             guess = strs[0];
         else
-            guess = strs[1];
+            // we need to be sure we are not repeating the same word
+            guess = strs.size() > 1 ? strs[1] : strs[0];
     }
     print(strs);
     cout << "our last try '" << guess << "'" << endl;
