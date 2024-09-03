@@ -1799,6 +1799,7 @@ hullo
 hulls
 human
 humid
+humph
 humps
 humus
 hunch
