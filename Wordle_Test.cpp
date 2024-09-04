@@ -1,4 +1,4 @@
-//Delta Group
+//Delta Group Wordle Assistant Tester
 //8/29/2024
 
 #include <iostream>
@@ -18,6 +18,8 @@ void myErasenot(vector<string>&, vector<char>&, const char&, const int& place); 
 void myErasehave(vector<string>&, const char&, const int&); // will delete every word that doesnt have letter in it
 void myEraseplace(vector<string>&, const char&, const int&); // will delete word if letter not in right place
 void print(vector<string>);
+char most_common_start(const vector<string>&);
+
 void WA(const vector<string>& pastWordleVec, const int& numWord, int& winCounter, int& almostCounter, vector<string>& wordlesNotSolved){
     ifstream fin("five_words.txt");
      if (fin.fail())
@@ -35,7 +37,7 @@ void WA(const vector<string>& pastWordleVec, const int& numWord, int& winCounter
         getline(fin, myString);
     }
     //cout << strs.size();
-    string guess = "glyph"; //always start with glyph
+    string guess = "carve"; //always start with glyph
     //myErase(strs, 'a');
     //cout << strs.size();
 
@@ -99,12 +101,18 @@ void WA(const vector<string>& pastWordleVec, const int& numWord, int& winCounter
 
         
         if (j == 1)
-            guess = "brick";
+            guess = "downy";
         if (j == 2)
-            guess = "mound";
+            guess = "plumb";
         if (j == 3)
-            guess = "fates";
-        
+            guess = "sight";
+        if (j == 4) {
+            for (auto word : strs) {
+                if (word[0] == most_common_start(strs)) {
+                    guess = word;
+                }
+            }
+        }
         
     }
     if (!flag2) {
@@ -122,8 +130,6 @@ void WA(const vector<string>& pastWordleVec, const int& numWord, int& winCounter
         }
     }
 }
-
-
 
 void myErasenot(vector<string>& strs, vector<char>& bank, const char& a,const int& place){ //grey letter case
                                         //checks a word bank so it doesnt purge words that have double letter (shoot)
@@ -163,6 +169,30 @@ void print(vector<string> strs){ //Will print all words left in strs
     for (auto i: strs){ 
         cout << i << endl;
     }
+}
+
+//calculates the most common starting letter out of the remaining words
+char most_common_start(const vector<string>& strs) {
+    char start_letters[strs.size()];
+    for (int i = 0; i < strs.size(); ++i) {
+        start_letters[i] = strs[i][0];
+    }
+
+    int letter_counts[26] = {0};
+    for (char letter : start_letters) {
+        if (letter >= 'a' && letter <= 'z') {
+            ++letter_counts[letter - 'a'];
+        }
+    }
+    // for (int i = 0; i < 26; ++i) {
+    //     cout << letter_counts[i] << ' ';
+    // }
+    // cout << endl;
+
+    int maxCount = std::distance(letter_counts, std::max_element(letter_counts, letter_counts + 26));
+    char maxChar = maxCount + 'a';
+
+    return maxChar;
 }
 
 int main() {
