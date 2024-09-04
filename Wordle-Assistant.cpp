@@ -20,7 +20,7 @@ void myErasenot(vector<string> &, vector<char> &, const char &, const int &place
 void myErasehave(vector<string> &, const char &, const int &);                     // will delete every word that doesnt have letter in it
 void myEraseplace(vector<string> &, const char &, const int &);                    // will delete word if letter not in right place
 void print(vector<string>);
-char most_common_start(const vector<string>&);
+char most_common_start(const vector<string> &);
 
 int main()
 {
@@ -36,19 +36,13 @@ int main()
     getline(fin, myString);
     while (!fin.eof())
     {
-        // cout << "got here";
         strs.push_back(myString); // put all words from words.txt into strs.
         getline(fin, myString);
     }
     // cout << strs.size();
     int counter = 0;
-    string guess = "carve"; // always start with glyph
-    // myErase(strs, 'a');
-    // cout << strs.size();
-    //  for(auto i: strs){
-    //      cout << i << endl;
-    //  }
-    //.(not found), #(found, not in right place), !(in right place)
+    string guess = "carve"; // always start with carve
+
     string result = "";
     vector<char> bank; // for letters that wont be deleted
     // cin >> result;
@@ -78,18 +72,14 @@ int main()
             {
             case '.':                                         // grey
                 myErasenot(strs, bank, result[i + 1], i / 2); // will delete every word that has the letter not used
-                // cout << "case 1"<<endl;;
                 break;
             case '#': // yellow
                 bank.push_back(result[i + 1]);
                 myErasehave(strs, result[i + 1], i / 2); // will delete every word that doesnt have letter
-                // cout << "case 2"<<endl;
                 break;
             case '!': // green
                 bank.push_back(result[i + 1]);
                 myEraseplace(strs, result[i + 1], i / 2); // will delete every word that doesnt have letter in place
-                // cout << "case 3"<<endl;
-                // cout << i/2 << endl;
                 break;
             default:
                 print(strs);
@@ -110,27 +100,24 @@ int main()
             // we need to be sure we are not repeating the same word
             guess = strs.size() > 1 ? strs[1] : strs[0];
 
-        // for (auto a : strs)
-        // {
-        //     cout << a << endl;
-        // }
-
         if (j == 1)
             guess = "downy";
         if (j == 2)
             guess = "plumb";
         if (j == 3)
             guess = "sight";
-        if (j == 4) {
-            for (auto word : strs) {
-                if (word[0] == most_common_start(strs)) {
-                    guess = word;                   
+        if (j == 4)
+        {
+            for (auto word : strs)
+            {
+                if (word[0] == most_common_start(strs))
+                {
+                    guess = word;
                 }
             }
         }
-
     }
-    //print(strs);
+    // print(strs);
     cout << "Our last try: '" << guess << "'" << endl;
 }
 
@@ -186,20 +173,25 @@ void print(vector<string> strs)
     }
 }
 
-//calculates the most common starting letter out of the remaining words
-char most_common_start(const vector<string>& strs) {
+// calculates the most common starting letter out of the remaining words
+char most_common_start(const vector<string> &strs)
+{
     char start_letters[strs.size()];
-    for (int i = 0; i < strs.size(); ++i) {
+    for (int i = 0; i < strs.size(); ++i)
+    {
         start_letters[i] = strs[i][0];
     }
 
     int letter_counts[26] = {0};
-    for (char letter : start_letters) {
-        if (letter >= 'a' && letter <= 'z') {
+    for (char letter : start_letters)
+    {
+        if (letter >= 'a' && letter <= 'z')
+        {
             ++letter_counts[letter - 'a'];
         }
     }
-    for (int i = 0; i < 26; ++i) {
+    for (int i = 0; i < 26; ++i)
+    {
         cout << letter_counts[i] << ' ';
     }
     cout << endl;
@@ -209,17 +201,3 @@ char most_common_start(const vector<string>& strs) {
 
     return maxChar;
 }
-
-// helper function to calculate letter frequencies
-// std::vector<int> calcFreq(const vector<string> &strs)
-// {
-//     std::vector<int> freq(26, 0); // only 26 letters in the alphabet
-//     for (const auto &word : strs)
-//     {
-//         for (const char &ch : word)
-//         {
-//             freq[ch - 'a']++;
-//         }
-//     }
-//     return freq;
-// }
