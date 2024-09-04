@@ -51,14 +51,16 @@ int main()
     vector<char> bank; // for letters that wont be deleted
     // cin >> result;
     int i = 0, j = 0;
-    cout << " Format for our wordle solver...\n"
-         << " '!' before your letter: means correct letter and position...\n"
-         << " '#' before your letter: means correct letter, but wrong position...\n"
-         << " '.' before your letter: means wrong letter and position..."
+    cout << "\n==============================================================================\n"
+         << " Format for our wordle solver...\n"
+         << " '!' before your letter: means correct letter and position... (Green)\n"
+         << " '#' before your letter: means correct letter, but wrong position... (Yellow)\n"
+         << " '.' before your letter: means wrong letter and position... (Gray)\n"
+         << "==============================================================================\n"
          << std::endl;
     while (j != 5)
     {
-        cout << "this is your guess '" << guess << "'" << endl;
+        cout << "This is your guess: '" << guess << "'" << endl;
         cin >> result;
         if (result[0] == '!' && result[2] == '!' && result[4] == '!' && result[6] == '!' && result[8] == '!')
         { // if all is correct
@@ -103,10 +105,10 @@ int main()
             // we need to be sure we are not repeating the same word
             guess = strs.size() > 1 ? strs[1] : strs[0];
 
-        for (auto a : strs)
-        {
-            cout << a << endl;
-        }
+        // for (auto a : strs)
+        // {
+        //     cout << a << endl;
+        // }
 
         if (j == 1)
             guess = "brick";
@@ -115,8 +117,8 @@ int main()
         if (j == 3)
             guess = "fates";
     }
-    print(strs);
-    cout << "our last try '" << guess << "'" << endl;
+    //print(strs);
+    cout << "Our last try: '" << guess << "'" << endl;
 }
 
 void myErasenot(vector<string> &strs, vector<char> &bank, const char &a, const int &place)
