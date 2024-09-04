@@ -12,7 +12,7 @@ the top left, Find "Terminal" and click, then click the option "New Terminal". O
 Bash commands:
 To run the program, use:
 
-"g++ Wordle_Assistant.cpp -std=c++20 -o game"
+"g++ Wordle-Assistant.cpp -std=c++20 -o game"
 
 "./game"
 
