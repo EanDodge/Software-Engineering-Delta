@@ -17,3 +17,5 @@ To run the program, use:
 "./game"
 
 From there, you can follow the instructions and play the game!
+
+Additionally, for words used we pulled them from this link: https://www.poirrier.ca/notes/wordle-optimal/
