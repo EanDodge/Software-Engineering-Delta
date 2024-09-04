@@ -40,7 +40,6 @@ int main()
         getline(fin, myString);
     }
     // cout << strs.size();
-    int counter = 0;
     string guess = "carve"; // always start with carve
 
     string result = "";
@@ -91,8 +90,6 @@ int main()
                 break;
         }
         ++j; // increase row of wordle
-
-        char temp = most_common_start(strs);
 
         if (guess != strs[0])
             guess = strs[0];
@@ -190,11 +187,11 @@ char most_common_start(const vector<string> &strs)
             ++letter_counts[letter - 'a'];
         }
     }
-    for (int i = 0; i < 26; ++i)
-    {
-        cout << letter_counts[i] << ' ';
-    }
-    cout << endl;
+    // for (int i = 0; i < 26; ++i)
+    // {
+    //     cout << letter_counts[i] << ' ';
+    // }
+    // cout << endl;
 
     int maxCount = std::distance(letter_counts, std::max_element(letter_counts, letter_counts + 26));
     char maxChar = maxCount + 'a';
