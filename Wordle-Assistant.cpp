@@ -211,15 +211,15 @@ char most_common_start(const vector<string>& strs) {
 }
 
 // helper function to calculate letter frequencies
-std::vector<int> calcFreq(const vector<string> &strs)
-{
-    std::vector<int> freq(26, 0); // only 26 letters in the alphabet
-    for (const auto &word : strs)
-    {
-        for (const char &ch : word)
-        {
-            freq[ch - 'a']++;
-        }
-    }
-    return freq;
-}
+// std::vector<int> calcFreq(const vector<string> &strs)
+// {
+//     std::vector<int> freq(26, 0); // only 26 letters in the alphabet
+//     for (const auto &word : strs)
+//     {
+//         for (const char &ch : word)
+//         {
+//             freq[ch - 'a']++;
+//         }
+//     }
+//     return freq;
+// }
