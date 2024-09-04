@@ -32,7 +32,7 @@
 // 
 // If wish to see feedback from program, check commented out std::cout at lines:
 // [testForWA.cpp]: 78
-// [Wordle_Test.cpp]: 53, 59, 111, 113, 114, 189, 191, 196, 197
+// [Wordle_Test.cpp]: 53, 59, 111, 113, 114, 117, 189, 191, 196, 197
 //
 // If wish to switch testing .txt file, check line 171 in [Wordle_test.cpp]
 

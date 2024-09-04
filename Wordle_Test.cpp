@@ -114,7 +114,7 @@ void WA(const vector<string>& pastWordleVec, const int& numWord, int& winCounter
             //cout << "Good job! See you tomorrow";
             ++winCounter;
         }else{
-        print(strs);
+        //print(strs);
         int checkIfInc = almostCounter;
         for (auto s : strs) if (s == correctWord) ++almostCounter;
         
