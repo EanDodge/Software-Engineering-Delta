@@ -19,3 +19,10 @@ To run the program, use:
 From there, you can follow the instructions and play the game!
 
 Additionally, for words used we pulled them from this link: https://www.poirrier.ca/notes/wordle-optimal/
+
+To be able to run the testForWA.cpp:
+to compile the file enter the following command into the terminal:
+"g++ Wordle_Test.cpp testForWA.cpp -o test"
+
+To run the test file use the following command:
+"./test"
