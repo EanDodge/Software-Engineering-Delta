@@ -24,7 +24,7 @@ char most_common_start(const vector<string> &);
 
 int main()
 {
-    ifstream fin("five_words.txt");
+    ifstream fin("rand_words.txt");
     if (fin.fail())
     { // made to exit program if file 1 not found
         cout << "failed to open file 1" << endl;

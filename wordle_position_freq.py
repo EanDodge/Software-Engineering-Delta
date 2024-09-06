@@ -2,6 +2,8 @@
 # Also prints each letter in order from most common to least common in the 5-letter word bank
 # Run code in terminal with: python wordle_position_freq.py
 
+import random
+
 with open("words.txt", "r") as f:
     words = f.readlines()
 
@@ -72,5 +74,20 @@ print(*freq_order)
 
 # close the file
 # f.close()
+
+# Reversing the word list in case I want to do that
+# five_words = five_words[::-1]
+
+# creating file with words in random order
+random.shuffle(five_words)
+# print(five_words)
+
+with open('rand_words_temp.txt', 'w+') as f:  
+    for words in five_words:
+        f.write('%s\n' %words)  
+    print("File written successfully")
+
+# close the file
+f.close()
 
 exit(0)
