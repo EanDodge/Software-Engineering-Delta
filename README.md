@@ -1,4 +1,4 @@
-##### This is a Wordle assistant program, meant to provide suggestions for new words to help the player find the right word!
+## This is a Wordle assistant program, meant to provide suggestions for new words to help the player find the right word!
 
 
 
