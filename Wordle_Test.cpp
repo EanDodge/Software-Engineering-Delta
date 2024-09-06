@@ -21,7 +21,7 @@ void print(vector<string>);
 char most_common_start(const vector<string>&);
 
 void WA(const vector<string>& pastWordleVec, const int& numWord, int& winCounter, int& almostCounter, vector<string>& wordlesNotSolved){
-    ifstream fin("five_words.txt");
+    ifstream fin("rand_words_temp.txt");
      if (fin.fail())
     { // made to exit program if file 1 not found
         cout << "failed to open file 1" << endl;
@@ -198,7 +198,7 @@ char most_common_start(const vector<string>& strs) {
 int main() {
     
     //ifstream allWords("pastWordles.txt");
-    ifstream allWords("five_words.txt");
+    ifstream allWords("rand_words_temp.txt");
     vector<string> wordsToTest;
 
     string s;
@@ -223,6 +223,6 @@ int main() {
 
     cout << "Words solved correctly:  " << winCounter << "." << endl;
     cout << "Words almost solved [in strs after]:  " << almostCounter << "." << endl;
-    //cout << "Words not solved:  " << endl;
-    //print(wordlesNotSolved);
+    // cout << "Words not solved:  " << endl;
+    // print(wordlesNotSolved);
 }
