@@ -1,7 +1,9 @@
 let player = new Player(250, 250);
+const mapXSize = 500;
+const mapYSize = 500;
 
 function setup() {
-  createCanvas(500, 500, WEBGL);
+  createCanvas(mapXSize, mapYSize, WEBGL);
 
   //camera to follow player
   cam = createCamera();
@@ -9,6 +11,15 @@ function setup() {
 
 function draw() {
   background("lightblue");
+
+  //border lines
+  stroke(255, 255, 255);
+  line(0, mapXSize, 0, 0);
+  line(mapXSize, mapXSize, 0, mapYSize);
+  line(mapXSize, 0, mapYSize, mapYSize);
+  line(0, 0, mapYSize, 0);
+  stroke(0, 0, 0);
+
 
   player.drawPlayer();
   player.movePlayer();

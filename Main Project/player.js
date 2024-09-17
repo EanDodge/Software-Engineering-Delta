@@ -10,24 +10,35 @@ class Player {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.speed = 1;
+        this.speed = 2;
+        this.size = 50;
     }
 
     drawPlayer() {
         fill(255, 255, 255);
-        ellipse(this.x, this.y, 50, 50);
+        ellipse(this.x, this.y, this.size, this.size);
     }
 
     movePlayer() {
+        //used to see if this upcoming move is out of bounds
+        let futureX;
+        let futureY;
+
         //normalize movement if diagonal
         if (yMove !== 0 && xMove !== 0) {
-            this.x = this.x + xMove * this.speed * 0.7;
-            this.y = this.y + yMove * this.speed * 0.7;
+            futureX = this.x + xMove * this.speed * 0.7;
+            futureY = this.y + yMove * this.speed * 0.7;
         }
         else {
-            this.x += xMove * this.speed;
-            this.y += yMove * this.speed;
+            futureX = this.x + xMove * this.speed;
+            futureY = this.y + yMove * this.speed;
         }
+
+        //check if move is in bounds accounting for size
+        if (futureX <= mapXSize - this.size / 2 && futureX >= 0 + this.size / 2)
+            this.x = futureX;
+        if (futureY <= mapYSize - this.size / 2 && futureY >= 0 + this.size / 2)
+            this.y = futureY;
     }
 }
 
