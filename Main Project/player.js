@@ -40,8 +40,22 @@ class Player {
         if (futureY <= mapYSize - this.size / 2 && futureY >= 0 + this.size / 2)
             this.y = futureY;
     }
+
+    testCollision(gameObject) {
+        //distance formuala between player and game object midpoints
+        let distance = Math.sqrt((gameObject.x - this.x) * (gameObject.x - this.x)
+            + (gameObject.y - this.y) * (gameObject.y - this.y));
+
+        if (gameObject.collision === true && distance < gameObject.size / 2 + player.size / 2) {
+            //uncomment to see if colliding
+            //console.log("collision");
+            return true;
+        }
+        return false;
+    }
 }
 
+//p5 built in function
 function keyPressed() {
     if (key == 'w') {
         yMove -= 1;
@@ -57,6 +71,7 @@ function keyPressed() {
     }
 }
 
+//p5 built in function
 function keyReleased() {
     if (key == 'w') {
         yMove += 1;
