@@ -10,7 +10,7 @@ class Player {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.speed = 2;
+        this.speed = 3;
         this.size = 50;
     }
 
