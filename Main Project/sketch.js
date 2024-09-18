@@ -1,5 +1,7 @@
 let player = new Player(250, 250);
 
+let enemy = new Enemy(0, 0);
+
 let gameObjects = [];
 
 const mapXSize = 500;
@@ -33,6 +35,8 @@ function draw() {
 	line(0, 0, mapYSize, 0);
 	stroke(0, 0, 0);
 
+	enemy.drawEnemy();
+	enemy.moveEnemy(player);
 
 	player.drawPlayer();
 	player.movePlayer();
