@@ -12,10 +12,12 @@ class Player {
         this.y = y;
         this.speed = 3;
         this.size = 50;
+        this.color = "white";
+        this.timer = 0;
     }
 
     drawPlayer() {
-        fill(255, 255, 255);
+        fill(this.color);
         ellipse(this.x, this.y, this.size, this.size);
     }
 
@@ -46,12 +48,36 @@ class Player {
         let distance = Math.sqrt((gameObject.x - this.x) * (gameObject.x - this.x)
             + (gameObject.y - this.y) * (gameObject.y - this.y));
 
-        if (gameObject.collision === true && distance < gameObject.size / 2 + player.size / 2) {
+        if (gameObject.collision === true && distance < gameObject.size / 2 + this.size / 2) {
             //uncomment to see if colliding
             //console.log("collision");
             return true;
         }
         return false;
+    }
+
+    checkCollisionEnemies(enemies) {
+        let hit = false;
+        enemies.forEach((enemy, index) => {
+            //distance formuala between enemy and projectile midpoints
+            let distance = Math.sqrt((enemy.x - this.x) * (enemy.x - this.x)
+                + (enemy.y - this.y) * (enemy.y - this.y));
+
+            if (distance < enemy.size / 2 + this.size / 2) {
+                hit = true;
+            }
+        });
+
+        if (hit && this.timer === 0) {
+            this.color = "red";
+            this.timer = 60;
+        }
+        else {
+            if (this.timer <= 50)
+                this.color = "white";
+            if (this.timer > 0)
+                this.timer--;
+        }
     }
 }
 

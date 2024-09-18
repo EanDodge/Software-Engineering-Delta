@@ -10,6 +10,7 @@ class Enemy {
         this.speed = 2;
         this.size = 40;
         this.collision = true;
+        this.health = 3;
     }
 
     drawEnemy() {
@@ -32,5 +33,18 @@ class Enemy {
         //multiply by sign of distance x because trig or something
         this.x += moveX * Math.sign(distanceX);
         this.y += moveY * Math.sign(distanceX);
+    }
+
+    checkCollisionProjectiles(projectiles) {
+        projectiles.forEach((projectile, index) => {
+            //distance formuala between enemy and projectile midpoints
+            let distance = Math.sqrt((projectile.x - this.x) * (projectile.x - this.x)
+                + (projectile.y - this.y) * (projectile.y - this.y));
+
+            if (distance < projectile.size / 2 + this.size / 2) {
+                this.health--;
+                projectiles.splice(index, 1);
+            }
+        });
     }
 }

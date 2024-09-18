@@ -1,8 +1,12 @@
 let player = new Player(250, 250);
 
-let enemy = new Enemy(0, 0);
+let enemies = [];
 
 let gameObjects = [];
+
+let projectiles = [];
+
+let frameCount = 0;
 
 const mapXSize = 500;
 const mapYSize = 500;
@@ -35,18 +39,55 @@ function draw() {
 	line(0, 0, mapYSize, 0);
 	stroke(0, 0, 0);
 
-	enemy.drawEnemy();
-	enemy.moveEnemy(player);
+	if (frameCount % 150 === 0) {
+		let enemy = new Enemy(0, 0);
+		enemies.push(enemy);
+	}
+	enemies.forEach((enemy, index) => {
+		enemy.drawEnemy();
+		enemy.moveEnemy(player);
+		enemy.checkCollisionProjectiles(projectiles);
+		if (enemy.health <= 0)
+			enemies.splice(index, 1);
+	});
 
 	player.drawPlayer();
 	player.movePlayer();
+	player.checkCollisionEnemies(enemies);
+
+	if (frameCount % 30 === 0) {
+		//mouseX and mouseY use camera positioning so need to use center of map
+		let lengthX = mouseX - mapXSize / 2;
+		let lengthY = mouseY - mapYSize / 2;
+		let angle = 90;
+		if (lengthX !== 0) {
+			angle = Math.atan(lengthY / lengthX);
+		}
+		let tmpProjectile = new Projectile(player.x, player.y, angle, Math.sign(lengthX));
+		projectiles.push(tmpProjectile);
+	}
+
+	projectiles.forEach((projectile, index) => {
+		projectile.drawProjectile();
+		projectile.moveProjectile();
+		if (projectile.outOfRange())
+			projectiles.splice(index, 1);
+
+	});
+
 
 	gameObjects.forEach((gameObject) => {
 		gameObject.drawObject();
 		player.testCollision(gameObject);
-	})
+	});
 
 	//moves cam to centered on player, z=800 default
 	cam.setPosition(player.x, player.y, 800);
 
+	frameCount++;
+}
+
+function mousePressed() {
+	console.log("mouse: " + mouseX + " " + mouseY);
+	console.log("player: " + player.x + " " + player.y);
 }
