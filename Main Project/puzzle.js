@@ -1,6 +1,6 @@
 let rows = 9; let cols = 9;
 let square_size = 45; //length and height of each square
-let square_states = 4; //number of color states each square can have
+let square_states = 3; //number of color states each square can have
 
 function setup() {
     //create a canvas in the center of the screen
@@ -34,15 +34,22 @@ function setup() {
     rectMode(CENTER);
 
     background(220); //gray background
+
+    cantClick = [1, 10, 20, 25, 70]; //specifies which squares cannot be clicked
   }
   
   function draw() {
     //loop through all square position coordinates and color states
     for (i = 0; i < rows * cols; ++i) {
-      if (colorState[i] == 0) fill(255); //1 in colorState = white
-      if (colorState[i] == 1) fill(0, 0, 200); //-1 in colorState = blue
-      if (colorState[i] == 2) fill(150, 150, 150);
-      if (colorState[i] == 3) fill(200, 100, 0);
+      if (cantClick.includes(i)) {
+        fill(200, 50, 50);
+      }
+      else {
+        if (colorState[i] == 0) fill(255); //0 in colorState = white
+        if (colorState[i] == 1) fill(0, 0, 200); //1 in colorState = blue
+        if (colorState[i] == 2) fill(150, 150, 150);
+        //if (colorState[i] == 3) fill(200, 100, 0);
+      }
       rect(xpos[i], ypos[i], sideLength, sideLength); //create square
 
       //prints the order the square positions are stored in the arrays:
