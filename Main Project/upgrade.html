@@ -4,15 +4,10 @@
         <meta charset="UTF-8">
         <title>Upgrade Menu</title>
         <style>     /* just some basic styling of the screen for now*/
-                .menu{
+                .menu .upgrade-option{
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                }
-
-                .upgrade-option{
-                    margin: 10x;
-
                 }
 
                 .coins{
@@ -23,23 +18,35 @@
     </head>
     <body>
         <div class = "menu">
-            <div class = "coins">Coins: <span id = "cointCount">100</span></div>
+            <div class = "coins">Coins: <span id = "coinCount">0</span></div>
             <div class = "upgrade option"></div>
             <h2>Armor Upgrades</h2>
             <button onclick="upgrade('armor')">Upgrade</button>
-            <span id="armorLevel">Tier: 1</span>
+            <span id="armorLevel">Tier: 1 - BasicArmor</span>
+        
+            <div class="upgrade-option">
+                <h2>Upgrade Cannons</h2>
+                <button onclick="upgrade('cannons')">Upgrade</button>
+                <span id="cannonsLevel">Tier: 1</span>
+            </div>
+            <div class="upgrade-option">
+                <h2>Upgrade Speed</h2>
+                <button onclick="upgrade('speed')">Upgrade</button>
+                <span id="speedLevel">Tier: 1</span>
+            </div>
+            <div class="upgrade-option">
+                <h2>Upgrade Ammo Capacity</h2>
+                <button onclick="upgrade('AmmoCapacity')">Upgrade</button>
+                <span id="CapacityLevel">Tier: 1</span>
+            </div>
+            <div class="upgrade-option">
+                <h2>Hints</h2>
+                <button onclick="upgrade('Hints')">Upgrade</button>
+                <span id="HintLevel">Tier: 1</span>
+            </div>
+            <button onclick="defeatSeaMonster()">Defeat Sea Monster</button>
+            <button onclick="completeLevel()">Complete Level</button>
         </div>
-        <div class="upgrade-option">
-            <h2>Upgrade Cannons</h2>
-            <button onclick="upgrade('cannons')">Upgrade</button>
-            <span id="cannonsLevel">Tier: 1</span>
-        </div>
-        <div class="upgrade-option">
-            <h2>Upgrade Speed</h2>
-            <button onclick="upgrade('speed')">Upgrade</button>
-            <span id="speedLevel">Tier: 1</span>
-        </div>
-    </div>
     <script src="upgradeMenu.js"></script>
         </div>
     </body>
