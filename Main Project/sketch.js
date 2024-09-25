@@ -11,6 +11,16 @@ let frameCount = 0;
 const mapXSize = 500;
 const mapYSize = 500;
 
+ let playerImage;
+ let islandImage;
+ let backgroundImage
+
+ function preload() {
+     playerImage = loadImage('./assets/shiplvl1Top.png');
+	 islandImage = loadImage('./assets/islandDock.png');
+	 backgroundImage = loadImage('./assets/sea.png');
+ }
+ 
 function setup() {
 	createCanvas(mapXSize, mapYSize, WEBGL);
 
@@ -29,7 +39,8 @@ function setup() {
 }
 
 function draw() {
-	background("lightblue");
+	background(0, 0, 0, 0);
+	image(backgroundImage, 250 - mapXSize, 250 - mapYSize, mapXSize * 2, mapYSize * 2);
 
 	//border lines
 	stroke(255, 255, 255);
@@ -51,9 +62,10 @@ function draw() {
 			enemies.splice(index, 1);
 	});
 
-	player.drawPlayer();
+	player.drawPlayer(playerImage);
 	player.movePlayer();
 	player.checkCollisionEnemies(enemies);
+
 
 	if (frameCount % 30 === 0) {
 		//mouseX and mouseY use camera positioning so need to use center of map
@@ -77,8 +89,9 @@ function draw() {
 
 
 	gameObjects.forEach((gameObject) => {
-		gameObject.drawObject();
+		gameObject.drawObject(islandImage);
 		player.testCollision(gameObject);
+		player.checkCollisionIsland(gameObjects);
 	});
 
 	//moves cam to centered on player, z=800 default
