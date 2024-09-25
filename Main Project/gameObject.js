@@ -2,6 +2,7 @@
 /// used for the game objects
 
 
+
 class GameObject {
     constructor(x, y) {
         this.x = x;
@@ -10,8 +11,8 @@ class GameObject {
         this.collision = false;
     }
 
-    drawObject() {
+    drawObject(islandImage) {
         fill(0, 255, 0);
-        ellipse(this.x, this.y, this.size, this.size);
+        image(islandImage, this.x, this.y, this.size, this.size);
     }
 }

@@ -1,10 +1,14 @@
 /// Player object
 /// used for the player
 
-
+//let playerImage;
 let xMove = 0;
 let yMove = 0;
 
+// function preload() {
+//     // 	backgroundImage = loadImage("./assets/sea.png");
+//         playerImage = loadImage("./assets/shiplvl1Top.png");
+//      }
 
 class Player {
     constructor(x, y) {
@@ -16,9 +20,9 @@ class Player {
         this.timer = 0;
     }
 
-    drawPlayer() {
-        fill(this.color);
-        ellipse(this.x, this.y, this.size, this.size);
+    drawPlayer(playerImage) {
+        //fill(this.color);
+        image(playerImage, this.x, this.y, this.size, this.size);
     }
 
     movePlayer() {
