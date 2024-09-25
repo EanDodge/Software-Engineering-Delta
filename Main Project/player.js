@@ -10,9 +10,9 @@ let yMove = 0;
 let turn = 0;
 
 // function preload() {
-//     // 	backgroundImage = loadImage("./assets/sea.png");
+//       	backgroundImage = loadImage("./assets/sea.png");
 //         playerImage = loadImage("./assets/shiplvl1Top.png");
-//      }
+//     }
 
 class Player {
     // constructor(x, y) {
@@ -27,9 +27,9 @@ class Player {
         this.x = x;                 //current x
         this.y = y;                 //current y
         this.speed = 3;             //speed of the boat in pixels (how many pixels it moves in one tic)
-        this.sizeH = 40;            //height of the rectangle
-        this.sizeW = 20;            //width of the rectangle
-        this.size = 45;             //strictley for map colision only
+        //this.sizeH = 40;            //height of the test rectangle
+        //this.sizeW = 20;            //width of the test rectangle
+        this.size = 45;
         this.color = "white";
         this.turningSpeed = 0.075;  //multiplyer for how fast the boat will turn
         this.timer = 0;
@@ -44,10 +44,11 @@ class Player {
         push();
         translate(this.x,this.y);
         rotate(-this.angle);
-        fill(186,184,80);
-        //ellipse(this.x, this.y, this.size * .80, this.size);
-        rectMode(CENTER);
-        rect(0, 0, this.sizeW, this.sizeH);
+        //fill(186,184,80);
+        //rectMode(CENTER);
+        //rect(0, 0, this.sizeW, this.sizeH);
+        imageMode(CENTER);
+        image(playerImage, 0, 0, this.size, this.size)
         rotate(this.angle);
         pop();
     }
