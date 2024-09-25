@@ -1,10 +1,14 @@
 /// Player object
 /// used for the player
 
-
+//let playerImage;
 let xMove = 0;
 let yMove = 0;
 
+// function preload() {
+//     // 	backgroundImage = loadImage("./assets/sea.png");
+//         playerImage = loadImage("./assets/shiplvl1Top.png");
+//      }
 
 class Player {
     constructor(x, y) {
@@ -16,9 +20,9 @@ class Player {
         this.timer = 0;
     }
 
-    drawPlayer() {
-        fill(this.color);
-        ellipse(this.x, this.y, this.size, this.size);
+    drawPlayer(playerImage) {
+        //fill(this.color);
+        image(playerImage, this.x, this.y, this.size, this.size);
     }
 
     movePlayer() {
@@ -71,6 +75,32 @@ class Player {
         if (hit && this.timer === 0) {
             this.color = "red";
             this.timer = 60;
+        }
+        else {
+            if (this.timer <= 50)
+                this.color = "white";
+            if (this.timer > 0)
+                this.timer--;
+        }
+    }
+
+
+    checkCollisionIsland(islands) {
+        let hit = false;
+        islands.forEach((island, index) => {
+            //distance formuala between enemy and projectile midpoints
+            let distance = Math.sqrt((island.x - this.x) * (island.x - this.x)
+                + (island.y - this.y) * (island.y - this.y));
+
+            if (distance < island.size / 2 + this.size / 2) {
+                hit = true;
+            }
+        });
+
+        if (hit && this.timer === 0) {
+            this.color = "blue";
+            this.timer = 60;
+            window.location.href = 'upgrade.html'; // Navigate to upgrades.html
         }
         else {
             if (this.timer <= 50)
