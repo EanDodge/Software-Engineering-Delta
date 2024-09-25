@@ -55,6 +55,7 @@ function draw() {
 	player.movePlayer();
 	player.checkCollisionEnemies(enemies);
 
+
 	if (frameCount % 30 === 0) {
 		//mouseX and mouseY use camera positioning so need to use center of map
 		let lengthX = mouseX - mapXSize / 2;
@@ -79,6 +80,7 @@ function draw() {
 	gameObjects.forEach((gameObject) => {
 		gameObject.drawObject();
 		player.testCollision(gameObject);
+		player.checkCollisionIsland(gameObjects);
 	});
 
 	//moves cam to centered on player, z=800 default

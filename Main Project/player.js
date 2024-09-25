@@ -79,6 +79,32 @@ class Player {
                 this.timer--;
         }
     }
+
+
+    checkCollisionIsland(islands) {
+        let hit = false;
+        islands.forEach((island, index) => {
+            //distance formuala between enemy and projectile midpoints
+            let distance = Math.sqrt((island.x - this.x) * (island.x - this.x)
+                + (island.y - this.y) * (island.y - this.y));
+
+            if (distance < island.size / 2 + this.size / 2) {
+                hit = true;
+            }
+        });
+
+        if (hit && this.timer === 0) {
+            this.color = "blue";
+            this.timer = 60;
+            window.location.href = 'upgrade.html'; // Navigate to upgrades.html
+        }
+        else {
+            if (this.timer <= 50)
+                this.color = "white";
+            if (this.timer > 0)
+                this.timer--;
+        }
+    }
 }
 
 //p5 built in function
