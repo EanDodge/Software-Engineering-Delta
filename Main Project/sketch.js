@@ -1,3 +1,6 @@
+const mapXSize = 500;
+const mapYSize = 500;
+
 let player = new Player(mapXSize/2, mapYSize/2);
 
 let enemies = [];
@@ -7,9 +10,6 @@ let gameObjects = [];
 let projectiles = [];
 
 let frameCount = 0;
-
-const mapXSize = 500;
-const mapYSize = 500;
 
  let playerImage;
  let islandImage;
