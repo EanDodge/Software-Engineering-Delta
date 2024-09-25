@@ -1,4 +1,4 @@
-let player = new Player(250, 250);
+let player = new Player(mapXSize/2, mapYSize/2);
 
 let enemies = [];
 
