@@ -53,7 +53,9 @@ function draw() {
 	stroke(0, 0, 0);
 
 	if (frameCount % 150 === 0) {
-		let enemy = new Enemy(0, 0);
+		let rand1 = Math.random() * 500;
+		let rand2 = Math.random() * 500;
+		let enemy = new Enemy(rand1, rand2);
 		enemies.push(enemy);
 	}
 	enemies.forEach((enemy, index) => {
