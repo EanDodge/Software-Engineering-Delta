@@ -45,7 +45,9 @@ function setup() {
 	island.collision = true;
 	gameObjects.push(island);
 
+
 	runTests();
+
 }
 
 function draw() {
@@ -61,7 +63,9 @@ function draw() {
 	stroke(0, 0, 0);
 
 	if (frameCount % 150 === 0) {
-		let enemy = new Enemy(0, 0);
+		let rand1 = Math.random() * 500;
+		let rand2 = Math.random() * 500;
+		let enemy = new Enemy(rand1, rand2);
 		enemies.push(enemy);
 	}
 
@@ -69,8 +73,10 @@ function draw() {
 		enemy.drawEnemy();
 		enemy.moveEnemy(player);
 		enemy.checkCollisionProjectiles(projectiles);
-		if (enemy.health <= 0)
+		if (enemy.health <= 0) {
 			enemies.splice(index, 1);
+			player.gainCurrency(enemy.currencyValue);
+		}
 	});
 
 	player.drawPlayer(playerImage);

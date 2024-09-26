@@ -32,8 +32,9 @@ class Player {
         this.size = 45;
         this.color = "white";
         this.turningSpeed = 0.075;  //multiplyer for how fast the boat will turn
-        this.timer = 0;
-        this.angle = 0              //current angle of boat in radians
+		this.timer = 0;
+		this.angle = 0;             //angle of the boat
+		this.currency = parseInt(localStorage.getItem('playerCurrency')) || 100; // Retrieve from localStorage or default to 100
     }
 
     // drawPlayer(playerImage) {
@@ -351,39 +352,32 @@ class Player {
                 this.timer--;
         }
     }
+	updateCoinCount() {
+        document.getElementById('coinCount').innerText = this.currency;
+        localStorage.setItem('playerCurrency', this.currency); // Store in localStorage
+		console.log(player.currency);
+    }
+
+	buyUpgrade(cost) {
+		if (player.currency >= cost) {
+			player.currency -= cost;
+			player.updateCoinCount();
+			return true;
+		}
+		else {
+			alert('Not enough coins!');
+			return false;
+		}
+	}
+
+	gainCurrency(amount) {
+		player.currency += amount;
+		player.updateCoinCount();
+	}
 }
 
-// //p5 built in function
-// function keyPressed() {
-//     if (key == 'w') {
-//         yMove -= 1;
-//     }
-//     if (key == 'a') {
-//         xMove -= 1;
-//     }
-//     if (key == 's') {
-//         yMove += 1;
-//     }
-//     if (key == 'd') {
-//         xMove += 1;
-//     }
-// }
 
-// //p5 built in function
-// function keyReleased() {
-//     if (key == 'w') {
-//         yMove += 1;
-//     }
-//     if (key == 'a') {
-//         xMove += 1;
-//     }
-//     if (key == 's') {
-//         yMove -= 1;
-//     }
-//     if (key == 'd') {
-//         xMove -= 1;
-//     }
-// }
+
 
 //p5 built in function
 function keyPressed() {
@@ -416,3 +410,8 @@ function keyReleased() {
         turn += 1;
     }
 }
+
+// Initial update to display the starting currency
+document.addEventListener('DOMContentLoaded', function() {
+    player.updateCoinCount();
+});
