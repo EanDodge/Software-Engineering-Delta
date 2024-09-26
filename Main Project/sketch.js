@@ -22,10 +22,18 @@ let frameCount = 0;
  }
  
 function setup() {
-	createCanvas(mapXSize, mapYSize, WEBGL);
+	//createCanvas(mapXSize, mapYSize, WEBGL);
+	//makes canvas size dependent on display size (- values because full display size was to big)
+	createCanvas(displayWidth - 100, displayHeight - 180, WEBGL);
+	
+	console.log("Display h x w = " + displayHeight + ", " + displayWidth);
 
+	
 	//camera to follow player
 	cam = createCamera();
+
+	//sets the standard frame rate to 45fps
+	frameRate(45);
 
 	//random object to show screen move
 	let island = new GameObject(100, 100);
@@ -56,6 +64,7 @@ function draw() {
 		let enemy = new Enemy(0, 0);
 		enemies.push(enemy);
 	}
+
 	enemies.forEach((enemy, index) => {
 		enemy.drawEnemy();
 		enemy.moveEnemy(player);
@@ -71,8 +80,11 @@ function draw() {
 
 	if (frameCount % 30 === 0) {
 		//mouseX and mouseY use camera positioning so need to use center of map
-		let lengthX = mouseX - mapXSize / 2;
-		let lengthY = mouseY - mapYSize / 2;
+			//allows for larger displaying to work with mouse aim
+		let lengthX = mouseX - (displayWidth - 100) / 2;
+		let lengthY = mouseY - (displayHeight - 180) / 2;
+		// let lengthX = mouseX - mapXSize / 2; //old functions
+		// let lengthY = mouseY - mapYSize / 2;
 		let angle = 90;
 		if (lengthX !== 0) {
 			angle = Math.atan(lengthY / lengthX);
@@ -102,9 +114,10 @@ function draw() {
 	frameCount++;
 }
 
+//debuging function currently
 function mousePressed() {
-	console.log("mouse: " + mouseX + " " + mouseY);
-	console.log("player: " + player.x + " " + player.y);
+	console.log("mouse: " + mouseX + ", " + mouseY);
+	console.log("player: " + player.x + ", " + player.y);
 }
 
 //this is where we can put our testing functions
