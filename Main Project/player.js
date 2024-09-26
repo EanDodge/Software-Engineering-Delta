@@ -1,5 +1,5 @@
-/// Player object
-/// used for the player
+// Player object
+// used for the player
 
 // //let playerImage;
 // let xMove = 0;
@@ -79,6 +79,7 @@ class Player {
         let futureX;
         let futureY;
 
+        //make sure angle is calculated first!
         this.angle += this.turningSpeed * turn;
 
         futureX = this.x + this.speed * sin(this.angle) * yMove;
@@ -93,6 +94,166 @@ class Player {
             this.y = futureY;
     }
 
+    testMovePlayer() {
+        //Test Framework
+        {
+            //puts player into middle of map
+            let testPlayer = new Player (mapXSize/2, mapYSize/2);
+
+            //make sure player starts where it should start
+            console.assert(testPlayer.x == mapXSize/2);
+            console.assert(testPlayer.y == mapYSize/2);
+        }
+        //Tests that player moves forward, and coordinates are calculated correctly
+        {
+            //puts player into middle of map
+            let testPlayer = new Player (mapXSize/2, mapYSize/2);
+
+            //make player move forward (yes -1 is forward dont ask)
+            yMove = -1;
+            testPlayer.movePlayer();
+
+            console.assert(testPlayer.x == mapXSize/2);
+            console.assert(testPlayer.y == mapYSize/2 - testPlayer.speed);
+
+
+            //reset yMove after done
+            yMove = 0;
+        }
+        //Tests that player moves backwards, and coordinates are calculated correctly
+        {
+            //puts player into middle of map
+            let testPlayer = new Player (mapXSize/2, mapYSize/2);
+
+            //make player move backward
+            yMove = 1;
+            testPlayer.movePlayer();
+
+            console.assert(testPlayer.x == mapXSize/2);
+            console.assert(testPlayer.y == mapYSize/2 + testPlayer.speed);
+
+            //reset yMove after done
+            yMove = 0;
+        }
+        //Tests that player turns clockwise
+        {
+            //puts player into middle of map
+            let testPlayer = new Player (mapXSize/2, mapYSize/2);
+
+            //make player turn clockwise
+            turn = -1;
+            testPlayer.movePlayer();
+
+            console.assert(testPlayer.x == mapXSize/2);
+            console.assert(testPlayer.y == mapYSize/2);
+            console.assert(testPlayer.angle == -1 * testPlayer.turningSpeed);
+
+
+            //reset turn after done
+            turn = 0;
+        }
+        //tests that player turns counter-clockwise
+        {
+            //puts player into middle of map
+            let testPlayer = new Player (mapXSize/2, mapYSize/2);
+
+            //make player turn counter-clockwise (yes turn is counter intuitave)
+            turn = 1;
+            testPlayer.movePlayer();
+
+            console.assert(testPlayer.x == mapXSize/2);
+            console.assert(testPlayer.y == mapYSize/2);
+            console.assert(testPlayer.angle == testPlayer.turningSpeed);
+
+            //reset turn after done
+            turn = 0;
+        }
+        //Tests that coordinate calculation with a turning input is working (cw - F)
+        {
+            //puts player into middle of map
+            let testPlayer = new Player (mapXSize/2, mapYSize/2);
+
+            //make player turn clockwise and move forward  
+            turn = 1;
+            yMove = -1;
+            testPlayer.movePlayer();
+
+            console.assert(testPlayer.x ==  (mapXSize/2) + 
+                                            testPlayer.speed * sin(testPlayer.angle) * yMove);
+            console.assert(testPlayer.y ==  (mapYSize/2) + 
+                                            testPlayer.speed * cos(testPlayer.angle) * yMove);
+            console.assert(testPlayer.angle == testPlayer.turningSpeed);
+            
+
+            //reset turn after done
+            turn = 0;
+            yMove = 0;
+        }
+        //Tests that coordinate calculation with a turning input is working (ccw - F)
+        {
+            //puts player into middle of map
+            let testPlayer = new Player (mapXSize/2, mapYSize/2);
+
+            //make player turn counter-clockwise and move forward  
+            turn = -1;
+            yMove = -1;
+            testPlayer.movePlayer();
+
+            console.assert(testPlayer.x ==  (mapXSize/2) + 
+                                            testPlayer.speed * sin(testPlayer.angle) * yMove);
+            console.assert(testPlayer.y ==  (mapYSize/2) + 
+                                            testPlayer.speed * cos(testPlayer.angle) * yMove);
+            console.assert(testPlayer.angle == -1 * testPlayer.turningSpeed);
+            
+
+            //reset turn after done
+            turn = 0;
+            yMove = 0;
+        }
+        //Tests that coordinate calculation with a turning input is working (cw - R)
+        {
+            //puts player into middle of map
+            let testPlayer = new Player (mapXSize/2, mapYSize/2);
+
+            //make player turn clockwise and move forward  
+            turn = 1;
+            yMove = 1;
+            testPlayer.movePlayer();
+
+            console.assert(testPlayer.x ==  (mapXSize/2) + 
+                                            testPlayer.speed * sin(testPlayer.angle) * yMove);
+            console.assert(testPlayer.y ==  (mapYSize/2) + 
+                                            testPlayer.speed * cos(testPlayer.angle) * yMove);
+            console.assert(testPlayer.angle == testPlayer.turningSpeed);
+            
+
+            //reset turn after done
+            turn = 0;
+            yMove = 0;
+        }
+        //Tests that coordinate calculation with a turning input is working (ccw - R)
+        {
+            //puts player into middle of map
+            let testPlayer = new Player (mapXSize/2, mapYSize/2);
+
+            //make player turn counter-clockwise and move forward  
+            turn = -1;
+            yMove = 1;
+            testPlayer.movePlayer();
+
+            console.assert(testPlayer.x ==  (mapXSize/2) + 
+                                            testPlayer.speed * sin(testPlayer.angle) * yMove);
+            console.assert(testPlayer.y ==  (mapYSize/2) + 
+                                            testPlayer.speed * cos(testPlayer.angle) * yMove);
+            console.assert(testPlayer.angle == -1 * testPlayer.turningSpeed);
+            
+
+            //reset turn after done
+            turn = 0;
+            yMove = 0;
+        }
+    }
+
     // testCollision(gameObject) {
     //     //distance formuala between player and game object midpoints
     //     let distance = Math.sqrt((gameObject.x - this.x) * (gameObject.x - this.x)
@@ -105,6 +266,7 @@ class Player {
     //     }
     //     return false;
     // }
+
     testCollision(gameObject) {
         //distance formuala between player and game object midpoints
         let distance = Math.sqrt((gameObject.x - this.x) * (gameObject.x - this.x)
@@ -236,7 +398,6 @@ function keyPressed() {
     }
     if (key == 'd') {
         turn -= 1;
-
     }
 }
 

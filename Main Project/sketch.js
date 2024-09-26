@@ -36,6 +36,8 @@ function setup() {
 	island = new GameObject(250, 100);
 	island.collision = true;
 	gameObjects.push(island);
+
+	runTests();
 }
 
 function draw() {
@@ -103,4 +105,9 @@ function draw() {
 function mousePressed() {
 	console.log("mouse: " + mouseX + " " + mouseY);
 	console.log("player: " + player.x + " " + player.y);
+}
+
+//this is where we can put our testing functions
+function runTests() {
+	player.testMovePlayer();
 }
