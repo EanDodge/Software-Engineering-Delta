@@ -11,6 +11,7 @@ class Enemy {
         this.size = 40;
         this.collision = true;
         this.health = 3;
+		this.currencyValue = 5;							// Currency value of the enemy
     }
 
     drawEnemy() {
@@ -44,6 +45,7 @@ class Enemy {
             if (distance < projectile.size / 2 + this.size / 2) {
                 this.health--;
                 projectiles.splice(index, 1);
+				
             }
         });
     }

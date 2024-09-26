@@ -1,4 +1,4 @@
-let coins = 0;// Initial coin count and upgrade levels
+let coins = 100;// Initial coin count and upgrade levels
 let upgrades = {
     armor: 1,
     cannons: 1,
@@ -9,11 +9,11 @@ let upgrades = {
 
 // Cost per tier of upgrade
 const upgradeCost = {
-    armor: [0, 0, 0, 0, 0, 0],
-    cannons: [0, 0, 0, 0, 0, 0],
-    speed: [0, 0, 0, 0, 0, 0],
-    AmmoCapacity: [0, 0, 0, 0, 0, 0],
-    Hints: [0, 0, 0, 0, 0, 0]
+    armor: [1, 2, 3, 4, 5, 6],
+    cannons: [2, 3, 4, 5, 6, 7],
+    speed: [3, 4, 5, 6, 7, 8],
+    AmmoCapacity: [4, 5, 6, 7, 8, 9],
+    Hints: [5, 6, 7, 8, 9, 10]
 };
 
 const tierNames = {
@@ -27,13 +27,14 @@ const tierNames = {
 // Function to upgrade a specific attribute
 function upgrade(attribute) {
     if (upgrades[attribute] < 6) { // Maximum tier is 4
-        let cost = upgradeCost[attribute][upgrades[attribute] - 1];
-        if (coins >= cost) {
-            coins -= cost;
+        let cost = upgradeCost[attribute][upgrades[attribute] - 1] ;
+		console.log(cost);
+        if (player.buyUpgrade(cost)) {
             upgrades[attribute]++;
             let tier = upgrades[attribute];
             document.getElementById(attribute + 'Level').innerText = 'Tier: ' + tier + ' - ' + tierNames[attribute][tier - 1];
-            document.getElementById('coinCount').innerText = coins;
+            player.updateCoinCount();
+			//document.getElementById('coinCount').innerText = coins;
         } else {
             alert('Not enough coins!');
         }
