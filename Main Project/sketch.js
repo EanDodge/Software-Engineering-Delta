@@ -36,6 +36,8 @@ function setup() {
 	island = new GameObject(250, 100);
 	island.collision = true;
 	gameObjects.push(island);
+
+	
 }
 
 function draw() {
@@ -58,8 +60,10 @@ function draw() {
 		enemy.drawEnemy();
 		enemy.moveEnemy(player);
 		enemy.checkCollisionProjectiles(projectiles);
-		if (enemy.health <= 0)
+		if (enemy.health <= 0) {
 			enemies.splice(index, 1);
+			player.gainCurrency(enemy.currencyValue);
+		}
 	});
 
 	player.drawPlayer(playerImage);

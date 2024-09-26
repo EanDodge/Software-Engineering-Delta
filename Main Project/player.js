@@ -18,6 +18,7 @@ class Player {
         this.size = 50;
         this.color = "white";
         this.timer = 0;
+		this.currency = parseInt(localStorage.getItem('playerCurrency')) || 100; // Retrieve from localStorage or default to 100
     }
 
     drawPlayer(playerImage) {
@@ -109,7 +110,31 @@ class Player {
                 this.timer--;
         }
     }
+
+	updateCoinCount() {
+        document.getElementById('coinCount').innerText = this.currency;
+        localStorage.setItem('playerCurrency', this.currency); // Store in localStorage
+		console.log(player.currency);
+    }
+
+	buyUpgrade(cost) {
+		if (player.currency >= cost) {
+			player.currency -= cost;
+			player.updateCoinCount();
+			return true;
+		}
+		else {
+			alert('Not enough coins!');
+			return false;
+		}
+	}
+
+	gainCurrency(amount) {
+		player.currency += amount;
+		player.updateCoinCount();
+	}
 }
+
 
 //p5 built in function
 function keyPressed() {
@@ -142,3 +167,8 @@ function keyReleased() {
         xMove -= 1;
     }
 }
+
+// Initial update to display the starting currency
+document.addEventListener('DOMContentLoaded', function() {
+    player.updateCoinCount();
+});
