@@ -128,5 +128,5 @@ function mousePressed() {
 
 //this is where we can put our testing functions
 function runTests() {
-	player.testMovePlayer();
+	player.runTestsPlayer();
 }

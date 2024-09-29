@@ -15,14 +15,7 @@ let turn = 0;
 //     }
 
 class Player {
-    // constructor(x, y) {
-    //     this.x = x;
-    //     this.y = y;
-    //     this.speed = 3;
-    //     this.size = 50;
-    //     this.color = "white";
-    //     this.timer = 0;
-    // }
+
     constructor(x, y) {
         this.x = x;                 //current x
         this.y = y;                 //current y
@@ -32,15 +25,30 @@ class Player {
         this.size = 45;
         this.color = "white";
         this.turningSpeed = 0.075;  //multiplyer for how fast the boat will turn
-		this.timer = 0;
-		this.angle = 0;             //angle of the boat
+        this.timer = 0;
+        this.angle = 0;             //angle of the boat
 		this.currency = parseInt(localStorage.getItem('playerCurrency')) || 100; // Retrieve from localStorage or default to 100
     }
 
-    // drawPlayer(playerImage) {
-    //     //fill(this.color);
-    //     image(playerImage, this.x, this.y, this.size, this.size);
-    // }
+    //runs all test for the Player Class
+    runTestsPlayer() {
+        this.testConstructor();
+        this.testMovePlayer();
+
+    }
+
+    testConstructor() {
+        //Test framework
+        {
+            let testPlayer = new Player  (mapXSize/2, mapYSize/2);
+            console.assert(testPlayer.x === mapXSize/2);
+            console.assert(testPlayer.y === mapYSize/2);
+            console.assert(testPlayer.speed != 0);          //make sure player can move
+            console.assert(testPlayer.size != 0);           //make sure player has size for hitbox
+            console.assert(testPlayer.turningSpeed != 0)    //Make sure player can turn
+        }
+    }
+
     drawPlayer() {
         push();
         translate(this.x,this.y);
@@ -253,7 +261,7 @@ class Player {
             turn = 0;
             yMove = 0;
         }
-    }
+    }   //testMovePlayer() end
 
     // testCollision(gameObject) {
     //     //distance formuala between player and game object midpoints
