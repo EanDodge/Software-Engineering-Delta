@@ -23,11 +23,13 @@ class Player {
         //this.sizeH = 40;          //height of the test rectangle
         //this.sizeW = 20;          //width of the test rectangle
         this.size = 45;
-        this.color = "white";
         this.turningSpeed = 0.075;  //how fast the boat will turn (radians per sec?)
         this.timer = 0;
         this.angle = 0;             //angle of the boat in radians
 		this.currency = parseInt(localStorage.getItem('playerCurrency')) || 100; // Retrieve from localStorage or default to 100
+        this.hit = false;
+        this.playerImage;
+        
     }
 
     //runs all test for the Player Class
@@ -57,7 +59,14 @@ class Player {
         //rectMode(CENTER);
         //rect(0, 0, this.sizeW, this.sizeH);
         imageMode(CENTER);
-        image(playerImage, 0, 0, this.size, this.size)
+        if (this.hit) {
+            //image(playerHitImage, 0, 0, this.size, this.size)
+            tint('red');
+            image(this.playerImage, 0, 0, this.size, this.size)
+        }
+        else {
+            image(this.playerImage, 0, 0, this.size, this.size)
+        }
         rotate(this.angle);
         pop();
     }
@@ -325,12 +334,13 @@ class Player {
         });
 
         if (hit && this.timer === 0) {
-            this.color = "red";
+            this.hit = true;
             this.timer = 60;
         }
         else {
-            if (this.timer <= 50)
-                this.color = "white";
+            if (this.timer <= 50) {
+                this.hit = false;
+            }
             if (this.timer > 0)
                 this.timer--;
         }

@@ -11,12 +11,12 @@ let projectiles = [];
 
 let frameCount = 0;
 
- let playerImage;
+ //let playerImage; made playerimage part of the player object
  let islandImage;
  let backgroundImage
 
  function preload() {
-     playerImage = loadImage('./assets/shiplvl1Top.png');
+     player.playerImage = loadImage('./assets/shiplvl1Top.png');
 	 islandImage = loadImage('./assets/islandDock.png');
 	 backgroundImage = loadImage('./assets/sea.png');
  }
@@ -79,7 +79,7 @@ function draw() {
 		}
 	});
 
-	player.drawPlayer(playerImage);
+	player.drawPlayer();
 	player.movePlayer();
 	player.checkCollisionEnemies(enemies);
 
