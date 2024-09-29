@@ -37,6 +37,7 @@ class Player {
         this.testConstructor();
         this.testMovePlayer();
         this.testCheckCollision();
+        this.testCheckCollisionEnemies();
     }
 
     testConstructor() {
@@ -346,11 +347,28 @@ class Player {
         }
     }
 
+    //assuming enemy is larger than 10
+    testCheckCollisionEnemies() {
+        {
+            let testPlayer = new Player(mapXSize/2, mapYSize/2);
+            let testEnemyNoHit = new Enemy(0,0);
+            let testEnemyHit = new Enemy(mapXSize/2, mapYSize/2);
+            let testEnemyHit2 = new Enemy(mapXSize/2 + 5, mapYSize/2 + 5);
+
+            //test that enemy ontop of player does hit player
+            console.assert(testPlayer.checkCollision(testEnemyHit) === true);
+            //test that enemy not near player does not hit player
+            console.assert(testPlayer.checkCollision(testEnemyNoHit) === false);
+            //test that enemy touching player but not at exact same coordinats hits player
+            console.assert(testPlayer.checkCollision(testEnemyHit2) === true);
+        }
+    }
+
 
     checkCollisionIsland(islands) {
         let hit = false;
         islands.forEach((island, index) => {
-            //distance formuala between enemy and projectile midpoints
+            //distance formuala between enemy and midpoints
             let distance = Math.sqrt((island.x - this.x) * (island.x - this.x)
                 + (island.y - this.y) * (island.y - this.y));
 
