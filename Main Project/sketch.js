@@ -37,12 +37,12 @@ function setup() {
 
 	//random object to show screen move
 	let island = new GameObject(100, 100);
-	island.collision = true;
+	//island.collision = true;
 	gameObjects.push(island);
 
 	//random object to show screen move
 	island = new GameObject(250, 100);
-	island.collision = true;
+	//island.collision = true;
 	gameObjects.push(island);
 
 
@@ -110,7 +110,7 @@ function draw() {
 
 	gameObjects.forEach((gameObject) => {
 		gameObject.drawObject(islandImage);
-		player.testCollision(gameObject);
+		player.checkCollision(gameObject);
 		player.checkCollisionIsland(gameObjects);
 	});
 

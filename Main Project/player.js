@@ -20,13 +20,13 @@ class Player {
         this.x = x;                 //current x
         this.y = y;                 //current y
         this.speed = 3;             //speed of the boat in pixels (how many pixels it moves in one tic)
-        //this.sizeH = 40;            //height of the test rectangle
-        //this.sizeW = 20;            //width of the test rectangle
+        //this.sizeH = 40;          //height of the test rectangle
+        //this.sizeW = 20;          //width of the test rectangle
         this.size = 45;
         this.color = "white";
-        this.turningSpeed = 0.075;  //multiplyer for how fast the boat will turn
+        this.turningSpeed = 0.075;  //how fast the boat will turn (radians per sec?)
         this.timer = 0;
-        this.angle = 0;             //angle of the boat
+        this.angle = 0;             //angle of the boat in radians
 		this.currency = parseInt(localStorage.getItem('playerCurrency')) || 100; // Retrieve from localStorage or default to 100
     }
 
@@ -34,7 +34,7 @@ class Player {
     runTestsPlayer() {
         this.testConstructor();
         this.testMovePlayer();
-
+        this.testCheckCollision();
     }
 
     testConstructor() {
@@ -263,20 +263,7 @@ class Player {
         }
     }   //testMovePlayer() end
 
-    // testCollision(gameObject) {
-    //     //distance formuala between player and game object midpoints
-    //     let distance = Math.sqrt((gameObject.x - this.x) * (gameObject.x - this.x)
-    //         + (gameObject.y - this.y) * (gameObject.y - this.y));
-
-    //     if (gameObject.collision === true && distance < gameObject.size / 2 + this.size / 2) {
-    //         //uncomment to see if colliding
-    //         //console.log("collision");
-    //         return true;
-    //     }
-    //     return false;
-    // }
-
-    testCollision(gameObject) {
+    checkCollision(gameObject) {
         //distance formuala between player and game object midpoints
         let distance = Math.sqrt((gameObject.x - this.x) * (gameObject.x - this.x)
             + (gameObject.y - this.y) * (gameObject.y - this.y));
@@ -287,6 +274,20 @@ class Player {
             return true;
         }
         return false;
+    }
+
+    //assuming that a new game object is not large enough to hit ship when at 0,0 and ship is in middle of map
+    testCheckCollision() {
+        {
+            let testPlayer = new Player(mapXSize/2, mapYSize/2);
+            let nonInterfearingObj = new GameObject(0,0);
+            let interfearingObj = new GameObject(mapXSize/2, mapYSize/2);
+            
+            //test collision with no other objects return false
+            console.assert(testPlayer.checkCollision(nonInterfearingObj) === false);
+            //tests that collision with a game object returns true
+            console.assert(testPlayer.checkCollision(interfearingObj) === true);
+        }
     }
 
     // checkCollisionEnemies(enemies) {
