@@ -95,6 +95,14 @@ class Player {
             this.y = futureY;
     }
 
+    getMovementOfPlayer() {
+        this.angle += this.turningSpeed * turn;
+
+        let futureX = this.speed * sin(this.angle) * yMove;
+        let futureY = this.speed * cos(this.angle) * yMove;
+        return [futureX, futureY];
+    }
+
     testMovePlayer() {
         //Test Framework
         {

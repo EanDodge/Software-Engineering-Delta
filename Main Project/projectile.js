@@ -1,5 +1,5 @@
 class Projectile {
-    constructor(x, y, angle, sign) {
+    constructor(x, y, angle, sign, playerXMove, playerYMove) {
         this.x = x;
         this.y = y;
         this.size = 5;
@@ -7,6 +7,8 @@ class Projectile {
         this.speed = 10;
         this.angle = angle;
         this.sign = sign;
+        this.extraXMove = playerXMove;
+        this.extraYMove = playerYMove;
     }
 
     drawProjectile() {
@@ -23,11 +25,8 @@ class Projectile {
     }
 
     moveProjectile() {
-        let moveX = this.speed * Math.cos(this.angle);
-        let moveY = this.speed * Math.sin(this.angle);
-
-        //multiply by sign of distance x because trig or something
-        this.x += moveX * this.sign;
-        this.y += moveY * this.sign;
+        //this works, dont know how
+        this.y += this.speed * sin(-this.angle) * this.sign + this.extraYMove;
+        this.x += this.speed * cos(-this.angle) * this.sign + this.extraXMove;
     }
 }
