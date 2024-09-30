@@ -15,32 +15,43 @@ let turn = 0;
 //     }
 
 class Player {
-    // constructor(x, y) {
-    //     this.x = x;
-    //     this.y = y;
-    //     this.speed = 3;
-    //     this.size = 50;
-    //     this.color = "white";
-    //     this.timer = 0;
-    // }
+
     constructor(x, y) {
         this.x = x;                 //current x
         this.y = y;                 //current y
         this.speed = 3;             //speed of the boat in pixels (how many pixels it moves in one tic)
-        //this.sizeH = 40;            //height of the test rectangle
-        //this.sizeW = 20;            //width of the test rectangle
+        //this.sizeH = 40;          //height of the test rectangle
+        //this.sizeW = 20;          //width of the test rectangle
         this.size = 45;
-        this.color = "white";
-        this.turningSpeed = 0.075;  //multiplyer for how fast the boat will turn
-		this.timer = 0;
-		this.angle = 0;             //angle of the boat
+        this.turningSpeed = 0.075;  //how fast the boat will turn (radians per sec?)
+        this.timer = 0;
+        this.angle = 0;             //angle of the boat in radians
 		this.currency = parseInt(localStorage.getItem('playerCurrency')) || 100; // Retrieve from localStorage or default to 100
+        this.hit = false;
+        this.playerImage;
+        
     }
 
-    // drawPlayer(playerImage) {
-    //     //fill(this.color);
-    //     image(playerImage, this.x, this.y, this.size, this.size);
-    // }
+    //runs all test for the Player Class
+    runTestsPlayer() {
+        this.testConstructor();
+        this.testMovePlayer();
+        this.testCheckCollision();
+        this.testCheckCollisionEnemies();
+    }
+
+    testConstructor() {
+        //Test framework
+        {
+            let testPlayer = new Player  (mapXSize/2, mapYSize/2);
+            console.assert(testPlayer.x === mapXSize/2);
+            console.assert(testPlayer.y === mapYSize/2);
+            console.assert(testPlayer.speed != 0);          //make sure player can move
+            console.assert(testPlayer.size != 0);           //make sure player has size for hitbox
+            console.assert(testPlayer.turningSpeed != 0)    //Make sure player can turn
+        }
+    }
+
     drawPlayer() {
         push();
         translate(this.x,this.y);
@@ -49,7 +60,14 @@ class Player {
         //rectMode(CENTER);
         //rect(0, 0, this.sizeW, this.sizeH);
         imageMode(CENTER);
-        image(playerImage, 0, 0, this.size, this.size)
+        if (this.hit) {
+            //image(playerHitImage, 0, 0, this.size, this.size)
+            tint('red');
+            image(this.playerImage, 0, 0, this.size, this.size)
+        }
+        else {
+            image(this.playerImage, 0, 0, this.size, this.size)
+        }
         rotate(this.angle);
         pop();
     }
@@ -261,22 +279,9 @@ class Player {
             turn = 0;
             yMove = 0;
         }
-    }
+    }   //testMovePlayer() end
 
-    // testCollision(gameObject) {
-    //     //distance formuala between player and game object midpoints
-    //     let distance = Math.sqrt((gameObject.x - this.x) * (gameObject.x - this.x)
-    //         + (gameObject.y - this.y) * (gameObject.y - this.y));
-
-    //     if (gameObject.collision === true && distance < gameObject.size / 2 + this.size / 2) {
-    //         //uncomment to see if colliding
-    //         //console.log("collision");
-    //         return true;
-    //     }
-    //     return false;
-    // }
-
-    testCollision(gameObject) {
+    checkCollision(gameObject) {
         //distance formuala between player and game object midpoints
         let distance = Math.sqrt((gameObject.x - this.x) * (gameObject.x - this.x)
             + (gameObject.y - this.y) * (gameObject.y - this.y));
@@ -287,6 +292,20 @@ class Player {
             return true;
         }
         return false;
+    }
+
+    //assuming that a new game object is not large enough to hit ship when at 0,0 and ship is in middle of map
+    testCheckCollision() {
+        {
+            let testPlayer = new Player(mapXSize/2, mapYSize/2);
+            let nonInterfearingObj = new GameObject(0,0);
+            let interfearingObj = new GameObject(mapXSize/2, mapYSize/2);
+            
+            //test collision with no other objects return false
+            console.assert(testPlayer.checkCollision(nonInterfearingObj) === false);
+            //tests that collision with a game object returns true
+            console.assert(testPlayer.checkCollision(interfearingObj) === true);
+        }
     }
 
     // checkCollisionEnemies(enemies) {
@@ -324,14 +343,32 @@ class Player {
         });
 
         if (hit && this.timer === 0) {
-            this.color = "red";
+            this.hit = true;
             this.timer = 60;
         }
         else {
-            if (this.timer <= 50)
-                this.color = "white";
+            if (this.timer <= 50) {
+                this.hit = false;
+            }
             if (this.timer > 0)
                 this.timer--;
+        }
+    }
+
+    //assuming enemy is larger than 10
+    testCheckCollisionEnemies() {
+        {
+            let testPlayer = new Player(mapXSize/2, mapYSize/2);
+            let testEnemyNoHit = new Enemy(0,0);
+            let testEnemyHit = new Enemy(mapXSize/2, mapYSize/2);
+            let testEnemyHit2 = new Enemy(mapXSize/2 + 5, mapYSize/2 + 5);
+
+            //test that enemy ontop of player does hit player
+            console.assert(testPlayer.checkCollision(testEnemyHit) === true);
+            //test that enemy not near player does not hit player
+            console.assert(testPlayer.checkCollision(testEnemyNoHit) === false);
+            //test that enemy touching player but not at exact same coordinats hits player
+            console.assert(testPlayer.checkCollision(testEnemyHit2) === true);
         }
     }
 
@@ -339,7 +376,7 @@ class Player {
     checkCollisionIsland(islands) {
         let hit = false;
         islands.forEach((island, index) => {
-            //distance formuala between enemy and projectile midpoints
+            //distance formuala between enemy and midpoints
             let distance = Math.sqrt((island.x - this.x) * (island.x - this.x)
                 + (island.y - this.y) * (island.y - this.y));
 

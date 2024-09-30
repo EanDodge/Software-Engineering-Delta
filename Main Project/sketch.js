@@ -11,12 +11,12 @@ let projectiles = [];
 
 let frameCount = 0;
 
- let playerImage;
+ //let playerImage; made playerimage part of the player object
  let islandImage;
  let backgroundImage
 
  function preload() {
-     playerImage = loadImage('./assets/shiplvl1Top.png');
+     player.playerImage = loadImage('./assets/shiplvl1Top.png');
 	 islandImage = loadImage('./assets/islandDock.png');
 	 backgroundImage = loadImage('./assets/sea.png');
  }
@@ -37,12 +37,12 @@ function setup() {
 
 	//random object to show screen move
 	let island = new GameObject(100, 100);
-	island.collision = true;
+	//island.collision = true;
 	gameObjects.push(island);
 
 	//random object to show screen move
 	island = new GameObject(250, 100);
-	island.collision = true;
+	//island.collision = true;
 	gameObjects.push(island);
 
 
@@ -88,7 +88,7 @@ function draw() {
 		}
 	});
 
-	player.drawPlayer(playerImage);
+	player.drawPlayer();
 	player.movePlayer();
 	player.checkCollisionEnemies(enemies);
 
@@ -114,7 +114,7 @@ function draw() {
 
 	gameObjects.forEach((gameObject) => {
 		gameObject.drawObject(islandImage);
-		player.testCollision(gameObject);
+		player.checkCollision(gameObject);
 		player.checkCollisionIsland(gameObjects);
 	});
 
@@ -132,5 +132,5 @@ function mousePressed() {
 
 //this is where we can put our testing functions
 function runTests() {
-	player.testMovePlayer();
+	player.runTestsPlayer();
 }
