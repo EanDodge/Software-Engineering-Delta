@@ -156,3 +156,8 @@ function setup() {
     }
   }
 
+  function autoComplete() {
+    for (i = 0; i < rows*cols; ++i) {
+      numberState[i] = +sudoku_answer[i];
+    }
+  }
