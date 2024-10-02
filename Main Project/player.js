@@ -8,7 +8,7 @@
 let xMove = 0;
 let yMove = 0;
 let turn = 0;
-
+let gear = 0;
 // function preload() {
 //       	backgroundImage = loadImage("./assets/sea.png");
 //         playerImage = loadImage("./assets/shiplvl1Top.png");
@@ -79,6 +79,8 @@ class Player {
         //used to see if this upcoming move is out of bounds
         let futureX;
         let futureY;
+        if ((yMove + gear) <=1 && (yMove + gear) >= -1)
+            yMove += gear;
 
         this.angle += this.turningSpeed * turn;
 
@@ -213,20 +215,40 @@ class Player {
 		player.updateCoinCount();
 	}
 }
-
+    
 
 
 
 //p5 built in function
+// function keyPressed() {
+//     if (key == 'w') {
+//         yMove -= 1 ;
+//     }
+//     if (key == 'a') {
+//         turn += 1;
+//     }
+//     if (key == 's') {
+//         yMove += 1;
+//     }
+//     if (key == 'd') {
+//         turn -= 1;
+
+//     }
+// }
+
 function keyPressed() {
     if (key == 'w') {
-        yMove -= 1;
+        if (gear > -.10){
+            gear -= .05;
+        }
     }
     if (key == 'a') {
         turn += 1;
     }
     if (key == 's') {
-        yMove += 1;
+        if (gear < .10){
+            gear += .05;
+        }
     }
     if (key == 'd') {
         turn -= 1;
@@ -237,13 +259,13 @@ function keyPressed() {
 //p5 built in function
 function keyReleased() {
     if (key == 'w') {
-        yMove += 1;
+        //gear += .05;
     }
     if (key == 'a') {
         turn -= 1;
     }
     if (key == 's') {
-        yMove -= 1;
+        //gear -= .05;
     }
     if (key == 'd') {
         turn += 1;
