@@ -456,6 +456,10 @@ function keyReleased() {
     }
 }
 
+//Gamepad basic 4-direction control
+
+
+
 // Initial update to display the starting currency
 document.addEventListener('DOMContentLoaded', function() {
     player.updateCoinCount();
