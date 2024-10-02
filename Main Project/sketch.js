@@ -88,6 +88,10 @@ function draw() {
 		}
 	});
 
+	controllerInput();
+
+	
+
 	player.drawPlayer();
 	player.movePlayer();
 	player.checkCollisionEnemies(enemies);
