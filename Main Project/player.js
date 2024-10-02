@@ -8,7 +8,7 @@
 let xMove = 0;
 let yMove = 0;
 let turn = 0;
-let gear = 0;
+let vel = 0;
 // function preload() {
 //       	backgroundImage = loadImage("./assets/sea.png");
 //         playerImage = loadImage("./assets/shiplvl1Top.png");
@@ -79,11 +79,16 @@ class Player {
         //used to see if this upcoming move is out of bounds
         let futureX;
         let futureY;
-        if ((yMove + gear) <=1 && (yMove + gear) >= -1)
-            yMove += gear;
+        if ((yMove + vel) < 1 && (yMove + vel) > -1) {// change these numbers for speed
+            yMove += vel;
+        }
+        else {
+            if ( yMove < 0) yMove = -1;
+            if ( yMove > 0) yMove = 1;
+        }
 
         this.angle += this.turningSpeed * turn;
-
+        //print(yMove);
         futureX = this.x + this.speed * sin(this.angle) * yMove;
         futureY = this.y + this.speed * cos(this.angle) * yMove;
 
@@ -238,17 +243,13 @@ class Player {
 
 function keyPressed() {
     if (key == 'w') {
-        if (gear > -.10){
-            gear -= .05;
-        }
+        vel = -.05;
     }
     if (key == 'a') {
         turn += 1;
     }
     if (key == 's') {
-        if (gear < .10){
-            gear += .05;
-        }
+        vel = .05;
     }
     if (key == 'd') {
         turn -= 1;
