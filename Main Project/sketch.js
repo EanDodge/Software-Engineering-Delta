@@ -1,4 +1,7 @@
-let player = new Player(250, 250);
+const mapXSize = 1000;
+const mapYSize = 1000;
+
+let player = new Player(mapXSize/2, mapYSize/2);
 
 let enemies = [];
 
@@ -8,41 +11,48 @@ let projectiles = [];
 
 let frameCount = 0;
 
-const mapXSize = 500;
-const mapYSize = 500;
-
- let playerImage;
+ //let playerImage; made playerimage part of the player object
  let islandImage;
  let backgroundImage
 
  function preload() {
-     playerImage = loadImage('./assets/shiplvl1Top.png');
+     player.playerImage = loadImage('./assets/shiplvl1Top.png');
 	 islandImage = loadImage('./assets/islandDock.png');
 	 backgroundImage = loadImage('./assets/sea.png');
  }
  
 function setup() {
-	createCanvas(mapXSize, mapYSize, WEBGL);
+	//createCanvas(mapXSize, mapYSize, WEBGL);
+	//makes canvas size dependent on display size (- values because full display size was to big)
+	createCanvas(displayWidth / 1.5, displayHeight / 1.5, WEBGL);
+	
+	console.log("Display h x w = " + displayHeight + ", " + displayWidth);
 
+	
 	//camera to follow player
 	cam = createCamera();
 
+	//sets the standard frame rate to 45fps
+	frameRate(45);
+
 	//random object to show screen move
 	let island = new GameObject(100, 100);
-	island.collision = true;
+	//island.collision = true;
 	gameObjects.push(island);
 
 	//random object to show screen move
 	island = new GameObject(250, 100);
-	island.collision = true;
+	//island.collision = true;
 	gameObjects.push(island);
 
-	
+
+	runTests();
+
 }
 
 function draw() {
 	background(0, 0, 0, 0);
-	image(backgroundImage, 250 - mapXSize, 250 - mapYSize, mapXSize * 2, mapYSize * 2);
+	image(backgroundImage, mapXSize / 2 - mapXSize, mapYSize / 2 - mapYSize, mapXSize * 2, mapYSize * 2);
 
 	//border lines
 	stroke(255, 255, 255);
@@ -53,11 +63,21 @@ function draw() {
 	stroke(0, 0, 0);
 
 	if (frameCount % 150 === 0) {
-		let rand1 = Math.random() * 500;
-		let rand2 = Math.random() * 500;
+		let generateXFirst = Math.random() > 0.5;
+		let rand1;
+		let rand2;
+		if (generateXFirst) {
+			rand1 = Math.random() * mapXSize;
+			rand2 = Math.random() > 0.5 ? mapYSize + 20 : -20;
+		}
+		else {
+			rand2 = Math.random() * mapYSize;
+			rand1 = Math.random() > 0.5 ? mapXSize + 20 : -20;
+		}
 		let enemy = new Enemy(rand1, rand2);
 		enemies.push(enemy);
 	}
+
 	enemies.forEach((enemy, index) => {
 		enemy.drawEnemy();
 		enemy.moveEnemy(player);
@@ -68,21 +88,23 @@ function draw() {
 		}
 	});
 
-	player.drawPlayer(playerImage);
+	controllerInput();
+
+	
+
+	player.drawPlayer();
 	player.movePlayer();
 	player.checkCollisionEnemies(enemies);
 
 
 	if (frameCount % 30 === 0) {
-		//mouseX and mouseY use camera positioning so need to use center of map
-		let lengthX = mouseX - mapXSize / 2;
-		let lengthY = mouseY - mapYSize / 2;
-		let angle = 90;
-		if (lengthX !== 0) {
-			angle = Math.atan(lengthY / lengthX);
-		}
-		let tmpProjectile = new Projectile(player.x, player.y, angle, Math.sign(lengthX));
-		projectiles.push(tmpProjectile);
+		extraMove = player.getMovementOfPlayer();
+		extraXMove = extraMove[0];
+        extraYMove = extraMove[1];
+		let tmpProjectile1 = new Projectile(player.x, player.y, player.angle, -1, extraXMove, extraYMove);
+		projectiles.push(tmpProjectile1);
+		let tmpProjectile2 = new Projectile(player.x, player.y, player.angle, 1, extraXMove, extraYMove);
+		projectiles.push(tmpProjectile2);
 	}
 
 	projectiles.forEach((projectile, index) => {
@@ -96,7 +118,7 @@ function draw() {
 
 	gameObjects.forEach((gameObject) => {
 		gameObject.drawObject(islandImage);
-		player.testCollision(gameObject);
+		player.checkCollision(gameObject);
 		player.checkCollisionIsland(gameObjects);
 	});
 
@@ -106,7 +128,13 @@ function draw() {
 	frameCount++;
 }
 
+//debuging function currently
 function mousePressed() {
-	console.log("mouse: " + mouseX + " " + mouseY);
-	console.log("player: " + player.x + " " + player.y);
+	console.log("mouse: " + mouseX + ", " + mouseY);
+	console.log("player: " + player.x + ", " + player.y);
+}
+
+//this is where we can put our testing functions
+function runTests() {
+	player.runTestsPlayer();
 }
