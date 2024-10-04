@@ -3,9 +3,9 @@ let square_size = 45; //length and height of each square
 let square_states = 4; //number of color states each square can have
 let interval = 30;
 
-let sudoku_example = "500020000030000080900058470001000060703000502020000300069230007070000020000090004";
-//let sudoku_example = "548723196637419285912658473851342769793861542426975318169234857374586921285197630";
-let sudoku_answer = "548723196637419285912658473851342769793861542426975318169234857374586921285197634";
+let indexForSudoku = giveSudokuIndex();
+let sudoku = sudoku_samples[indexForSudoku];
+let sudoku_solution = sudoku_answers[indexForSudoku];
 
 function setup() {
     //create a canvas in the center of the screen
@@ -31,9 +31,9 @@ function setup() {
         ypos[index] = (j * sideLength) + (sideLength / 2);
 
         colorState[index] = 0; //set all color states to 1 as default
-        numberState[index] = +sudoku_example[index];
+        numberState[index] = +sudoku[index];
         if (numberState[index] != 0) {
-          colorState[index] = 4;
+          colorState[index] = 2;
           editable[index] = false;
         } else {
           editable[index] = true;
@@ -56,9 +56,7 @@ function setup() {
     for (i = 0; i < rows * cols; ++i) {
       if (colorState[i] == 0) fill(255); //1 in colorState = white
       if (colorState[i] == 1) fill(0, 0, 200); //-1 in colorState = blue
-      if (colorState[i] == 2) fill(150, 150, 150);
-      if (colorState[i] == 3) fill(200, 100, 0);
-      if (colorState[i] == 4) fill(220);
+      if (colorState[i] == 2) fill(220);
       strokeWeight(1);
       rect(xpos[i], ypos[i], sideLength, sideLength); //create square
       
@@ -104,8 +102,11 @@ function setup() {
     for (i = 0; i < rows * cols; ++i) {
       //check if mouse position is within the current square
       if (dist(mouseX, 0, xpos[i], 0) < sideLength / 2 && dist(0, mouseY, 0, ypos[i]) < sideLength / 2 && editable[i]) {
-        ++colorState[i];
-        colorState[i] = colorState[i] % square_states;
+        if (colorState[i] == 0) {
+          colorState[i] = 1;
+        } else if (colorState[i] == 1) {
+          colorState[i] = 0;
+        }
         currSquare = i; // sets currSquare to the current square clicked on by mouse
         return;
       } else {
@@ -132,7 +133,7 @@ function setup() {
 
   // Sets text to red if key entered is wrong
   function check_key_entered(i) {
-    if (numberState[i] != +sudoku_answer[i]) {
+    if (numberState[i] != +sudoku_solution[i]) {
       fill('red');
     }
   }
@@ -140,7 +141,7 @@ function setup() {
   function check_sudoku() {
     let incompletedGame = true;
     for (i = 0; i < rows*cols; ++i) {
-      if (numberState[i] != +sudoku_answer[i]) {
+      if (numberState[i] != +sudoku_solution[i]) {
         incompletedGame = false;
         break;
       }
@@ -156,3 +157,8 @@ function setup() {
     }
   }
 
+  function autoComplete() {
+    for (i = 0; i < rows*cols; ++i) {
+      numberState[i] = +sudoku_solution[i];
+    }
+  }

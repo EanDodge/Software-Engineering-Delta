@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Puzzle</title>
+    <title>Sudoku</title>
 
     <link rel="stylesheet" type="text/css" href="style.css">
 
@@ -13,6 +13,9 @@
   </head>
 
   <body>
-    <script src="puzzle.js"></script>
+    <button onclick="window.location.href='index.html'" style="position: absolute; top: 75%; left: 43%; transform: translate(-50%, -50%); z-index: 1000;">Back to Game</button>
+    <button onclick="autoComplete()" style="position: absolute; top: 75%; left: 57%; transform: translate(-50%, -50%); z-index: 1000;">Finish puzzle</button>
+    <script src="sudokuPick.js"></script>
+    <script src="sudoku.js"></script>
   </body>
 </html>
