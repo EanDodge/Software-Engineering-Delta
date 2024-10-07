@@ -1,0 +1,41 @@
+// File for storing and selecting random sudoku grids
+
+function giveSudokuIndex() {
+    
+    randomIndex = Math.floor(Math.random() * sudoku_samples.length);
+    while (usedSudoku.length != sudoku_samples.length) {
+        if (checkStorageIndex(randomIndex) == false) {
+            randomIndex = Math.floor(Math.random() * sudoku_samples.length);
+        } else {
+            break;
+        }
+    }
+    return randomIndex;
+
+}
+
+function checkStorageIndex(index) {
+    for (i = 0; i < usedSudoku.length; ++i) {
+        if (index == usedSudoku[i]) {
+            return false;
+        }
+    }
+    usedSudoku.push(index);
+    return true;
+}
+
+const sudoku_samples = [
+    "500020000030000080900058470001000060703000502020000300069230007070000020000090004",
+    "400070005010000080800351000041030200708526401002140600000983000080000040300010006",
+    "100000060005801003800400090360004000000000000000200041010003008400507600070000009",
+    "700400090000308007003000480000000608080090050104000000016000200200706000090001006"
+];
+
+const sudoku_answers = [
+    "548723196637419285912658473851342769793861542426975318169234857374586921285197634",
+    "496872135513694782827351964641739258738526491952148673264983517185267349379415826",
+    "127359864945861723836472195361984257294715386758236941519623478483597612672148539",
+    "768415392941328567523679481379542618682193754154867923816934275235786149497251836"
+];
+
+const usedSudoku = [];
