@@ -4,10 +4,12 @@
         <meta charset="UTF-8">
         <title>Upgrade Menu</title>
         <script src ="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script src="dataBase.js"></script>
         <script src="player.js"></script> <!-- Ensure player.js is included -->
 		<script src="sketch.js"></script> <!-- Ensure sketch.js is included -->
-		<script src="upgradeMenu.js"></script>
-        <style>    
+		<script src="upgradeMenu.js"></script> 
+
+        <!-- <style>    
         
         /* just some basic styling of the screen for now*/
         body, html{
@@ -62,7 +64,7 @@
 
 
 
-        </style>       
+        </style>    -->
     </head>
     <body>
         <div class = "menu">
@@ -101,14 +103,6 @@
 
         </div>
 		
-        <script> document.addEventListener('DOMContentLoaded', function() {
-            const screenshotDataUrl = localStorage.getItem('screenshot');
-            if (screenshotDataUrl) {
-                document.body.style.backgroundImage = `url(${screenshotDataUrl})`;
-                document.body.style.backgroundSize = 'cover';
-                document.body.style.backgroundRepeat = 'no-repeat';
-            }
-        });
-        </script>
+        
 	</body>
 	</html>

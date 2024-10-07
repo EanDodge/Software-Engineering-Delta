@@ -1,4 +1,4 @@
-import html2canvas from 'html2canvas';
+
 
 let coins = 100;// Initial coin count and upgrade levels
 let upgrades = {
@@ -59,6 +59,7 @@ function completeLevel() {
     document.getElementById('coinCount').innerText = coins;
 
 }
+
 
 
 

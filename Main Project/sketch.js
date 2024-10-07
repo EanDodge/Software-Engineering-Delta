@@ -24,7 +24,7 @@ let frameCount = 0;
 function setup() {
 	//createCanvas(mapXSize, mapYSize, WEBGL);
 	//makes canvas size dependent on display size (- values because full display size was to big)
-	createCanvas(displayWidth / 1.5, displayHeight / 1.5, WEBGL);
+	createCanvas(displayWidth / 1.15, displayHeight / 1, WEBGL);
 	
 	console.log("Display h x w = " + displayHeight + ", " + displayWidth);
 

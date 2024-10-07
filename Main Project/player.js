@@ -388,13 +388,24 @@ class Player {
         if (hit && this.timer === 0) {
             this.color = "blue";
             this.timer = 60;
+            // console.log('Screenshot taken:);
             html2canvas(document.body).then(canvas => {
+                // console.log('Screenshot taken(kill me)');
                 const screenshotDataUrl = canvas.toDataURL();
-                localStorage.setItem('screenshot', screenshotDataUrl);
-                window.location.href = 'upgrade.html'; // Navigate to upgrade.html
+                console.log('Screenshot taken:(kill me)', screenshotDataUrl);
+    
+                openDatabase().then(db => {
+                    return storeScreenshot(db, screenshotDataUrl);
+                }).then(() => {
+                    console.log('screenshot saved to DB');
+                    // return retrieveScreenshot(db);
+                    window.location.href = 'upgrade.html'; // Navigate to upgrade.html
+                }).catch(error => {
+                    console.error('IndexedDB error:', error);
+                });
             }).catch(error => {
                 console.error('html2canvas error:', error);
-            });           // Navigate to upgrades.html
+            });          
         }
         else {
             if (this.timer <= 50)
