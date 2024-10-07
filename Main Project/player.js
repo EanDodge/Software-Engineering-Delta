@@ -388,7 +388,13 @@ class Player {
         if (hit && this.timer === 0) {
             this.color = "blue";
             this.timer = 60;
-            window.location.href = 'upgrade.html'; // Navigate to upgrades.html
+            html2canvas(document.body).then(canvas => {
+                const screenshotDataUrl = canvas.toDataURL();
+                localStorage.setItem('screenshot', screenshotDataUrl);
+                window.location.href = 'upgrade.html'; // Navigate to upgrade.html
+            }).catch(error => {
+                console.error('html2canvas error:', error);
+            });           // Navigate to upgrades.html
         }
         else {
             if (this.timer <= 50)
