@@ -1,5 +1,5 @@
-const mapXSize = 1000;
-const mapYSize = 1000;
+const mapXSize = 500;
+const mapYSize = 500;
 
 let player = new Player(mapXSize/2, mapYSize/2);
 
@@ -10,6 +10,14 @@ let gameObjects = [];
 let projectiles = [];
 
 let frameCount = 0;
+
+let enemySpawnNumber = parseInt(localStorage.getItem("enemySpawnNumber")) || 0;
+let enemyHealth = parseInt(localStorage.getItem("enemyHealth")) || 1;
+
+// frame counts for each use case because if not reset 
+// % can return true because frame count isnt back to 0
+let enemyFrameCount = 0;
+let projectileFrameCount = 0;
 
  //let playerImage; made playerimage part of the player object
  let islandImage;
@@ -24,7 +32,12 @@ let frameCount = 0;
 function setup() {
 	//createCanvas(mapXSize, mapYSize, WEBGL);
 	//makes canvas size dependent on display size (- values because full display size was to big)
+
 	createCanvas(displayWidth / 1.15, displayHeight / 1, WEBGL);
+
+	clearStorageButton = createButton("Clear Storage");
+	clearStorageButton.position(0, 0);
+	clearStorageButton.mousePressed(() => { localStorage.clear(); location.reload(); });
 	
 	console.log("Display h x w = " + displayHeight + ", " + displayWidth);
 
@@ -62,7 +75,11 @@ function draw() {
 	line(0, 0, mapYSize, 0);
 	stroke(0, 0, 0);
 
-	if (frameCount % 150 === 0) {
+	//enemy generation
+	// enemyFrameCount = 200 - (enemySpawnNumber/2)^1.5
+	// y = 200 - (x/2)^1.5 if want to graph
+	let enemySpawnTimer = 200 - Math.ceil(Math.pow(enemySpawnNumber, 2));
+	if (enemyFrameCount % enemySpawnTimer === 0) {
 		let generateXFirst = Math.random() > 0.5;
 		let rand1;
 		let rand2;
@@ -74,8 +91,22 @@ function draw() {
 			rand2 = Math.random() * mapYSize;
 			rand1 = Math.random() > 0.5 ? mapXSize + 20 : -20;
 		}
-		let enemy = new Enemy(rand1, rand2);
+		let enemy = new Enemy(rand1, rand2, enemyHealth);
 		enemies.push(enemy);
+
+		// parabolic generation
+		// cap of spawn every 100 frames (can be generated into less)
+		if (enemySpawnTimer > 100) {
+			enemySpawnNumber++;
+		} else {
+			enemyHealth++;
+			enemySpawnNumber = 0;
+		}
+
+		localStorage.setItem("enemySpawnNumber", enemySpawnNumber);
+		localStorage.setItem("enemyHealth", enemyHealth);
+
+		enemyFrameCount = 0;
 	}
 
 	enemies.forEach((enemy, index) => {
@@ -97,7 +128,7 @@ function draw() {
 	player.checkCollisionEnemies(enemies);
 
 
-	if (frameCount % 30 === 0) {
+	if (projectileFrameCount % 30 === 0) {
 		extraMove = player.getMovementOfPlayer();
 		extraXMove = extraMove[0];
         extraYMove = extraMove[1];
@@ -105,6 +136,8 @@ function draw() {
 		projectiles.push(tmpProjectile1);
 		let tmpProjectile2 = new Projectile(player.x, player.y, player.angle, 1, extraXMove, extraYMove);
 		projectiles.push(tmpProjectile2);
+
+		projectileFrameCount = 0;
 	}
 
 	projectiles.forEach((projectile, index) => {
@@ -126,6 +159,8 @@ function draw() {
 	cam.setPosition(player.x, player.y, 800);
 
 	frameCount++;
+	projectileFrameCount++;
+	enemyFrameCount++;
 }
 
 //debuging function currently
