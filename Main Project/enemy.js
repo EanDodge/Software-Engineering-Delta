@@ -4,13 +4,13 @@
 
 
 class Enemy {
-    constructor(x, y) {
+    constructor(x, y, health) {
         this.x = x;
         this.y = y;
         this.speed = 2;
         this.size = 40;
         this.collision = true;
-        this.health = 3;
+        this.health = health;
 		this.currencyValue = 5;							// Currency value of the enemy
     }
 
