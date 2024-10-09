@@ -22,4 +22,5 @@ jobs:
       run: npm install
 
     - name: Run Jest tests
+      working-directory: Main Project
       run: npm test
