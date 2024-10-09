@@ -19,6 +19,7 @@ jobs:
         node-version: '21'
 
     - name: Install dependencies
+      working-directory: Main Project
       run: npm install
 
     - name: Run Jest tests
