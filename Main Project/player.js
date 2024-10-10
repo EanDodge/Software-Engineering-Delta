@@ -8,7 +8,8 @@
 let xMove = 0;
 let yMove = 0;
 let turn = 0;
-
+let vel = 0;
+let anchor = false;
 // function preload() {
 //       	backgroundImage = loadImage("./assets/sea.png");
 //         playerImage = loadImage("./assets/shiplvl1Top.png");
@@ -93,14 +94,26 @@ class Player {
     //     if (futureY <= mapYSize - this.size / 2 && futureY >= 0 + this.size / 2)
     //         this.y = futureY;
     // }
+
     movePlayer() {
         //used to see if this upcoming move is out of bounds
         let futureX;
         let futureY;
+        
+        if ((yMove + vel) < 1 && (yMove + vel) > -1) {// change these numbers for speed
+            yMove += vel;
+        }
+        else {
+            if ( yMove < 0) yMove = -1;
+            if ( yMove > 0) yMove = 1;
+        }
+        if(anchor){
+            yMove = 0;
+        }
 
         //make sure angle is calculated first!
         this.angle += this.turningSpeed * turn;
-
+        //print(yMove);
         futureX = this.x + this.speed * sin(this.angle) * yMove;
         futureY = this.y + this.speed * cos(this.angle) * yMove;
 
@@ -420,36 +433,57 @@ class Player {
 		player.updateCoinCount();
 	}
 }
-
+    
 
 
 
 //p5 built in function
+// function keyPressed() {
+//     if (key == 'w') {
+//         yMove -= 1 ;
+//     }
+//     if (key == 'a') {
+//         turn += 1;
+//     }
+//     if (key == 's') {
+//         yMove += 1;
+//     }
+//     if (key == 'd') {
+//         turn -= 1;
+
+//     }
+// }
+
 function keyPressed() {
     if (key == 'w') {
-        yMove -= 1;
+        vel = -.05;
+        anchor = false;
     }
     if (key == 'a') {
         turn += 1;
     }
     if (key == 's') {
-        yMove += 1;
+        vel = .05;
+        anchor = false;
     }
     if (key == 'd') {
         turn -= 1;
+    }
+    if (key == 'r'){
+        anchor = true;
     }
 }
 
 //p5 built in function
 function keyReleased() {
     if (key == 'w') {
-        yMove += 1;
+        //gear += .05;
     }
     if (key == 'a') {
         turn -= 1;
     }
     if (key == 's') {
-        yMove -= 1;
+        //gear -= .05;
     }
     if (key == 'd') {
         turn += 1;

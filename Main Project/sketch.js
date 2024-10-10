@@ -21,12 +21,15 @@ let projectileFrameCount = 0;
 
  //let playerImage; made playerimage part of the player object
  let islandImage;
- let backgroundImage
+ let backgroundImage;
+ let enemyImage; 
+
 
  function preload() {
      player.playerImage = loadImage('./assets/shiplvl1Top.png');
 	 islandImage = loadImage('./assets/islandDock.png');
 	 backgroundImage = loadImage('./assets/sea.png');
+	 enemyImage = loadImage('./assets/shiplvl2Top.png');
  }
  
 function setup() {
@@ -90,7 +93,7 @@ function draw() {
 			rand2 = Math.random() * mapYSize;
 			rand1 = Math.random() > 0.5 ? mapXSize + 20 : -20;
 		}
-		let enemy = new Enemy(rand1, rand2, enemyHealth);
+		let enemy = new Enemy(rand1, rand2, enemyHealth,enemyImage);
 		enemies.push(enemy);
 
 		// parabolic generation

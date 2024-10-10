@@ -7,8 +7,8 @@ class GameObject {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.size = 50;
-        this.collision = true;  //collision is on by default
+        this.size = 100;
+        this.collision = false;
     }
 
     drawObject(islandImage) {
