@@ -4,19 +4,20 @@
 
 
 class Enemy {
-    constructor(x, y, health) {
+    constructor(x, y, health, enemyImage) {
         this.x = x;
         this.y = y;
         this.speed = 2;
-        this.size = 40;
+        this.size = 75;
         this.collision = true;
         this.health = health;
 		this.currencyValue = 5;							// Currency value of the enemy
+        this.playerimage = enemyImage;
     }
 
     drawEnemy() {
         fill(255, 0, 0);
-        ellipse(this.x, this.y, this.size, this.size);
+        image(enemyImage, this.x, this.y, this.size, this.size);
     }
 
     moveEnemy(player) {
