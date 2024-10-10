@@ -14,31 +14,9 @@ let puzzles = []; //will store the puzzle starting states and solution states
 // (Sounds like a lot but it's really not too bad I swear)
 //==================================================================================================================
 
-function generateStartingColors(puzzle) {
-  cantClickMap = new Map();
-
-  for (let i = 0; i < puzzle.length; ++i) {
-      const char = puzzle[i];
-      if (char !== '.' && char !== ' ') { // Only process numbers
-          const key = parseInt(char); // Convert character to integer
-          cantClickMap.set(i, key);
-      }
-  }
-
-  return cantClickMap;
-}
-
-function generateSolutionColors(solpuz) {
-  var solution_colors = [];
-  for (var i = 0; i < solpuz.length; i++) {
-      solution_colors.push(solpuz[i] !== '#' ? 1 : 0);
-  }
-  return solution_colors;
-}
-
 function setup() {
     //create a canvas in the center of the screen
-    var canvas = createCanvas(cols * square_size, rows * square_size);
+    canvas = createCanvas(cols * square_size, rows * square_size);
     var center_x = (windowWidth - width) / 2;
     var center_y = (windowHeight - height) / 2;
     canvas.position(center_x, center_y);
@@ -67,7 +45,7 @@ function setup() {
 
     background(220); //gray background
 
-    // here is how all the puzzle starts and solutions are stored:
+    // here is how all the puzzle start and puzzle solution states are stored:
     // puzzles[0]
     puzzles.push({
       //[square index, square value]
@@ -86,7 +64,7 @@ function setup() {
                         0, 0, 0, 0, 0, 0, 0, 0, 0]
     });
 
-    //calls functions defined above to store cantClick and solution_colors as seen in puzzles[0]
+    //calls functions defined below to store cantClick and solution_colors in the format seen in puzzles[0]
     //takes in strings for puzzle start and solution that I found on a nurikabe archive website: https://www.logicgamesonline.com/nurikabe/archive.php
     var puzzle = "6...............1.2.....2.........4...........2.........7.....5.1...............2";
     var solpuz = "6     ##########1#2 # # 2##### ###4## # #   ##2# #######7 #   5#1# # ########## 2";
@@ -1009,10 +987,6 @@ function setup() {
       fill(0, 250, 200);
       rect(width / 2, height / 2, 100, 100);
     }
-    // for comparing the current state to the solution with the web editor:
-    // print(colorState); //current state
-    // print(solution_colors); //solution state
-    // print('=========='); //divider lol
   }
 
   function mouseClicked() {
@@ -1025,4 +999,24 @@ function setup() {
         return;
       }
     }
+  }
+
+  function generateStartingColors(puzzle) {
+    cantClickMap = new Map();
+    for (let i = 0; i < puzzle.length; ++i) {
+        const char = puzzle[i];
+        if (char !== '.' && char !== ' ') { // Only process numbers
+            const key = parseInt(char); // Convert character to integer
+            cantClickMap.set(i, key);
+        }
+    }
+    return cantClickMap;
+  }
+  
+  function generateSolutionColors(solpuz) {
+    var solution_colors = [];
+    for (var i = 0; i < solpuz.length; i++) {
+        solution_colors.push(solpuz[i] !== '#' ? 1 : 0);
+    }
+    return solution_colors;
   }
