@@ -18,6 +18,8 @@ class Enemy {
     drawEnemy() {
         fill(255, 0, 0);
         image(enemyImage, this.x, this.y, this.size, this.size);
+        imageMode(CENTER);
+
     }
 
     moveEnemy(player) {
