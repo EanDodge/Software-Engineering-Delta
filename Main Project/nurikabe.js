@@ -16,7 +16,7 @@ let puzzles = []; //will store the puzzle starting states and solution states
 
 function setup() {
     //create a canvas in the center of the screen
-    var canvas = createCanvas(cols * square_size, rows * square_size);
+    canvas = createCanvas(cols * square_size, rows * square_size);
     var center_x = (windowWidth - width) / 2;
     var center_y = (windowHeight - height) / 2;
     canvas.position(center_x, center_y);
@@ -45,6 +45,7 @@ function setup() {
 
     background(220); //gray background
 
+    // here is how all the puzzle start and puzzle solution states are stored:
     // puzzles[0]
     puzzles.push({
       //[square index, square value]
@@ -63,182 +64,891 @@ function setup() {
                         0, 0, 0, 0, 0, 0, 0, 0, 0]
     });
 
-    //puzzles[1]
+    //calls functions defined below to store cantClick and solution_colors in the format seen in puzzles[0]
+    //takes in strings for puzzle start and solution that I found on a nurikabe archive website: https://www.logicgamesonline.com/nurikabe/archive.php
+    var puzzle = "6...............1.2.....2.........4...........2.........7.....5.1...............2";
+    var solpuz = "6     ##########1#2 # # 2##### ###4## # #   ##2# #######7 #   5#1# # ########## 2";
     puzzles.push({
-      cantClick: new Map([
-        [1, 6], [16, 4], [23, 2], [31, 2], [49, 2], [57, 7], [64, 1], [79, 4]
-      ]),
-      solution_colors: [0, 1, 0, 0, 0, 0, 0, 0, 0, 
-                        0, 1, 1, 1, 0, 1, 0, 1, 0, 
-                        0, 1, 0, 0, 0, 1, 0, 1, 0, 
-                        0, 1, 0, 1, 1, 0, 1, 1, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 1, 1, 0, 1, 1, 0, 1, 0,
-                        0, 0, 1, 1, 0, 0, 0, 1, 0,
-                        0, 1, 0, 1, 1, 1, 0, 1, 0,
-                        0, 0, 0, 0, 0, 0, 0, 1, 0]
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
     });
 
-    //puzzles[2]
+    var puzzle = ".........4.........2............4...3.......5...7............5.........3.........";
+    var solpuz = "   ######4###  # ##2 ## # #### #4# #3 # ### 5# #7# ###### #  5##   # ##3#######  ";
     puzzles.push({
-      cantClick: new Map([
-        [4, 5], [10, 3], [28, 2], [32, 6], [48, 2], [52, 3], [70, 1], [76, 6]
-      ]),
-      solution_colors: [0, 0, 0, 0, 1, 0, 0, 0, 0,
-                        0, 1, 1, 0, 1, 1, 1, 1, 0,
-                        0, 0, 1, 0, 0, 0, 0, 0, 0,
-                        0, 1, 0, 0, 1, 1, 0, 1, 0,
-                        0, 1, 0, 1, 0, 1, 0, 1, 0,
-                        0, 0, 0, 1, 0, 1, 0, 1, 0,
-                        0, 1, 0, 0, 0, 1, 0, 0, 0,
-                        0, 1, 1, 1, 0, 1, 0, 1, 0,
-                        0, 0, 0, 1, 1, 0, 0, 0, 0]
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
     });
 
-    //puzzles[3]
+    var puzzle = ".5..............3.1..........5..2...............4..2..........2.5..............1.";
+    var solpuz = "#5    ##########3#1#  # # ## 5 #2# ###########  4 #2# ###### #2#5    ##########1#";
     puzzles.push({
-      cantClick: new Map([
-        [2, 3], [12, 4], [23, 5], [25, 6], [55, 8], [57, 2], [68, 2], [78, 1]
-      ]),
-      solution_colors: [1, 1, 1, 0, 0, 1, 1, 1, 0,
-                        0, 0, 0, 1, 0, 1, 0, 0, 0,
-                        0, 1, 1, 1, 0, 1, 0, 1, 0,
-                        0, 0, 0, 0, 0, 0, 0, 1, 0,
-                        0, 1, 1, 1, 1, 1, 0, 1, 0,
-                        0, 1, 0, 0, 0, 0, 0, 1, 0,
-                        0, 1, 0, 1, 0, 1, 0, 1, 0,
-                        0, 1, 0, 1, 0, 1, 0, 1, 0,
-                        0, 0, 0, 0, 0, 0, 1, 0, 0]
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
     });
 
-    //puzzles[4]
+    var puzzle = "..6.3....................3.3.........3.....2.........3.3....................1.6..";
+    var solpuz = "##6#3  ## # #### # #   # 3#3### #####3 ### 2### # ###3#3##   # #  ### # ####1#6##";
     puzzles.push({
-      cantClick: new Map([
-        [10, 1], [26, 5], [30, 3], [34, 5], [46, 5], [50, 4], [54, 4], [70, 1]
-      ]),
-      solution_colors: [0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 1, 0, 1, 0, 1, 1, 1, 1,
-                        0, 0, 0, 1, 0, 0, 0, 0, 1,
-                        0, 1, 0, 1, 0, 1, 1, 1, 0,
-                        0, 1, 0, 0, 0, 0, 0, 1, 0,
-                        0, 1, 1, 1, 0, 1, 0, 1, 0,
-                        1, 0, 0, 0, 0, 1, 0, 0, 0,
-                        1, 1, 1, 0, 1, 1, 0, 1, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0]
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
     });
 
-    //puzzles[5] (hard)
+    var puzzle = "......2.4.1.4.......3.......................................7.......2.5.6.5......";
+    var solpuz = "###  #2#4#1#4 # # ##3#####  #  #  #  ####  ## #  #  #  # ###7#  # # 2#5 6#5##### ";
     puzzles.push({
-      cantClick: new Map([
-        [8, 1], [11, 5], [14, 6], [24, 2], [56, 8], [66, 7], [69, 3], [72, 7]
-      ]),
-      solution_colors: [1, 1, 1, 0, 1, 1, 1, 0, 1,
-                        0, 0, 1, 0, 1, 1, 0, 0, 0,
-                        1, 0, 1, 0, 1, 0, 1, 1, 0,
-                        1, 0, 0, 0, 0, 0, 0, 0, 0,
-                        1, 0, 1, 1, 1, 1, 1, 1, 0,
-                        1, 0, 1, 0, 0, 0, 0, 0, 0,
-                        1, 0, 1, 0, 1, 1, 0, 1, 0,
-                        1, 0, 0, 1, 1, 0, 1, 1, 0,
-                        1, 0, 1, 1, 1, 0, 0, 0, 0]
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
     });
 
-    //puzzles[6]
+    var puzzle = "..........4................7...1......4...4......2...6................4..........";
+    var solpuz = "##########4   # # ###### # 7# #1# #  #4 ##4#  # #2 # 6 ########   #   4##########";
     puzzles.push({
-      cantClick: new Map([
-        [6, 4], [16, 5], [19, 3], [27, 7], [53, 3], [61, 3], [64, 4], [74, 6]
-      ]),
-      solution_colors: [0, 0, 0, 1, 1, 1, 1, 0, 0,
-                        0, 1, 0, 0, 0, 0, 0, 1, 0,
-                        0, 1, 1, 0, 1, 1, 1, 1, 0,
-                        1, 0, 0, 0, 0, 0, 0, 0, 0,
-                        1, 1, 1, 1, 1, 1, 0, 1, 1,
-                        0, 0, 0, 0, 0, 0, 0, 0, 1,
-                        0, 1, 1, 1, 0, 1, 1, 1, 0,
-                        0, 1, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 1, 1, 1, 1, 1, 1, 0]
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
     });
 
-    //puzzles[7]
+    var puzzle = "..4.........2...4.......3......3.................2......4.......1...3.........5..";
+    var solpuz = "# 4###   # #2 ##4## ####3##### 3#  ## # ######  #2 # ###4#### ##1#  3# #######5 #";
     puzzles.push({
-      cantClick: new Map([
-        [1, 5], [5, 6], [12, 2], [17, 3], [63, 3], [68, 4], [75, 4], [79, 5]
-      ]),
-      solution_colors: [0, 1, 0, 1, 0, 1, 0, 0, 0,
-                        0, 1, 0, 1, 0, 1, 0, 1, 1,
-                        0, 1, 0, 0, 0, 1, 0, 1, 0,
-                        0, 1, 0, 1, 1, 1, 0, 0, 0,
-                        0, 1, 0, 0, 0, 0, 0, 1, 0,
-                        0, 0, 0, 1, 0, 1, 0, 1, 0,
-                        0, 1, 0, 1, 0, 1, 0, 1, 0,
-                        1, 1, 0, 1, 0, 1, 0, 1, 0,
-                        0, 0, 0, 1, 0, 1, 0, 1, 0]
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
     });
 
-    //puzzles[8]
+    var puzzle = "......2....4....1..3.................2.....4.................4..1....7....5......";
+    var solpuz = "##### 2## #4 ###1# 3# # ###### # #  #2### #4 # # # ###### # #4 #1# # 7# ##5 #### ";
     puzzles.push({
-      cantClick: new Map([
-        [8, 3], [13, 6], [26, 4], [30, 2], [36, 1], [44, 1], [50, 3], [54, 5], [67, 4], [72, 3]
-      ]),
-      solution_colors: [0, 0, 0, 0, 0, 0, 1, 1, 1,
-                        0, 1, 1, 1, 1, 0, 0, 0, 0,
-                        0, 1, 0, 0, 0, 0, 1, 1, 1,
-                        0, 1, 0, 1, 1, 0, 1, 0, 0,
-                        1, 0, 0, 0, 0, 0, 0, 0, 1,
-                        0, 0, 1, 1, 0, 1, 1, 1, 0,
-                        1, 1, 1, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 1, 1, 1, 1, 0,
-                        1, 1, 1, 0, 0, 0, 0, 0, 0]
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
     });
 
-    //puzzles[9]
+    var puzzle = "................7.1.........1..3.................2..9.........3.3................";
+    var solpuz = "##########      7#1#########1# 3 # ######## ## # 2# 9## #### #3#3#    # ######## ";
     puzzles.push({
-      cantClick: new Map([
-        [1, 2], [17, 5], [19, 4], [27, 2], [38, 2], [42, 2], [53, 4], [61, 4], [63, 2], [79, 8]
-      ]),
-      solution_colors: [1, 1, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 1, 0, 1, 1, 1, 1,
-                        0, 1, 1, 1, 0, 1, 0, 0, 0,
-                        1, 0, 0, 0, 0, 0, 0, 1, 1,
-                        1, 0, 1, 1, 0, 1, 1, 0, 1,
-                        0, 0, 0, 0, 0, 0, 0, 0, 1,
-                        1, 0, 1, 0, 1, 1, 1, 1, 0,
-                        1, 0, 1, 0, 0, 0, 0, 0, 0,
-                        0, 0, 1, 1, 1, 1, 1, 1, 0]
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
     });
 
-    //puzzles[10]
+    var puzzle = ".......5....7..1......3...................................9......5..1....3.......";
+    var solpuz = "###  ##5 #  7##1# # ##3### # #  # # ###### ###  #    ### #9## # #5 #1# # 3#######";
     puzzles.push({
-      cantClick: new Map([
-        [3, 9], [16, 8], [29, 3], [39, 3], [41, 4], [51, 6], [64, 1], [77, 2]
-      ]),
-      solution_colors: [1, 1, 1, 1, 0, 0, 0, 0, 0,
-                        1, 0, 0, 0, 0, 1, 0, 1, 0,
-                        1, 0, 1, 1, 0, 1, 0, 1, 0,
-                        1, 0, 1, 0, 0, 1, 0, 1, 1,
-                        1, 0, 0, 1, 0, 1, 0, 0, 1,
-                        1, 0, 1, 1, 0, 0, 1, 0, 1,
-                        0, 0, 0, 0, 1, 1, 1, 0, 1,
-                        0, 1, 0, 1, 1, 0, 0, 0, 1,
-                        0, 0, 0, 0, 0, 1, 1, 0, 0]
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
     });
 
-    //puzzles[11]
+    var puzzle = "......4.........3....................2.6.2.2....................8.........6......";
+    var solpuz = "####  4###  # ##3###  ##  ## # # ####2#6#2#2 ##########       ##8#########6     #";
     puzzles.push({
-      cantClick: new Map([
-        [0, 4], [16, 4], [18, 6], [24, 3], [34, 1], [46, 2], [56, 5], [62, 3], [64, 6], [80, 4]
-      ]),
-      solution_colors: [1, 1, 1, 1, 0, 1, 1, 1, 0,
-                        0, 0, 0, 0, 0, 0, 0, 1, 0,
-                        1, 1, 1, 1, 0, 1, 1, 0, 0,
-                        0, 0, 0, 1, 0, 1, 0, 1, 0,
-                        0, 1, 0, 1, 0, 0, 0, 0, 0,
-                        0, 1, 0, 0, 0, 1, 0, 1, 0,
-                        0, 0, 1, 1, 1, 1, 0, 1, 1,
-                        1, 1, 0, 0, 0, 0, 0, 0, 0,
-                        1, 1, 1, 1, 0, 1, 1, 1, 1]
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
     });
 
+    var puzzle = "1..............1..6............5......4...4......1............6..3..............4";
+    var solpuz = "1##########   #1# 6### ###  # #5# #  #4 ##4#  # #1# #  ##### #6 #3  #########   4";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "........7............3....18..........2...1..........36....2............8........";
+    var solpuz = "   #    7  #### ## ##3 # #18# # #### #2###1# ###  ###36   #2 # #########8       #";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "6..........4....3............1.....................2............4....6..........6";
+    var solpuz = "6######## #4  # 3# ### # ## #1#####  ### # #  # # #2# ## # ### #4 #  6# ########6";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "....9.......6.....4...3...................................5...2.....6.......2....";
+    var solpuz = "####9     # 6#### 4# #3  #  # #####  #  #  # ###### ###   5# #2# ###6 # ### 2####";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".............4...........4...4..1...............1..3...3...........4.............";
+    var solpuz = "##########   4#  ########4## 4 #1# ## ##########1# 3 ##3########  #4   ##########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".5..1......8.......................4...4.3...4.......................1......2..5.";
+    var solpuz = " 5##1###  #8### #  #     #  # #####4###4#3 ##4 # ## # # #  ### # ####1# ### 2##5 ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "...................2....3.3..........6.....4..........3.3....4...................";
+    var solpuz = "########## # # #  #2# # 3#3### ######6  #  4###### ###3#3 ###4#  # #   ##########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "2.............8.................3....3.....4....5.................2.............3";
+    var solpuz = "2 ##########  8  ## # ### ## # #3####3### #4### 5# # ##  ###  ## #2 ##########  3";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".2...............6................4.5.......3.1................6...............5.";
+    var solpuz = "#2######## #     6#########    #  4#5#### ##3#1# ###  ### # ###6   #   ########5#";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".3..........2....1..6....4.............................2....4..7....2..........5.";
+    var solpuz = " 3####### ##2 # #1##6### 4##    ## #### # #### ###  # #2# ##4# 7## #2##     # #5 ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "...........7....1.........3....1.1.............1.4....4.........5....7...........";
+    var solpuz = "########## 7   #1### #####3 # #1#1#  #### ##  #1#4  ##4## #### #5   #7  ######   ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "..6..................2............2.6..2.4..3.4............1..................6..";
+    var solpuz = " #6     # ######## # 2# # #  ##  #2#6##2#4##3#4# ###  # ###1####  # ## #####  6 #";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".......4.4....3..........3.8.........................2.3..........3....2.4.......";
+    var solpuz = "  #### 4 4 #  3## #######3#8    #  ##### #####  #  # 2#3####### ##3  # 2 4 ######";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".......3.4.........6....1............5.....2............4....2.........1.7.......";
+    var solpuz = "   ####3 4###  ## #6   #1######### ##5    #2########### 4  # 2#########1 7     ##";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "..3............4.4....2.......1...................4.......2....1.7............2..";
+    var solpuz = "##3#######  # #4#4####2# # # #1#  # # ###### #   #4 #### #2#  #1#7# ##########2 #";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".........4......3.........7.....5...............3.....6.........4......2.........";
+    var solpuz = "#########4   #  3#########7  # #5#    # # #   ##3# #  6# ## ####4  # # 2#########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "..6......3......4............1.....3.........2.....4............1......1......5..";
+    var solpuz = "##6######3#   # 4# ### # ## #1# # #3######## 2 #   4# ##########1#    #1######5##";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".3..................2.......4..........2.4..........7.......7..................5.";
+    var solpuz = "#3  ########## # # #2 # # # 4### # # # 2#4# ########7 #     7# # ##########    5#";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".....1...6.........3...4.......3.................3.......4...4.........3...3.....";
+    var solpuz = "    #1###6## ### ##3###4  ## # 3##### # ##  #####3 # ##  4# #4## ######3###3  #  ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "....3.......2....6..............1...............7..............3....5.......6....";
+    var solpuz = "####3 #### #2# # 6# # ### ## ###1# ##   ### ####7# # # # ## ###3#  #5  # #  6####";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "...1.........6..........5.1............2.1............3.3..........7.........5...";
+    var solpuz = "###1##   # ##6# ###    #5#1######### # 2#1# # #####  #3#3#   ###  #7### #####5   ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "6.2..1..........1....................6.....4....................7..........2..1.4";
+    var solpuz = "6#2 #1### ######1#   # # ## ### #  ##6   ##4###### ####     #  #7###### ###2 #1#4";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "..........2..5.............8....1...............2....3.............2..4..........";
+    var solpuz = "##########2 #5   ######## #8   #1#### #####  # #2 # #3# #### ### # 2# 4##########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".....1.........4...2..4.........1...............1.........4..4...5.........4.....";
+    var solpuz = "#####1#### # ##4 ##2# 4## #### #1# ## ######## #1#  # # ##4 #4 # 5##### ###4   ##";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "7............2....5.....3......6.................1......5.....2....1............5";
+    var solpuz = "7  ######## #2 # #5# ###3 # # #6 ### # ##   # ###1# #  #5#####2## #1# ##   ##   5";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "....3...................8.24.........4.....5.........42.1...................3....";
+    var solpuz = " #  3#### ##### #  # #  8#24# # #####4 # # 5##### # #42#1# # #  ##### # ##  3### ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "............4..........1.......7..3...........6..3.......1..........5............";
+    var solpuz = "###   #### #4### ## ###1# ##   7##3### ## ####6##3 # ## #1### ## ###5  ##   #####";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "........8..........8.........2.4.................4.5.........2..........3........";
+    var solpuz = "#       8######### 8#   # # #2#4## # # ###  # ###4#5##   # ##2#####  # #3  ######";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "....4.............4.1....3..1.......................4..5....5.5.............5....";
+    var solpuz = "  # 4#### ### #  #4#1# ##3##1#### #### # #  ##  # ##4##5 #  5#5########     5#   ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "..........8.6....1..............2...............1..............1....3.5..........";
+    var solpuz = "##########8#6   #1# # ###### # #2# ## ### # ## #1### ##  ## # #1# # 3#5##########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "..3..7......2......2.................4.....4.................3......4......2..3..";
+    var solpuz = "  3##7######2# # # 2# # # ###### # ##4#   #4## ###### # #   #3 # ###4##### 2##3  ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".....3....3...........3..1..2.......................7..2..3...........1....2.....";
+    var solpuz = "#####3  ##3 # ###### #3 #1##2######## #     #### ###7##2##3 #### # # #1####2#####";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "........4.3.......3................5....7....1................6.......4.2........";
+    var solpuz = "#####   4#3  #####3####      # ####5### 7# ##1#  #    ## #####6 # #   4#2########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "...............5.........3.....2.....6.....5.....2.....3.........3...............";
+    var solpuz = "########## #   5# # # ###3 # ##2 ####6 ####5### #2 # # 3##### # #3  #  ##########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "..6..3......3..........................3.3..........................5......6..8..";
+    var solpuz = "  6##3  # ##3##### #  # # # #### # ##  3#3# ######## # #    # # ####5# #   6##8 #";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".7...................2......7.........6...4.........4......3...................2.";
+    var solpuz = "#7      ########### #2 #  # 7#### ## #6  #4#  # ####4  # # 3# # # # ########## 2#";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "2.4............2.........3.......5.............3.......6.........5............2.5";
+    var solpuz = "2#4 ##### #  # 2# #######3  # #  5## # ### #  #3# # #  6## ###  #5  # # ######2#5";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".2...........2.2.......5............4.......3............6.......1.2...........3.";
+    var solpuz = "#2######## # 2#2 ######5####  #  # #4# ## # 3 #  # ### ##6### # #1#2 # ########3#";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".....................4......1...3...4.......5...2...3......7.....................";
+    var solpuz = "##########   # # ####4# # ##1###3#  4## ####5  #2# #3# ####7# ##     # ##########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "................1..4..............5....2.4....8..............6..6................";
+    var solpuz = "##########   # #1##4### ## ### # #5 # #2#4#  #8 ########    #6  6### #      ###  ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".............4....5............2..7...........3..5............1....2.............";
+    var solpuz = "#########   #4   #5######## # #2 #7###  ##  ##3# 5# ### #### #1# # 2#  ##########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "..5......5...............2......3....2.....3....2......6...............2......1..";
+    var solpuz = "##5   ###5#### # #    ###2######3### 2# # #3####2# # ##6##### ##     ##2######1# ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "..........4......4...............2...5..2..6...1...............2......5..........";
+    var solpuz = "##########4  #   4### ######  ## 2#  5##2##6  #1# #   #########2 #    5##########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".........4...........3..........5.2...........1.2..........6...........5.........";
+    var solpuz = "#########4 # #   ## #3# #### # #5#2 ##########1#2 #  ######6# ##     # 5#########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".5..2.5.3.............................4...4.............................3.4.5..1.";
+    var solpuz = " 5# 2#5#3# #### # #  #   # ########## 4  #4 ###### # # #  # # # # ## ###3#4#5 #1#";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".....4....4..........7.................4.4.................2..........3....3.....";
+    var solpuz = "#   #4####4###   ### 7######  ##   ## #4#4#### #  ## ## # #2# ###### #3##  3#####";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".2...................3.........3......4...9......3.........4...................7.";
+    var solpuz = "#2 #    ######## ##  3# # #####3 # ## 4###9 ## # 3##### # #4   ##########      7#";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".5.........1.....5.................4.........5.................7.....7.........2.";
+    var solpuz = " 5####### #1#    5 ######## # #   #4## ### # 5  # # # #### # # 7    #7#########2 ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".......6.4...............2.........2..4...3..3.........3...............1.7.......";
+    var solpuz = "####   6#4  # ###### # # 2# #######2 #4  #3# 3### #  ##3  ##########  #1#7    ###";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".2..............1.............2....2.........7....6.............5..............4.";
+    var solpuz = "#2 ##########  #1## # # #### #2# # 2# ### ###7   #6# ######## ##5    # ########4#";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".5..2...........2.4............2.................2............4.2...........4..7.";
+    var solpuz = " 5 #2###### # # 2#4# ###### ## 2# #   #### # ### 2# # # #### #4#2#  # ##### 4# 7#";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "...7.......2................5...4...............2...2................6.......5...";
+    var solpuz = "###7    ## 2#### ####   # ##5###4#### # ### ## #2# #2##  #   ########6 ##    5###";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".4...........7..............1.......5..4.2..1.......2..............2...........7.";
+    var solpuz = " 4#######  # 7   ######## ##1# # # #5##4#2##1  #  # 2## ######## # 2#   #####  7 ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".2............3.............3...........4...........7.............3............6.";
+    var solpuz = "#2######## #  3# ######## ##3# #   ## # 4## ## # # #7###### ####  3#   ########6#";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "......7.........3.1............4....1.......6....2............4.5.........4......";
+    var solpuz = "      7#########3#1#   #  #####4####1# ##   6## #2# ###  # # #4#5###### ##4   #  ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle),
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "....1.5..........1............3....4.........6....1............2..........7.5....";
+    var solpuz = "####1#5### # ## #1# # #  ##  #3# ##4 ######  6#  #1# ###   ####2# ###  # #7#5  ##";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".............3..5.............2...1.4.......4.1...2.............5..3.............";
+    var solpuz = "######### #  3# 5# ####  ## # 2# #1#4#######4#1# #2 # ##  #### #5 #3  # #########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    })
+
+    var puzzle = ".....2.................2..3....4......5...2......6....4..2.................7.....";
+    var solpuz = "#####2 # # # #### # # #2 #3# # 4##### 5###2 # ###6 ###4# 2#     ######## # 7     ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    })
+
+    var puzzle = ".5..2...............4......7...........1.2...........6......6...............5..1.";
+    var solpuz = " 5 #2 ###  ##### ###4   #  7#######   #1#2 #   ## ###6  #   6 ###########   5 #1#";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    })
+
+    var puzzle = "..........5..5.......7.................2.3.................1.......8..4..........";
+    var solpuz = "   ###### 5##5   ### 7### ##  ##  ### #2#3# ## # ### ## ###1# #### 8##4#      ###";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    })
+
+    var puzzle = "......3.................7.....1...5...........3...4.....4.................4......";
+    var solpuz = "######3 ##    ## #####  7### #1###5## ### # ##3# #4# ###4 # # # ## # # #  4######";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    })
+
+    var puzzle = "..2..6...........2....1...............2...7...............5....7...........1..2..";
+    var solpuz = "##2# 6 ## # ##  #2 ###1# #  # ###### #2#  7 # ###### # #  5 # #7# #### ####1# 2##";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    })
+
+    var puzzle = ".........1......7.........4.....5...............4.....2.........4......9.........";
+    var solpuz = "#########1#     7####### #4#    5## #######   # 4  ###2#####   #4   #  9######   ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    })
+
+    var puzzle = ".........2................64....2...............5....37................3.........";
+    var solpuz = "#########2 # #   #### ### 64 # #2# #  # # ######5##  37 ## #####    #  3#########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    })
+
+    var puzzle = "7...3...............4....5...........2.....1...........6....1...............6...3";
+    var solpuz = "7  #3  ##  ######  #4  # 5  ### # ###2 ####1#####  ####6   #1# ######## #   6  #3";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    })
+
+    var puzzle = "....2.........2...........26..........5...2..........38...........7.........5....";
+    var solpuz = "  # 2####  ###2 #  ## ####26#   # ####5###2#   ##  ##38 #    #   #7#####  ##5    ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    })
+
+    var puzzle = "...............5.4.........4.1....4...........4....4.2.........4.3...............";
+    var solpuz = " ######   #    5#4 ####### 4#1#   4###########4   #4#2 ##### # 4#3  #  #  #######";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    })
+
+    var puzzle = ".................6..........5...8...1.......3...2...4..........2.................";
+    var solpuz = "########## #     6# ########5  #8#  1#### ##3## 2# #4# ###  # #2#   #  ##########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    })
+
+    var puzzle = "..1....3..5...6...................................................7...2..2....4..";
+    var solpuz = "##1####3##5# #6# ## # # # ## # # #### # #   ## # ######## # # ## #7# #2##2### 4##";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    })
+
+    var puzzle = "...........8.....4.5.2..3...............................1..5.1.4.....3...........";
+    var solpuz = "       ####8#####4#5#2 #3# # #### # #  # # # # ## ######1# 5#1#4### #3##   ###  #";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    })
+
+    var puzzle = ".3.................1...........1....1.6...6.4....4...........2.................3.";
+    var solpuz = "#3 ######## #   # #1#### # ## #1# # 1#6###6#4## #4#####  # # 2## #  ########## 3 ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    })
+
+    var puzzle = ".3.8....................6.....2...................4.....4....................5.1.";
+    var solpuz = "#3#8    ## #  ##### ## #6 ####2### ## # # # ## ###4# ## 4#  # ###########    5#1#";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    })
+
+    var puzzle = "......4....8...........3......4...................3......1...........5....3......";
+    var solpuz = "####  4 ## 8####### # #3  ## #4 ##### # # # ## ###3# ## #1# # ## ####5 ###3  ####";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "...6.....2.........6......1.........5.......4.........4......4.........2.....3...";
+    var solpuz = " # 6    #2#########6     #1#########5   #   4## ######4###   4#   #####2#### 3 # ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "......3......4...........1.2..3...................2..3.3...........4......3......";
+    var solpuz = "######3 ##   4# #########1#2 #3  ########## ##  # 2# 3#3######### #4   ## 3######";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".........4....3.............6....2.............4....3.............1....4.........";
+    var solpuz = "#########4   #3  ###########6   #2 ##### ##### 4# # 3 # ######## #1#   4#########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".................6.......4..3..........4.3..........3..7.......1.................";
+    var solpuz = "####     # # ####6# # #  4##3# ### ####4#3#### ##  #3##7 #### #1#    # ##########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "...4.............2....1..5..2.......................1..3..5....6.............8...";
+    var solpuz = "## 4#### #  ##  #2####1# 5##2 #### #####  ####  #  #1##3##5### 6## ##       #8   ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "...................3......7.......5....3.4....4.......4......7...................";
+    var solpuz = "####     #  ##### #3# #  #7### ## 5## #3#4# ##4 ## ###4# #  #7# ###### #  #     #";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "..7..2.4..6...........................................................4..2.4..5..";
+    var solpuz = "##7 #2#4 #6# # # ## # ### ## #   #### ##### ## # # # ## # # # #### # #4# 2#4# 5##";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "...3..........6...............4...2.1.......2.6...2...............1..........4...";
+    var solpuz = "#  3#   ######6####   # # ####4# #2#1# #####2#6  #2 # # ######## #1#   ######4###";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "................8..3....1.........3...........4.........4....9..7................";
+    var solpuz = "####    ##  # ##8##3## #1#### # ##3##  ###  ##4## ######4  # 9  7####        #   ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "........1.3...3.........1.4...........................4.6.........4...5.3........";
+    var solpuz = "#####  #1#3  #3#########1#4 #   ###  # ### #  # # # # 4#6# # #####4 # 5#3  ######";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".....6....5..................3.......3.1.5.3.......1..................4....5.....";
+    var solpuz = "  #  6    5####### #  #   ###3## ####3#1#5#3 # ####1# # # # ###### #  4##  5#####";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "..........4..4......2......1...........4.2...........7......3......4..3..........";
+    var solpuz = "   ##### #4##4  # ##2# ### 1# ## #  ###4#2## #   ## #7##### 3###   4##3#######  #";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "........1.5..............3.........4...3.2...5.........2..............4.4........";
+    var solpuz = "########1#5   # ###### # 3#  # ####4  #3#2#  5## # # ##2 ##########   4#4   #####";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "....8...2.7..........1......4.......................4......3..........2.2...2....";
+    var solpuz = "   #8 # 2 7 ## ### ##1# # ##4### # ## #   # ## #####4## #  3######### 2#2 # 2####";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "...............4.5..............6.....2...5.....4..............7.2...............";
+    var solpuz = "#####  ## #  ##4#5 ##  # #  # # 6##  #2###5#  ##4 # #  # # # ##7#2# #  ##########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "....5.........3................4.2..1.......1..2.3................3.........6....";
+    var solpuz = "### 5#####   #3  ###########   4#2 #1#######1# 2#3  ######### ##  3#   #####6 ###";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "..3.............7.2.2............1.............2............2.8.5.............1..";
+    var solpuz = "  3##########   7#2#2# ###  # # #1# #### ##  # 2### # #### #2#8#5   ### ######1# ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "..6................4..4..............6.....6..............1..6................2..";
+    var solpuz = "##6     # ######## 4 #4   ###########6#    6## # #### # ##1# 6 #   #### ##### 2# ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "........6.1.......4.....3.............3...2.............1.....5.......7.6........";
+    var solpuz = "###     6#1#######4# #  3#  # #####  #3# #2#  ### # # ##1#  ##5  ###  7#6   #####";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "................1..6............1...7.......6...2............6..1................";
+    var solpuz = "##########     #1##6#########  #1#  7  ###  6  #2 # #########6##1#     ##########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".......8..3...6...4..............1.............3..............4...2...3..3.......";
+    var solpuz = "###### 8 #3 # 6#  4# # ##   ### #1#  # # #### #3# #   ## #####4 ##2#  3# 3# #####";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "......7...3...1......3..................1..................1......5...7...4......";
+    var solpuz = "######7 ##3# #1# ## #3### ## # #   #####1#####  ###  ###  #1# # ##5###7#  4##   #";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "......3.........2....5.................1.6.................2....7.........4......";
+    var solpuz = "####  3### # ###2## #5  # ## ## ##### #1#6  ## ##### ## # #2# ##7# # # ###4 #####";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "2............1...........9.....1.4.............5.1.....5...........5............3";
+    var solpuz = "2######## # #1#   ## ####9  # #1#4#  # ### #  #5#1# #  5#### # ### 5#####   ##  3";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".....4.........7...4...3.................................3...3...6.........2.....";
+    var solpuz = "##   4### #####7 # 4 # 3# ##### ## ##  ###  ## ## # ### #3 ##3## 6###  ####2 ####";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "..4.........5......6...................6.1...................5......2.........2..";
+    var solpuz = "  4###### ##5    ##6######## #  #  ## #6#1# ## # ### ## # # #5## # #2#########2 #";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".1..1.......4..........................7.3..........................4.......1..9.";
+    var solpuz = "#1##1#######4##  ##   # # ###### # ##  7#3# ## ##### ## #   # ##  ##4# #####1##9#";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".1.........1.....1...........3.....5.........9.....1...........5.....1.........5.";
+    var solpuz = "#1#########1# # #1# ## # ### 3# #  5#### ####9    #1# ######## 5    #1# #######5 ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "...2...6......5.........7...............................1.........6......9...4...";
+    var solpuz = "## 2###6  ### 5##  #   #7#  ##### #  #     #  ######## #1#    # ##6 #### 9###4   ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".8........................2..4.......4.1.1.4.......6..4........................5.";
+    var solpuz = "#8     ######## #  #   # #2 #4###### 4#1#1#4 ######6# 4#     #  ########  #    5#";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "......2.........4..2.2..............2.......4..............2.2..2.........6......";
+    var solpuz = "##### 2### # ###4##2#2#   ##########2 # #   4### ###### # #2#2##2# # # ###6 #####";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "........7.....2.......5.4...............................7.5.......4.....2........";
+    var solpuz = "##### # 7#   #2## ### 5#4# # #### # #   #  # #  ##### ##7#5  ## ##4##  #2#   ####";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".............7.2...4...2......3...................5......1...3...2.1.............";
+    var solpuz = "     #### ###7#2 ##4# #2#### #3# # ## # ##  ## ###5 #####1###3## 2#1#  ##########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "..1....3..2............1..........2...........6..........6............1..3....8..";
+    var solpuz = "##1##  3##2# ###### # #1# #### ###2#  # # ### 6# #   #  #6# ######## #1##3  # 8##";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "...........3............3.....8.....2.......4.....3.....1............8...........";
+    var solpuz = "########## 3#  # ## ## #3 ####8 ####2#  ## #4 ## #3 # ##1##### # ##  8# #    ####";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".....5.6.5..2..........................3.2..........................2..1.3.3.....";
+    var solpuz = " ####5#6#5# 2# # # ###  # # # # ## # # 3#2# ###### # ## # ###### # #2 #1#3#3#####";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".....7.3...6........................3.......3........................2...5.2.....";
+    var solpuz = "#####7#3## 6 # # #### # # ## # # ###3 # # # 3##### # ##   # #### ####2 ##5#2 ####";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".3..4................3...4.........5.........6.........2...4................1..2.";
+    var solpuz = "#3##4   ## # ###### #3 # 4####### #5     # # 6####### #2#  4#  # # #########1# 2#";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".........4.............4..........1.4.......5.3..........8.............4.........";
+    var solpuz = "#########4   #   ######4###   # ##1#4###  ##5#3#  #   # #8## ### #  ###4######   ";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "4......8..........7...............3...........2...............1..........2......7";
+    var solpuz = "4   ###8######   #7   # ###### # #3## # # # ##2# # # #########1# #    ###2####  7";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = ".......3..1.1.................3...................2.................5.7..6.......";
+    var solpuz = "#####  3##1#1######### #  ## #3 ## ## ### # ## # #2# ## # ### ## #  5#7##6#######";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+    var puzzle = "..........1...............5...3...5...........5...4...4...............1..........";
+    var solpuz = "##########1# #    ### ####5# #3#  5## ##### ##5  #4# #4#### ###   #  #1##########";
+    puzzles.push({
+      cantClick: generateStartingColors(puzzle), 
+      solution_colors: generateSolutionColors(solpuz)
+    });
+
+  //choose index of random puzzle
   puzzle_index = Math.floor(Math.random() * puzzles.length);
 }
   
@@ -277,10 +987,6 @@ function setup() {
       fill(0, 250, 200);
       rect(width / 2, height / 2, 100, 100);
     }
-    // for comparing the current state to the solution with the web editor:
-    // print(colorState); //current state
-    // print(solution_colors); //solution state
-    // print('=========='); //divider lol
   }
 
   function mouseClicked() {
@@ -293,4 +999,24 @@ function setup() {
         return;
       }
     }
+  }
+
+  function generateStartingColors(puzzle) {
+    cantClickMap = new Map();
+    for (let i = 0; i < puzzle.length; ++i) {
+        const char = puzzle[i];
+        if (char !== '.' && char !== ' ') { // Only process numbers
+            const key = parseInt(char); // Convert character to integer
+            cantClickMap.set(i, key);
+        }
+    }
+    return cantClickMap;
+  }
+  
+  function generateSolutionColors(solpuz) {
+    var solution_colors = [];
+    for (var i = 0; i < solpuz.length; i++) {
+        solution_colors.push(solpuz[i] !== '#' ? 1 : 0);
+    }
+    return solution_colors;
   }
