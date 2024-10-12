@@ -109,4 +109,23 @@ describe('p5.js sketch tests', () => {
     expect(isSolved).toBe(true);
   });
 
+  it('should display a random puzzle on load', async () => {
+    // Reload the page to reset and load a new random puzzle
+    await page.reload();
+  
+    // Get the puzzle index chosen randomly in the sketch
+    const chosenPuzzleIndex = await page.evaluate(() => puzzle_index);
+  
+    // Check that the randomly selected puzzle index is within the valid range
+    const numPuzzles = await page.evaluate(() => puzzles.length);
+    expect(chosenPuzzleIndex).toBeGreaterThanOrEqual(0);
+    expect(chosenPuzzleIndex).toBeLessThan(numPuzzles);
+  
+    // Verify that at least one "unclickable" numbered square is present on the canvas
+    const hasUnclickableSquares = await page.evaluate(() => {
+      return puzzles[puzzle_index].cantClick.size > 0;
+    });
+    expect(hasUnclickableSquares).toBe(true);
+  });
+
 });
