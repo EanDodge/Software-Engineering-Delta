@@ -8,7 +8,7 @@ class GameObject {
         this.x = x;
         this.y = y;
         this.size = 100;
-        this.collision = false;
+        this.collision = true;
     }
 
     drawObject(islandImage) {

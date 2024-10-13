@@ -1,26 +1,19 @@
 // Player object
 // used for the player
 
-// //let playerImage;
-// let xMove = 0;
-// let yMove = 0;
 //used for key inputs
 let xMove = 0;
 let yMove = 0;
 let turn = 0;
 let vel = 0;
 let anchor = false;
-// function preload() {
-//       	backgroundImage = loadImage("./assets/sea.png");
-//         playerImage = loadImage("./assets/shiplvl1Top.png");
-//     }
 
 class Player {
 
     constructor(x, y) {
         this.x = x;                 //current x
         this.y = y;                 //current y
-        this.speed = 3;             //speed of the boat in pixels (how many pixels it moves in one tic)
+        this.speed = parseInt(localStorage.getItem('speed')) || 1;  //speed of the boat in pixels (how many pixels it moves in one tic)
         //this.sizeH = 40;          //height of the test rectangle
         //this.sizeW = 20;          //width of the test rectangle
         this.size = 45;
@@ -30,7 +23,6 @@ class Player {
 		this.currency = parseInt(localStorage.getItem('playerCurrency')) || 100; // Retrieve from localStorage or default to 100
         this.hit = false;
         this.playerImage;
-        
     }
 
     //runs all test for the Player Class
