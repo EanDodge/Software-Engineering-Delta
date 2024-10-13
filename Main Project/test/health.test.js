@@ -55,7 +55,7 @@ describe('Player Health Collision Tests', () => {
         await page.waitForNavigation();
 
         const url = await page.url();
-        const expectedUrl = 'file://' + path.resolve(__dirname, '../gameover.html').replace(/\\/g, '/');
+        const expectedUrl = 'file:///' + path.resolve(__dirname, '../gameover.html').replace(/\\/g, '/');
         expect(decodeURIComponent(url)).toBe(decodeURIComponent(expectedUrl));
     });
 });
