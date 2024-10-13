@@ -17,7 +17,9 @@ class Enemy {
 
     drawEnemy() {
         fill(255, 0, 0);
+        imageMode(CENTER);  //sets the image to be drawn ontop of the enemy x, y
         image(enemyImage, this.x, this.y, this.size, this.size);
+        imageMode(CORNER);  //returns draw mode to default
     }
 
     moveEnemy(player) {
