@@ -12,7 +12,11 @@ class GameObject {
     }
 
     drawObject(islandImage) {
-        fill(0, 255, 0);
+        fill(0, 255, 0);    
+        imageMode(CENTER);      //Sets the image to be drawn in the middle on the x, y
         image(islandImage, this.x, this.y, this.size, this.size);
+        imageMode(CORNER);      //returns the image draw mode to default
     }
 }
+
+module.exports = GameObject;
