@@ -93,7 +93,7 @@ function draw() {
 			rand2 = Math.random() * mapYSize;
 			rand1 = Math.random() > 0.5 ? mapXSize + 20 : -20;
 		}
-		let enemy = new Enemy(rand1, rand2, enemyHealth,enemyImage);
+		let enemy = new Enemy(rand1, rand2, enemyHealth, enemyImage);
 		enemies.push(enemy);
 
 		// parabolic generation

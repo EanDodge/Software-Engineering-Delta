@@ -17,7 +17,7 @@ class Enemy {
 
     drawEnemy() {
         fill(255, 0, 0);
-        image(enemyImage, this.x, this.y, this.size, this.size);
+        image(enemyImage, this.x - this.size / 2, this.y - this.size / 2, this.size, this.size);
     }
 
     moveEnemy(player) {
