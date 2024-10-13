@@ -30,6 +30,8 @@ class Player {
 		this.currency = parseInt(localStorage.getItem('playerCurrency')) || 100; // Retrieve from localStorage or default to 100
         this.hit = false;
         this.playerImage;
+		this.health = 10;
+		this.lastCollisionTime = 0; //Tracks the time of last collision
         
     }
 
@@ -345,13 +347,25 @@ class Player {
     //     }
     checkCollisionEnemies(enemies) {
         let hit = false;
-        enemies.forEach((enemy, index) => {
-            //distance formuala between enemy and projectile midpoints
+        const currentTime = Date.now();
+        const collisionCooldown = 1000; // Cooldown period in milliseconds (e.g., 1000ms = 1 second)
+
+        enemies.forEach((enemy) => {
+            // Distance formula between enemy and player midpoints
             let distance = Math.sqrt((enemy.x - this.x) * (enemy.x - this.x)
                 + (enemy.y - this.y) * (enemy.y - this.y));
 
             if (distance < enemy.size / 2 + this.size / 2) {
                 hit = true;
+            }
+
+            if (hit && (currentTime - this.lastCollisionTime) > collisionCooldown) {
+                this.takeDamage(1); // Decrease player health by 1
+                console.log(`Player health: ${this.health}`);
+                this.lastCollisionTime = currentTime; // Update the last collision time
+                if (this.health <= 0) {
+                    window.location.href = 'gameover.html'; // Navigate to gameover.html
+                }
             }
         });
 
@@ -432,6 +446,19 @@ class Player {
 		player.currency += amount;
 		player.updateCoinCount();
 	}
+
+	updateHealthBar() {
+        const healthBar = document.getElementById('health-bar');
+        const healthPercentage = (this.health / 10) * 100; // Assuming max health is 10
+        healthBar.style.width = healthPercentage + '%';
+    }
+
+    // Call this method whenever the player's health changes
+    takeDamage(amount) {
+        this.health -= amount;
+        if (this.health < 0) this.health = 0;
+        this.updateHealthBar();
+    }
 }
     
 
@@ -492,9 +519,4 @@ function keyReleased() {
 
 //Gamepad basic 4-direction control
 
-
-
-// Initial update to display the starting currency
-document.addEventListener('DOMContentLoaded', function() {
-    player.updateCoinCount();
-});
+module.exports = { Player }; // Export the Player class for testing
