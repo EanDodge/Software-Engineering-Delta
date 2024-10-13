@@ -18,3 +18,5 @@ class GameObject {
         imageMode(CORNER);      //returns the image draw mode to default
     }
 }
+
+module.exports = GameObject;

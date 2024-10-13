@@ -28,29 +28,44 @@ class Player {
         this.timer = 0;
         this.angle = 0;             //angle of the boat in radians
 		this.currency = parseInt(localStorage.getItem('playerCurrency')) || 100; // Retrieve from localStorage or default to 100
-        this.hit = false;
+        this.hitEnemy = false;
+        this.hitIsland = false;
         this.playerImage;
         
     }
 
     //runs all test for the Player Class
-    runTestsPlayer() {
-        this.testConstructor();
-        this.testMovePlayer();
-        this.testCheckCollision();
-        this.testCheckCollisionEnemies();
-    }
+    // runTestsPlayer() {
+    //     this.testConstructor();
+    //     this.testMovePlayer();
+    //     this.testCheckCollision();
+    //     this.testCheckCollisionEnemies();
+    //     //return("passed")
+    // }
 
     testConstructor() {
         //Test framework
         {
-            let testPlayer = new Player  (mapXSize/2, mapYSize/2);
-            console.assert(testPlayer.x === mapXSize/2);
-            console.assert(testPlayer.y === mapYSize/2);
-            console.assert(testPlayer.speed != 0);          //make sure player can move
-            console.assert(testPlayer.size != 0);           //make sure player has size for hitbox
-            console.assert(testPlayer.turningSpeed != 0)    //Make sure player can turn
+            let testMapX = 500;
+            let testMapY = 400;
+            let testPlayer = new Player  (testMapX/2, testMapY/2);
+            if(testPlayer.x != testMapX/2) {
+                return "failed";
+            }
+            if(testPlayer.y != testMapY/2) {
+                return "failed";
+            }
+            if(!(testPlayer.speed != 0)) {
+                return "failed";
+            }
+            if(!(testPlayer.size != 0)) {
+                return "failed";
+            }
+            if(!(testPlayer.turningSpeed != 0)) {
+                return "failed";
+            }
         }
+        return "passed";
     }
 
     drawPlayer() {
@@ -61,7 +76,7 @@ class Player {
         //rectMode(CENTER);
         //rect(0, 0, this.sizeW, this.sizeH);
         imageMode(CENTER);
-        if (this.hit) {
+        if (this.hitEnemy) {
             //image(playerHitImage, 0, 0, this.size, this.size)
             tint('red');
             image(this.playerImage, 0, 0, this.size, this.size)
@@ -72,28 +87,6 @@ class Player {
         rotate(this.angle);
         pop();
     }
-
-    // movePlayer() {
-    //     //used to see if this upcoming move is out of bounds
-    //     let futureX;
-    //     let futureY;
-
-    //     //normalize movement if diagonal
-    //     if (yMove !== 0 && xMove !== 0) {
-    //         futureX = this.x + xMove * this.speed * 0.7;
-    //         futureY = this.y + yMove * this.speed * 0.7;
-    //     }
-    //     else {
-    //         futureX = this.x + xMove * this.speed;
-    //         futureY = this.y + yMove * this.speed;
-    //     }
-
-    //     //check if move is in bounds accounting for size
-    //     if (futureX <= mapXSize - this.size / 2 && futureX >= 0 + this.size / 2)
-    //         this.x = futureX;
-    //     if (futureY <= mapYSize - this.size / 2 && futureY >= 0 + this.size / 2)
-    //         this.y = futureY;
-    // }
 
     movePlayer() {
         //used to see if this upcoming move is out of bounds
@@ -135,26 +128,36 @@ class Player {
     }
 
     testMovePlayer() {
+        let testMapX = 500;
+        let testMapY = 400;
         //Test Framework
         {
             //puts player into middle of map
-            let testPlayer = new Player (mapXSize/2, mapYSize/2);
+            let testPlayer = new Player (testMapX/2, testMapY/2);
 
             //make sure player starts where it should start
-            console.assert(testPlayer.x == mapXSize/2);
-            console.assert(testPlayer.y == mapYSize/2);
+            if(!(testPlayer.x == testMapX/2)) {
+                return "failed";
+            }
+            if(!(testPlayer.y == testMapY/2)) {
+                return "failed";
+            }
         }
         //Tests that player moves forward, and coordinates are calculated correctly
         {
             //puts player into middle of map
-            let testPlayer = new Player (mapXSize/2, mapYSize/2);
+            let testPlayer = new Player (testMapX/2, testMapY/2);
 
             //make player move forward (yes -1 is forward dont ask)
             yMove = -1;
             testPlayer.movePlayer();
 
-            console.assert(testPlayer.x == mapXSize/2);
-            console.assert(testPlayer.y == mapYSize/2 - testPlayer.speed);
+            if(!(testPlayer.x == testMapX/2)) {
+                return "failed";
+            }
+            if(!(testPlayer.y == testMapY/2 - testPlayer.speed)) {
+                return "failed";
+            }
 
 
             //reset yMove after done
@@ -163,14 +166,18 @@ class Player {
         //Tests that player moves backwards, and coordinates are calculated correctly
         {
             //puts player into middle of map
-            let testPlayer = new Player (mapXSize/2, mapYSize/2);
+            let testPlayer = new Player (testMapX/2, testMapY/2);
 
             //make player move backward
             yMove = 1;
             testPlayer.movePlayer();
 
-            console.assert(testPlayer.x == mapXSize/2);
-            console.assert(testPlayer.y == mapYSize/2 + testPlayer.speed);
+            if(!(testPlayer.x == testMapX/2)) {
+                return "failed";
+            }
+            if(!(testPlayer.y == testMapY/2 + testPlayer.speed)) {
+                return "failed";
+            }
 
             //reset yMove after done
             yMove = 0;
@@ -178,15 +185,21 @@ class Player {
         //Tests that player turns clockwise
         {
             //puts player into middle of map
-            let testPlayer = new Player (mapXSize/2, mapYSize/2);
+            let testPlayer = new Player (testMapX/2, testMapY/2);
 
             //make player turn clockwise
             turn = -1;
             testPlayer.movePlayer();
 
-            console.assert(testPlayer.x == mapXSize/2);
-            console.assert(testPlayer.y == mapYSize/2);
-            console.assert(testPlayer.angle == -1 * testPlayer.turningSpeed);
+            if(!(testPlayer.x == testMapX/2)) {
+                return "failed";
+            }
+            if(!(testPlayer.y == testMapY/2)) {
+                return "failed";
+            }
+            if(!(testPlayer.angle == -1 * testPlayer.turningSpeed)) {
+                return "failed";
+            }
 
 
             //reset turn after done
@@ -195,15 +208,21 @@ class Player {
         //tests that player turns counter-clockwise
         {
             //puts player into middle of map
-            let testPlayer = new Player (mapXSize/2, mapYSize/2);
+            let testPlayer = new Player (testMapX/2, testMapY/2);
 
             //make player turn counter-clockwise (yes turn is counter intuitave)
             turn = 1;
             testPlayer.movePlayer();
 
-            console.assert(testPlayer.x == mapXSize/2);
-            console.assert(testPlayer.y == mapYSize/2);
-            console.assert(testPlayer.angle == testPlayer.turningSpeed);
+            if(!(testPlayer.x == testMapX/2)) {
+                return "failed";
+            }
+            if(!(testPlayer.y == testMapY/2)) {
+                return "failed";
+            }
+            if(!(testPlayer.angle == testPlayer.turningSpeed)) {
+                return "failed";
+            }
 
             //reset turn after done
             turn = 0;
@@ -211,20 +230,24 @@ class Player {
         //Tests that coordinate calculation with a turning input is working (cw - F)
         {
             //puts player into middle of map
-            let testPlayer = new Player (mapXSize/2, mapYSize/2);
+            let testPlayer = new Player (testMapX/2, testMapY/2);
 
             //make player turn clockwise and move forward  
             turn = 1;
             yMove = -1;
             testPlayer.movePlayer();
 
-            console.assert(testPlayer.x ==  (mapXSize/2) + 
-                                            testPlayer.speed * sin(testPlayer.angle) * yMove);
-            console.assert(testPlayer.y ==  (mapYSize/2) + 
-                                            testPlayer.speed * cos(testPlayer.angle) * yMove);
-            console.assert(testPlayer.angle == testPlayer.turningSpeed);
-            
-
+            if(!(testPlayer.x ==  (testMapX/2) + 
+                                            testPlayer.speed * sin(testPlayer.angle) * yMove)) {
+                                                return "failed";
+                                            }
+            if(!(testPlayer.y ==  (testMapY/2) + 
+                                            testPlayer.speed * cos(testPlayer.angle) * yMove)) {
+                                                return "failed";
+                                            }
+            if(!(testPlayer.angle == testPlayer.turningSpeed)) {
+                return "failed";
+            }
             //reset turn after done
             turn = 0;
             yMove = 0;
@@ -232,18 +255,24 @@ class Player {
         //Tests that coordinate calculation with a turning input is working (ccw - F)
         {
             //puts player into middle of map
-            let testPlayer = new Player (mapXSize/2, mapYSize/2);
+            let testPlayer = new Player (testMapX/2, testMapY/2);
 
             //make player turn counter-clockwise and move forward  
             turn = -1;
             yMove = -1;
             testPlayer.movePlayer();
 
-            console.assert(testPlayer.x ==  (mapXSize/2) + 
-                                            testPlayer.speed * sin(testPlayer.angle) * yMove);
-            console.assert(testPlayer.y ==  (mapYSize/2) + 
-                                            testPlayer.speed * cos(testPlayer.angle) * yMove);
-            console.assert(testPlayer.angle == -1 * testPlayer.turningSpeed);
+            if(!(testPlayer.x ==  (testMapX/2) + 
+                                            testPlayer.speed * sin(testPlayer.angle) * yMove)) {
+                                                return "failed";
+                                            }
+            if(!(testPlayer.y ==  (testMapY/2) + 
+                                            testPlayer.speed * cos(testPlayer.angle) * yMove)) {
+                                                return "failed";
+                                            }
+            if(!(testPlayer.angle == -1 * testPlayer.turningSpeed)) {
+                return "failed";
+            }
             
 
             //reset turn after done
@@ -253,18 +282,24 @@ class Player {
         //Tests that coordinate calculation with a turning input is working (cw - R)
         {
             //puts player into middle of map
-            let testPlayer = new Player (mapXSize/2, mapYSize/2);
+            let testPlayer = new Player (testMapX/2, testMapY/2);
 
             //make player turn clockwise and move forward  
             turn = 1;
             yMove = 1;
             testPlayer.movePlayer();
 
-            console.assert(testPlayer.x ==  (mapXSize/2) + 
-                                            testPlayer.speed * sin(testPlayer.angle) * yMove);
-            console.assert(testPlayer.y ==  (mapYSize/2) + 
-                                            testPlayer.speed * cos(testPlayer.angle) * yMove);
-            console.assert(testPlayer.angle == testPlayer.turningSpeed);
+            if(!(testPlayer.x ==  (testMapX/2) + 
+                                            testPlayer.speed * sin(testPlayer.angle) * yMove)) {
+                                                return "failed";
+                                            }
+            if(!(testPlayer.y ==  (testMapY/2) + 
+                                            testPlayer.speed * cos(testPlayer.angle) * yMove)) {
+                                                return "failed";
+                                            }
+            if(!(testPlayer.angle == testPlayer.turningSpeed)) {
+                return "failed";
+            }
             
 
             //reset turn after done
@@ -274,26 +309,35 @@ class Player {
         //Tests that coordinate calculation with a turning input is working (ccw - R)
         {
             //puts player into middle of map
-            let testPlayer = new Player (mapXSize/2, mapYSize/2);
+            let testPlayer = new Player (testMapX/2, testMapY/2);
 
             //make player turn counter-clockwise and move forward  
             turn = -1;
             yMove = 1;
             testPlayer.movePlayer();
 
-            console.assert(testPlayer.x ==  (mapXSize/2) + 
-                                            testPlayer.speed * sin(testPlayer.angle) * yMove);
-            console.assert(testPlayer.y ==  (mapYSize/2) + 
-                                            testPlayer.speed * cos(testPlayer.angle) * yMove);
-            console.assert(testPlayer.angle == -1 * testPlayer.turningSpeed);
+            if(!(testPlayer.x ==  (testMapX/2) + 
+                                            testPlayer.speed * sin(testPlayer.angle) * yMove)) {
+                                                return "failed";
+                                            }
+            if(!(testPlayer.y ==  (testMapY/2) + 
+                                            testPlayer.speed * cos(testPlayer.angle) * yMove)) {
+                                                return "failed";
+                                            }
+            if(!(testPlayer.angle == -1 * testPlayer.turningSpeed)) {
+                return "failed";
+            }
             
 
             //reset turn after done
             turn = 0;
             yMove = 0;
         }
+
+        return "passed";
     }   //testMovePlayer() end
 
+    //a usless function
     checkCollision(gameObject) {
         //distance formuala between player and game object midpoints
         let distance = Math.sqrt((gameObject.x - this.x) * (gameObject.x - this.x)
@@ -307,18 +351,27 @@ class Player {
         return false;
     }
 
+    //usless test of usless function
     //assuming that a new game object is not large enough to hit ship when at 0,0 and ship is in middle of map
     testCheckCollision() {
         {
-            let testPlayer = new Player(mapXSize/2, mapYSize/2);
+            let testMapX = 500;
+            let testMapY = 400;
+
+            let testPlayer = new Player(testMapX/2, testMapY/2);
             let nonInterfearingObj = new GameObject(0,0);
-            let interfearingObj = new GameObject(mapXSize/2, mapYSize/2);
+            let interfearingObj = new GameObject(testMapX/2, testMapY/2);
             
             //test collision with no other objects return false
-            console.assert(testPlayer.checkCollision(nonInterfearingObj) === false);
+            if(!(testPlayer.checkCollision(nonInterfearingObj) === false)) {
+                return "failed";
+            }
             //tests that collision with a game object returns true
-            console.assert(testPlayer.checkCollision(interfearingObj) === true);
+            if(!(testPlayer.checkCollision(interfearingObj) === true)) {
+                return "failed";
+            }
         }
+        return "passed";
     }
 
     // checkCollisionEnemies(enemies) {
@@ -356,12 +409,12 @@ class Player {
         });
 
         if (hit && this.timer === 0) {
-            this.hit = true;
+            this.hitEnemy = true;
             this.timer = 60;
         }
         else {
             if (this.timer <= 50) {
-                this.hit = false;
+                this.hitEnemy = false;
             }
             if (this.timer > 0)
                 this.timer--;
@@ -371,22 +424,42 @@ class Player {
     //assuming enemy is larger than 10
     testCheckCollisionEnemies() {
         {
-            let testPlayer = new Player(mapXSize/2, mapYSize/2);
-            let testEnemyNoHit = new Enemy(0,0);
-            let testEnemyHit = new Enemy(mapXSize/2, mapYSize/2);
-            let testEnemyHit2 = new Enemy(mapXSize/2 + 5, mapYSize/2 + 5);
+            let testMapX = 500;
+            let testMapY = 400;
 
-            //test that enemy ontop of player does hit player
-            console.assert(testPlayer.checkCollision(testEnemyHit) === true);
-            //test that enemy not near player does not hit player
-            console.assert(testPlayer.checkCollision(testEnemyNoHit) === false);
-            //test that enemy touching player but not at exact same coordinats hits player
-            console.assert(testPlayer.checkCollision(testEnemyHit2) === true);
+            
+            let testEnemyNoHit = [new Enemy(0,0)];
+            let testEnemyHit = [new Enemy(testMapX/2, testMapY/2)];
+            let testEnemyHit2 = [new Enemy(testMapX/2 + 5, testMapY/2 + 5)];
+
+
+            {
+                let testPlayer = new Player(testMapX/2, testMapY/2);
+                testPlayer.checkCollisionEnemies(testEnemyHit);
+                if(testPlayer.hitEnemy === false) {
+                    return "failed";
+                }
+            }
+            {
+                let testPlayer = new Player(testMapX/2, testMapY/2);
+                testPlayer.checkCollisionEnemies(testEnemyNoHit);
+                if(testPlayer.hitEnemy === true) {
+                    return "failed";
+                }
+            }
+            {
+                let testPlayer = new Player(testMapX/2, testMapY/2);
+                testPlayer.checkCollisionEnemies(testEnemyHit2);
+                if(testPlayer.hitEnemy === false) {
+                    return "failed";
+                }
+            }
         }
+        return "passed";
     }
 
 
-    checkCollisionIsland(islands) {
+    checkCollisionIslands(islands) {
         let hit = false;
         islands.forEach((island, index) => {
             //distance formuala between enemy and midpoints
@@ -398,18 +471,42 @@ class Player {
             }
         });
 
-        if (hit && this.timer === 0) {
-            this.color = "blue";
-            this.timer = 60;
+        if (hit) {
+            //this.color = "blue";
+            this.hitIsland = true;
+            if(typeof document !== 'undefined') {   //allows tests to ignore this line
             window.location.href = 'upgrade.html'; // Navigate to upgrades.html
-        }
-        else {
-            if (this.timer <= 50)
-                this.color = "white";
-            if (this.timer > 0)
-                this.timer--;
+            }
         }
     }
+
+    testCheckCollisionIsland() {
+        {
+            let testMapX = 500;
+            let testMapY = 400;
+
+            let nonInterfearingObj = [new GameObject(0,0)];
+            let interfearingObj = [new GameObject(testMapX/2, testMapY/2)];
+            
+            {
+                let testPlayer = new Player(testMapX/2, testMapY/2);
+                testPlayer.checkCollisionIslands(nonInterfearingObj);
+                if(testPlayer.hitIsland === true) {
+                    return "failed";
+                }
+            }
+            {
+                let testPlayer = new Player(testMapX/2, testMapY/2);
+                testPlayer.checkCollisionIslands(interfearingObj);
+                if(testPlayer.hitIsland === false) {
+                    return "failed";
+                }
+            }
+
+        }
+        return "passed";
+    }
+
 	updateCoinCount() {
         document.getElementById('coinCount').innerText = this.currency;
         localStorage.setItem('playerCurrency', this.currency); // Store in localStorage
@@ -433,26 +530,6 @@ class Player {
 		player.updateCoinCount();
 	}
 }
-    
-
-
-
-//p5 built in function
-// function keyPressed() {
-//     if (key == 'w') {
-//         yMove -= 1 ;
-//     }
-//     if (key == 'a') {
-//         turn += 1;
-//     }
-//     if (key == 's') {
-//         yMove += 1;
-//     }
-//     if (key == 'd') {
-//         turn -= 1;
-
-//     }
-// }
 
 function keyPressed() {
     if (key == 'w') {
@@ -495,6 +572,11 @@ function keyReleased() {
 
 
 // Initial update to display the starting currency
-document.addEventListener('DOMContentLoaded', function() {
-    player.updateCoinCount();
-});
+//typeof is requred for the player test to run through nodejs and not have to set up browser testing shit
+if(typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', function() {
+        player.updateCoinCount();
+    });
+}
+
+module.exports = Player;
