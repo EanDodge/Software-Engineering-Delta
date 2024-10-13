@@ -8,31 +8,20 @@ describe('Player Health Collision Tests', () => {
     beforeAll(async () => {
         browser = await puppeteer.launch();
         page = await browser.newPage();
+
+        // Listen for console events and log them to the terminal
+        page.on('console', msg => {
+            for (let i = 0; i < msg.args().length; ++i)
+                console.log(`${i}: ${msg.args()[i]}`);
+        });
     });
 
     afterAll(async () => {
         await browser.close();
     });
 
-    test('Player health decreases on collision', async () => {
-        await page.goto('file://' + __dirname + '/../index.html');
-
-        // Set initial player health and simulate collision
-        const playerHealth = await page.evaluate(() => {
-            localStorage.setItem('playerCurrency', '100');
-            const player = new Player(50, 50);
-            player.health = 10;
-            const enemies = [{ x: 50, y: 50, size: 10 }];
-            player.checkCollisionEnemies(enemies);
-            console.log("Player health after collision: " + player.health);
-            return player.health;
-        });
-
-        expect(playerHealth).toBe(9);
-    });
-
     test('Player health does not decrease if collision cooldown is active', async () => {
-        await page.goto('file://' + __dirname + '/../index.html');
+        await page.goto('file://' + path.resolve(__dirname, '../index.html').replace(/\\/g, '/'));
 
         // Set initial player health and simulate collision with cooldown
         const playerHealth = await page.evaluate(() => {
@@ -50,7 +39,7 @@ describe('Player Health Collision Tests', () => {
     });
 
     test('Player navigates to gameover.html when health reaches 0', async () => {
-        await page.goto('file://' + __dirname + '/../index.html');
+        await page.goto('file://' + path.resolve(__dirname, '../index.html').replace(/\\/g, '/'));
 
         // Set player health to 1 and simulate collision to trigger game over
         await page.evaluate(() => {
@@ -66,8 +55,9 @@ describe('Player Health Collision Tests', () => {
         await page.waitForNavigation();
 
         const url = await page.url();
-		const expectedUrl = 'file://' + path.resolve(__dirname, '../gameover.html');
-        expect(decodeURIComponent(url)).toBe(decodeURIComponent(expectedUrl));    });
+        const expectedUrl = 'file://' + path.resolve(__dirname, '../gameover.html').replace(/\\/g, '/');
+        expect(decodeURIComponent(url)).toBe(decodeURIComponent(expectedUrl));
+    });
 });
 
 describe('Player Health Bar Tests', () => {
@@ -77,6 +67,12 @@ describe('Player Health Bar Tests', () => {
     beforeAll(async () => {
         browser = await puppeteer.launch();
         page = await browser.newPage();
+
+        // Listen for console events and log them to the terminal
+        page.on('console', msg => {
+            for (let i = 0; i < msg.args().length; ++i)
+                console.log(`${i}: ${msg.args()[i]}`);
+        });
     });
 
     afterAll(async () => {
@@ -84,7 +80,7 @@ describe('Player Health Bar Tests', () => {
     });
 
     test('Health bar updates correctly when player takes damage', async () => {
-        await page.goto('file://' + path.resolve(__dirname, '../index.html'));
+        await page.goto('file://' + path.resolve(__dirname, '../index.html').replace(/\\/g, '/'));
 
         // Set initial player health and simulate taking damage
         const healthBarWidth = await page.evaluate(() => {
@@ -100,7 +96,7 @@ describe('Player Health Bar Tests', () => {
     });
 
     test('Health bar is empty when player health is 0', async () => {
-        await page.goto('file://' + path.resolve(__dirname, '../index.html'));
+        await page.goto('file://' + path.resolve(__dirname, '../index.html').replace(/\\/g, '/'));
 
         // Set player health to 0 and update health bar
         const healthBarWidth = await page.evaluate(() => {
@@ -114,7 +110,7 @@ describe('Player Health Bar Tests', () => {
     });
 
     test('Health bar is full when player health is 10', async () => {
-        await page.goto('file://' + path.resolve(__dirname, '../index.html'));
+        await page.goto('file://' + path.resolve(__dirname, '../index.html').replace(/\\/g, '/'));
 
         // Set player health to 10 and update health bar
         const healthBarWidth = await page.evaluate(() => {

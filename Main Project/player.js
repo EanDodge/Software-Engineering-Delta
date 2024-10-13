@@ -448,10 +448,12 @@ class Player {
 	}
 
 	updateHealthBar() {
-        const healthBar = document.getElementById('health-bar');
-        const healthPercentage = (this.health / 10) * 100; // Assuming max health is 10
-        healthBar.style.width = healthPercentage + '%';
-    }
+		if (typeof document !== 'undefined') {
+			const healthBar = document.getElementById('health-bar');
+			const healthPercentage = (this.health / 10) * 100; // Assuming max health is 10
+			healthBar.style.width = healthPercentage + '%';
+		}
+	}
 
     // Call this method whenever the player's health changes
     takeDamage(amount) {
