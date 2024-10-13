@@ -1,8 +1,9 @@
 let coins = 100;// Initial coin count and upgrade levels
+
 let upgrades = {
     armor: 1,
     cannons: 1,
-    speed: 1,
+    speed: parseInt(localStorage.getItem('speed')) || 1,
     AmmoCapacity: 1,
     Hints: 1
 };
@@ -31,9 +32,10 @@ function upgrade(attribute) {
 		console.log(cost);
         if (player.buyUpgrade(cost)) {
             upgrades[attribute]++;
+            localStorage.setItem(attribute, upgrades[attribute]);
+            player.updateCoinCount();
             let tier = upgrades[attribute];
             document.getElementById(attribute + 'Level').innerText = 'Tier: ' + tier + ' - ' + tierNames[attribute][tier - 1];
-            player.updateCoinCount();
 			//document.getElementById('coinCount').innerText = coins;
         } else {
             alert('Not enough coins!');
