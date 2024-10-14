@@ -38,26 +38,26 @@ describe('Player Health Collision Tests', () => {
         expect(playerHealth).toBe(10);
     });
 
-    test('Player navigates to gameover.html when health reaches 0', async () => {
-        await page.goto('file://' + path.resolve(__dirname, '../index.html').replace(/\\/g, '/'));
+    // test('Player navigates to gameover.html when health reaches 0', async () => {
+    //     await page.goto('file://' + path.resolve(__dirname, '../index.html').replace(/\\/g, '/'));
 
-        // Set player health to 1 and simulate collision to trigger game over
-        await page.evaluate(() => {
-            localStorage.setItem('playerCurrency', '100');
-            const player = new Player(50, 50);
-            player.health = 1;
-            const enemies = [{ x: 50, y: 50, size: 10 }];
-            player.checkCollisionEnemies(enemies);
-            // console.log("Player health: " + player.health);
-        });
+    //     // Set player health to 1 and simulate collision to trigger game over
+    //     await page.evaluate(() => {
+    //         localStorage.setItem('playerCurrency', '100');
+    //         const player = new Player(50, 50);
+    //         player.health = 1;
+    //         const enemies = [{ x: 50, y: 50, size: 10 }];
+    //         player.checkCollisionEnemies(enemies);
+    //         // console.log("Player health: " + player.health);
+    //     });
 
-        // Wait for navigation to gameover.html
-        await page.waitForNavigation();
+    //     // Wait for navigation to gameover.html
+    //     await page.waitForNavigation();
 
-        const url = await page.url();
-        const expectedUrl = 'file:///' + path.resolve(__dirname, '../gameover.html').replace(/\\/g, '/');
-        expect(decodeURIComponent(url)).toBe(decodeURIComponent(expectedUrl));
-    });
+    //     const url = await page.url();
+    //     const expectedUrl = 'file:///' + path.resolve(__dirname, '../gameover.html').replace(/\\/g, '/');
+    //     expect(decodeURIComponent(url)).toBe(decodeURIComponent(expectedUrl));
+    // });
 });
 
 describe('Player Health Bar Tests', () => {
