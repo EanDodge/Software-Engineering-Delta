@@ -407,7 +407,7 @@ class Player {
 
             if (hit && (currentTime - this.lastCollisionTime) > collisionCooldown) {
                 this.takeDamage(1); // Decrease player health by 1
-                console.log(`Player health: ${this.health}`);
+                // console.log(`Player health: ${this.health}`);
                 this.lastCollisionTime = currentTime; // Update the last collision time
                 if (this.health <= 0) {
                     window.location.href = 'gameover.html'; // Navigate to gameover.html
@@ -517,7 +517,7 @@ class Player {
 	updateCoinCount() {
         document.getElementById('coinCount').innerText = this.currency;
         localStorage.setItem('playerCurrency', this.currency); // Store in localStorage
-		console.log(player.currency);
+		// console.log(player.currency);
     }
 
 	buyUpgrade(cost) {

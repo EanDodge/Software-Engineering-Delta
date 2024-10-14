@@ -11,8 +11,8 @@ describe('Player Health Collision Tests', () => {
 
         // Listen for console events and log them to the terminal
         page.on('console', msg => {
-            for (let i = 0; i < msg.args().length; ++i)
-                console.log(`${i}: ${msg.args()[i]}`);
+            // for (let i = 0; i < msg.args().length; ++i)
+                //console.log(`${i}: ${msg.args()[i]}`);
         });
     });
 
@@ -31,7 +31,7 @@ describe('Player Health Collision Tests', () => {
             player.lastCollisionTime = Date.now();
             const enemies = [{ x: 50, y: 50, size: 10 }];
             player.checkCollisionEnemies(enemies);
-            console.log("Player health with cooldown: " + player.health);
+            //console.log("Player health with cooldown: " + player.health);
             return player.health;
         });
 
@@ -48,7 +48,7 @@ describe('Player Health Collision Tests', () => {
             player.health = 1;
             const enemies = [{ x: 50, y: 50, size: 10 }];
             player.checkCollisionEnemies(enemies);
-            console.log("Player health: " + player.health);
+            // console.log("Player health: " + player.health);
         });
 
         // Wait for navigation to gameover.html
@@ -70,8 +70,8 @@ describe('Player Health Bar Tests', () => {
 
         // Listen for console events and log them to the terminal
         page.on('console', msg => {
-            for (let i = 0; i < msg.args().length; ++i)
-                console.log(`${i}: ${msg.args()[i]}`);
+            // for (let i = 0; i < msg.args().length; ++i)
+                // console.log(`${i}: ${msg.args()[i]}`);
         });
     });
 

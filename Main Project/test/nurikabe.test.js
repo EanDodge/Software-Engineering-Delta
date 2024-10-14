@@ -14,7 +14,7 @@ describe('p5.js sketch tests', () => {
     page = await browser.newPage();
 
     // Listen for browser console messages
-    page.on('console', msg => console.log('PAGE LOG:', msg.text()));
+    // page.on('console', msg => console.log('PAGE LOG:', msg.text()));
 
     // Load p5.js nurikabe
     await page.goto('file://' + __dirname + '/../nurikabe.html');
