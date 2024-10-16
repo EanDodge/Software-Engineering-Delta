@@ -60,9 +60,6 @@ function setup() {
 	//island.collision = true;
 	gameObjects.push(island);
 
-
-	runTests();
-
 }
 
 function draw() {
@@ -93,7 +90,7 @@ function draw() {
 			rand2 = Math.random() * mapYSize;
 			rand1 = Math.random() > 0.5 ? mapXSize + 20 : -20;
 		}
-		let enemy = new Enemy(rand1, rand2, enemyHealth,enemyImage);
+		let enemy = new Enemy(rand1, rand2, enemyHealth, enemyImage);
 		enemies.push(enemy);
 
 		// parabolic generation
@@ -129,6 +126,11 @@ function draw() {
 	player.movePlayer();
 	player.checkCollisionEnemies(enemies);
 
+	player.checkCollisionIslands(gameObjects);
+	if (player.hitIslant) {
+		window.location.href = 'upgrade.html'; // Navigate to upgrades.html
+	}
+
 
 	if (projectileFrameCount % 30 === 0) {
 		extraMove = player.getMovementOfPlayer();
@@ -153,12 +155,11 @@ function draw() {
 
 	gameObjects.forEach((gameObject) => {
 		gameObject.drawObject(islandImage);
-		player.checkCollision(gameObject);
-		player.checkCollisionIsland(gameObjects);
 	});
 
 	//moves cam to centered on player, z=800 default
-	cam.setPosition(player.x, player.y, 800);
+	//MUST BE 801 FOR 2d LINES TO RENDER ABOVE IMAGES
+	cam.setPosition(player.x, player.y, 801);
 
 	frameCount++;
 	projectileFrameCount++;
@@ -169,9 +170,4 @@ function draw() {
 function mousePressed() {
 	console.log("mouse: " + mouseX + ", " + mouseY);
 	console.log("player: " + player.x + ", " + player.y);
-}
-
-//this is where we can put our testing functions
-function runTests() {
-	player.runTestsPlayer();
 }

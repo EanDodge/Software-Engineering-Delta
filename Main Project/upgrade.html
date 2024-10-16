@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<lang ="en">
+<lang="en">
     <head>
         <meta charset="UTF-8">
         <title>Upgrade Menu</title>
@@ -59,7 +59,7 @@
 
 
 
-        </style>       
+        </style>    
     </head>
     <body>
         <div class = "menu">
@@ -104,5 +104,10 @@
 			player.updateCoinCount();
 		</script>
 		<script src="upgradeMenu.js"></script>
+        <script>
+            //set upgrade values to what they currently are
+            let tier = parseInt(localStorage.getItem('speed')) || 1;
+            document.getElementById('speedLevel').innerText = 'Tier: ' + tier + ' - ' + tierNames['speed'][tier - 1];
+        </script>   
 	</body>
 	</html>
