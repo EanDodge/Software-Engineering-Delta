@@ -60,9 +60,6 @@ function setup() {
 	//island.collision = true;
 	gameObjects.push(island);
 
-
-	runTests();
-
 }
 
 // function draw() {
@@ -79,12 +76,33 @@ function setup() {
 // 	let offsetX = player.x % backgroundImage.width;
 //     let offsetY = player.y % backgroundImage.height;
 
+<<<<<<< HEAD
 //     // Draw the background image multiple times to tile it over the canvas
 //     for (let x = -offsetX - backgroundImage.width; x < displayWidth; x += backgroundImage.width) {
 //         for (let y = -offsetY - backgroundImage.height; y < displayHeight; y += backgroundImage.height) {
 //             image(backgroundImage, x, y, backgroundImage.width, backgroundImage.height);
 //         }
 //     }
+=======
+	//enemy generation
+	// enemyFrameCount = 200 - (enemySpawnNumber/2)^1.5
+	// y = 200 - (x/2)^1.5 if want to graph
+	let enemySpawnTimer = 200 - Math.ceil(Math.pow(enemySpawnNumber, 2));
+	if (enemyFrameCount % enemySpawnTimer === 0) {
+		let generateXFirst = Math.random() > 0.5;
+		let rand1;
+		let rand2;
+		if (generateXFirst) {
+			rand1 = Math.random() * mapXSize;
+			rand2 = Math.random() > 0.5 ? mapYSize + 20 : -20;
+		}
+		else {
+			rand2 = Math.random() * mapYSize;
+			rand1 = Math.random() > 0.5 ? mapXSize + 20 : -20;
+		}
+		let enemy = new Enemy(rand1, rand2, enemyHealth, enemyImage);
+		enemies.push(enemy);
+>>>>>>> ae8a2bda0fcd5faa82d44edc6fcf04098be4ef62
 
 // 	//enemy generation
 // 	// enemyFrameCount = 200 - (enemySpawnNumber/2)^1.5
@@ -138,6 +156,11 @@ function setup() {
 // 	player.movePlayer();
 // 	player.checkCollisionEnemies(enemies);
 
+	player.checkCollisionIslands(gameObjects);
+	if (player.hitIslant) {
+		window.location.href = 'upgrade.html'; // Navigate to upgrades.html
+	}
+
 
 // 	if (projectileFrameCount % 30 === 0) {
 // 		extraMove = player.getMovementOfPlayer();
@@ -160,14 +183,13 @@ function setup() {
 // 	});
 
 
-// 	gameObjects.forEach((gameObject) => {
-// 		gameObject.drawObject(islandImage);
-// 		player.checkCollision(gameObject);
-// 		player.checkCollisionIsland(gameObjects);
-// 	});
+	gameObjects.forEach((gameObject) => {
+		gameObject.drawObject(islandImage);
+	});
 
-// 	//moves cam to centered on player, z=800 default
-// 	cam.setPosition(player.x, player.y, 800);
+	//moves cam to centered on player, z=800 default
+	//MUST BE 801 FOR 2d LINES TO RENDER ABOVE IMAGES
+	cam.setPosition(player.x, player.y, 801);
 
 // 	frameCount++;
 // 	projectileFrameCount++;
@@ -283,9 +305,4 @@ function draw() {
 function mousePressed() {
 	console.log("mouse: " + mouseX + ", " + mouseY);
 	console.log("player: " + player.x + ", " + player.y);
-}
-
-//this is where we can put our testing functions
-function runTests() {
-	player.runTestsPlayer();
 }

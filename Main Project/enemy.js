@@ -17,8 +17,15 @@ class Enemy {
 
     drawEnemy() {
         fill(255, 0, 0);
+        imageMode(CENTER);  //sets the image to be drawn ontop of the enemy x, y
         image(enemyImage, this.x, this.y, this.size, this.size);
+<<<<<<< HEAD
         imageMode(CENTER);
+=======
+        imageMode(CORNER);  //returns draw mode to default
+
+		    console.log("Enemy health: " + this.health);
+>>>>>>> ae8a2bda0fcd5faa82d44edc6fcf04098be4ef62
 
     }
 
@@ -47,9 +54,12 @@ class Enemy {
 
             if (distance < projectile.size / 2 + this.size / 2) {
                 this.health--;
+				console.log("Enemy hit! Health: " + this.health);
                 projectiles.splice(index, 1);
 				
             }
         });
     }
 }
+
+module.exports = Enemy;

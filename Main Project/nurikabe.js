@@ -2,6 +2,7 @@ let rows = 9; let cols = 9;
 let square_size = 50; //length and height of each square
 let square_states = 2; //number of color states each square can have
 let puzzles = []; //will store the puzzle starting states and solution states
+let rulesPopup;
 
 //==================================================================================================================
 // Nurikabe rules:
@@ -44,6 +45,42 @@ function setup() {
     rectMode(CENTER);
 
     background(220); //gray background
+
+    // Create the pop-up text box using createDiv with the Nurikabe rules
+    rulesPopup = createDiv(`
+      <h2>Nurikabe rules:</h2>
+      <ul>
+          <li>"Islands" are made up of white squares, the blue squares are water</li>
+          <li>Each starting square is part of an island, the amount of white squares this island has is listed on the square</li>
+          <li>Each island has only one numbered square</li>
+          <li>Islands cannot touch horizontally or vertically (diagonally is ok)</li>
+          <li>There cannot be 2x2 squares of water</li>
+          <li>All water blocks must be connected</li>
+      </ul>
+  `).id('rulesPopup');
+    rulesPopup.style('font-size', '16px');
+    rulesPopup.style('padding', '10px');
+    rulesPopup.style('background-color', '#fff');
+    rulesPopup.style('border', '1px solid #000');
+    rulesPopup.style('position', 'absolute');
+    rulesPopup.style('left', '50%');
+    rulesPopup.style('top', '50%');
+    rulesPopup.style('transform', 'translate(-50%, -50%)');
+    rulesPopup.style('display', 'none'); // Hide the pop-up initially
+
+    // Create a button to show the pop-up
+    let rulesButton = createButton('Rules');
+    rulesButton.position(10, 50);
+    rulesButton.mousePressed(showPopup);
+
+    // Create a button inside the pop-up to close it
+    let closeRules = createButton('Close');
+    closeRules.mousePressed(hidePopup);
+    closeRules.parent(rulesPopup); // Attach the button to the pop-up
+    closeRules.style('position', 'absolute');
+    closeRules.style('top', '10px');
+    closeRules.style('right', '10px');
+
 
     // here is how all the puzzle start and puzzle solution states are stored:
     // puzzles[0]
@@ -1019,4 +1056,12 @@ function setup() {
         solution_colors.push(solpuz[i] !== '#' ? 1 : 0);
     }
     return solution_colors;
+  }
+
+  function showPopup() {
+    rulesPopup.style('display', 'block'); // Show the pop-up
+  }
+  
+  function hidePopup() {
+    rulesPopup.style('display', 'none'); // Hide the pop-up
   }

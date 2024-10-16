@@ -20,8 +20,17 @@
 </head>
 
 <body>
+	<div id="health-bar-container">
+		<div id="health-bar"></div>
+	</div>
 	<div class = "coins">Coins: <span id = "coinCount"></span></div>
   <script src="sketch.js"></script>
+  <script>
+	// Initial update to display the starting currency
+	document.addEventListener('DOMContentLoaded', function() {
+		player.updateCoinCount();
+});
+  </script>
 </body>
 
 </html>
