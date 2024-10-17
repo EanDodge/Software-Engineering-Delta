@@ -3,13 +3,17 @@ let square_size = 45; //length and height of each square
 let square_states = 4; //number of color states each square can have
 let interval = 30;
 
+// Here for globlal, needed for testing
+let incompletedGame = true;
+
+// Retrieves a random sudoku pattern from 'sudokuPick.js'
 let indexForSudoku = giveSudokuIndex();
 let sudoku = sudoku_samples[indexForSudoku];
 let sudoku_solution = sudoku_answers[indexForSudoku];
 
 function setup() {
     //create a canvas in the center of the screen
-    var canvas = createCanvas(cols * square_size, rows * square_size);
+    canvas = createCanvas(cols * square_size, rows * square_size);
     var center_x = (windowWidth - width) / 2;
     var center_y = (windowHeight - height) / 2;
     canvas.position(center_x, center_y);
@@ -47,7 +51,6 @@ function setup() {
 
     background(220); //gray background
 
-    cantClick = [1, 10, 20, 25, 70]; //specifies which squares cannot be clicked
   }
 
   
@@ -60,6 +63,9 @@ function setup() {
       strokeWeight(1);
       rect(xpos[i], ypos[i], sideLength, sideLength); //create square
       
+
+      // Next four ifs:
+      // Create the grid-like sanctions, divide the grid into 9 equal parts
       if (i <= rows-1) { 
         strokeWeight(6);
         line(xpos[i] - sideLength/2, ypos[i] - sideLength/2, xpos[i] - sideLength/2, ypos[i] + sideLength/2);
@@ -109,10 +115,9 @@ function setup() {
         }
         currSquare = i; // sets currSquare to the current square clicked on by mouse
         return;
-      } else {
-        currSquare = -1;
       }
     }
+    currSquare = -1;
   }
 
   function keyPressed() {
@@ -138,8 +143,8 @@ function setup() {
     }
   }
 
+  // Sets incompletedGame to false if game state doesn't match solution, true if complete
   function check_sudoku() {
-    let incompletedGame = true;
     for (i = 0; i < rows*cols; ++i) {
       if (numberState[i] != +sudoku_solution[i]) {
         incompletedGame = false;
@@ -157,6 +162,7 @@ function setup() {
     }
   }
 
+  // Sets game state to complete to show complete state; Demo purposes
   function autoComplete() {
     for (i = 0; i < rows*cols; ++i) {
       numberState[i] = +sudoku_solution[i];
