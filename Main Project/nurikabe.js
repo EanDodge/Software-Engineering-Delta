@@ -80,7 +80,7 @@ function setup() {
 
   // Create a button to show the pop-up
   let rulesButton = createButton('Rules');
-  rulesButton.position(10, 50);
+  rulesButton.position(10, 60);
   rulesButton.mousePressed(showPopup);
 
   // Create a button inside the pop-up to close it
@@ -90,6 +90,11 @@ function setup() {
   closeRules.style('position', 'absolute');
   closeRules.style('top', '10px');
   closeRules.style('right', '10px');
+
+  // Create a button to show the pop-up
+  let restartButton = createButton('Restart');
+  restartButton.position(10, 110);
+  restartButton.mousePressed(restart);
 
   //Choose random puzzle
   const keys = Object.keys(puzzles); //get all keys from the stored puzzles
@@ -191,4 +196,9 @@ function showPopup() {
 
 function hidePopup() {
   rulesPopup.style('display', 'none'); // Hide the pop-up
+}
+
+//Reset all the colors when "Restart" button is pressed
+function restart() {
+  for (let i = 0; i < colorState.length; ++i) colorState[i] = 0;
 }
