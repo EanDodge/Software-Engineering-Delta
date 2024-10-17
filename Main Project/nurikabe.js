@@ -3,7 +3,7 @@ let square_size = 50; //length and height of each square
 let square_states = 2; //number of color states each square can have
 let puzzles = []; //will store the puzzle starting states and solution states
 let rulesPopup;
-let done = false;
+let done, winnerPopup = false;
 
 //==================================================================================================================
 // Nurikabe rules:
@@ -79,12 +79,12 @@ function setup() {
   rulesPopup.style('transform', 'translate(-50%, -50%)');
   rulesPopup.style('display', 'none'); // Hide the pop-up initially
 
-  // Create a button to show the pop-up
+  // Create a button to show rules pop-up
   let rulesButton = createButton('Rules');
   rulesButton.position(10, 60);
   rulesButton.mousePressed(showPopup);
 
-  // Create a button inside the pop-up to close it
+  // Create a button inside rules pop-up to close it
   let closeRules = createButton('Close');
   closeRules.mousePressed(hidePopup);
   closeRules.parent(rulesPopup); // Attach the button to the pop-up
@@ -92,10 +92,15 @@ function setup() {
   closeRules.style('top', '10px');
   closeRules.style('right', '10px');
 
-  // Create a button to show the pop-up
+  // Create a button to restart the puzzle
   let restartButton = createButton('Restart');
   restartButton.position(10, 110);
   restartButton.mousePressed(restart);
+
+  // Create a button to restart the puzzle
+  let solveButton = createButton('Solve');
+  solveButton.position(10, 160);
+  solveButton.mousePressed(solve);
 
   //Choose random puzzle
   const keys = Object.keys(puzzles); //get all keys from the stored puzzles
@@ -159,7 +164,12 @@ function draw() {
     //text(i, xpos[i], ypos[i]);
     //==============================
   }
-  if (isSolved) done = true;
+  if (isSolved) {
+    if (done && !winnerPopup) {
+      winnerText();
+    }
+    done = true;
+  }
 }
 
 function mouseClicked() {
@@ -205,4 +215,30 @@ function hidePopup() {
 //Reset all the colors when "Restart" button is pressed
 function restart() {
   for (let i = 0; i < colorState.length; ++i) colorState[i] = 0;
+}
+
+//Set current color state to the solution colors to solve the puzzle
+function solve() {
+  colorState = solution_colors;
+}
+
+async function winnerText() {
+  await new Promise(r => setTimeout(r, 2000)); //wait a second
+  winner = createDiv(`
+    <h2>Congrats!</h2>
+    <p>You have opened the treasure chest.</p>
+    <p>You've earned some doubloons!</p>
+  `)
+  // After creating the element, add an id to it
+  winner.style('font-size', '16px');
+  winner.style('padding', '10px');
+  winner.style('background-color', '#fff');
+  winner.style('border', '1px solid #000');
+  winner.style('position', 'absolute');
+  winner.style('left', '50%');
+  winner.style('top', '50%');
+  winner.style('transform', 'translate(-50%, -50%)');
+  winner.style('z-index', '1000');
+
+  winnerPopup = true;
 }
