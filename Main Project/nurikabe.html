@@ -24,19 +24,25 @@
       background-repeat: no-repeat; 
     }
     button { 
-      color: gray; 
+      background-color: slategray;
+      color: black;
       text-align: center;
       font-size: 16px;
       font-family: monospace;
-      border: none;
-      padding: 10px;
       text-decoration: none;
+      cursor: pointer;
       display: inline-block;
+      border: 2px solid lightgray;
+      border-radius: 10px; /*curved corners*/
+      padding: 10px;
+      transition-duration: 0.2s;
     }
     button:hover {
-      background-color: lightskyblue;
-      transition: background-color 0.3s ease;
+      color: rgb(112, 199, 233);
+      background-color: rgb(130, 148, 168);
+      border: 2px solid gray;
     }
+
     h2{font-family: monospace;}
     ul{font-family: monospace;}
   </style>

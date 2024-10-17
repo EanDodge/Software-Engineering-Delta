@@ -62,7 +62,7 @@ function setup() {
       <h2>Nurikabe rules:</h2>
       <ul>
           <li>"Islands" are made up of white squares, the blue squares are water</li>
-          <li>Each starting square is part of an island, the amount of white squares this island has is listed on the square</li>
+          <li>Each numbered square is part of an island, with the number being the amount of white squares this island has</li>
           <li>Each island has only one numbered square</li>
           <li>Islands cannot touch horizontally or vertically (diagonally is ok)</li>
           <li>There cannot be 2x2 squares of water</li>
