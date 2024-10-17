@@ -3,6 +3,7 @@ let square_size = 50; //length and height of each square
 let square_states = 2; //number of color states each square can have
 let puzzles = []; //will store the puzzle starting states and solution states
 let rulesPopup;
+let done = false;
 
 //==================================================================================================================
 // Nurikabe rules:
@@ -125,17 +126,23 @@ function draw() {
   var isSolved = true;
   //loop through all square position coordinates and color states
   for (i = 0; i < rows * cols; ++i) {
-    //making all the starting squares unclickable
-    if (cantClick.has(i)) {
-      fill('white');
+    if (!done) {
+      //making all the starting squares unclickable
+      if (cantClick.has(i)) {
+        fill('white');
+      }
+      else {
+        if (colorState[i] == 0) fill(0, 0, 200); //0 in colorState = blue
+        if (colorState[i] == 1) fill('white'); //1 in colorState = white
+        //if there's any difference between the current color states and the solution's color states, the puzzle is not solved
+        if (colorState[i] != solution_colors[i]) {
+          isSolved = false;
+        }
+      }
     }
     else {
-      if (colorState[i] == 0) fill(0, 0, 200); //0 in colorState = blue
-      if (colorState[i] == 1) fill('white'); //1 in colorState = white
-      //if there's any difference between the current color states and the solution's color states, the puzzle is not solved
-      if (colorState[i] != solution_colors[i]) {
-        isSolved = false;
-      }
+      if (solution_colors[i] == 0) fill('green');
+      else fill('white');
     }
     rect(xpos[i], ypos[i], sideLength, sideLength); //create square
 
@@ -152,10 +159,7 @@ function draw() {
     //text(i, xpos[i], ypos[i]);
     //==============================
   }
-  if (isSolved) {
-    fill(0, 250, 200);
-    rect(width / 2, height / 2, 100, 100);
-  }
+  if (isSolved) done = true;
 }
 
 function mouseClicked() {
