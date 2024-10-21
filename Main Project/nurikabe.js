@@ -173,6 +173,8 @@ function draw() {
 }
 
 function mouseClicked() {
+  Event.preventDefault();
+
   //when the mouse is clicked, change the color state by negating the value
   for (i = 0; i < rows * cols; ++i) {
     //check if mouse position is within the current square
@@ -228,7 +230,7 @@ async function winnerText() {
     <h2>Congrats!</h2>
     <p>You have opened the treasure chest.</p>
     <p>You've earned some doubloons!</p>
-  `)
+  `).id(`completionText`);
   // After creating the element, add an id to it
   winner.style('font-size', '16px');
   winner.style('padding', '10px');
