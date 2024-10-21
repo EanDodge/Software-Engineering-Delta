@@ -44,10 +44,17 @@ describe('Sudoku Test', () => {
         // Parsing for correct type comparisons
         for (i = 0; i < gridSize; ++i)  expect(parseInt(sudoku[i])).toBe(parseInt(numberState[i]));
     });
-    
+
     // Fails if entering number into grid results in incorrect behavior
     test('Testing that Sudoku grid is able to take in numbers.', async () => {
         await page.reload();
+        const {startupDisplay, helpDisplay} = await page.evaluate(() => {
+            return {startupDisplay, helpDisplay};
+        });
+        await page.evaluate(() => {
+            startupDisplay = false;
+            helpDisplay = false;
+        });
         // Gets:
         // Coords Array of Cells
         // Editability Array
