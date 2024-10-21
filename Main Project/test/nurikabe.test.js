@@ -126,5 +126,9 @@ describe('Nurikabe Puzzle Tests', () => {
   
     expect(currentState).toEqual(solutionState); // Compare current state with the solution state
   });
+
+  //Testing completion features manually:
+  // test for unclickable squares after puzzle completion: complete a nurikabe (not using the solve button) and then try to click one of the green squares
+  // test for completion text: solve nurikabe using solve button (and once without too) and see if completion text pops up on the screen
   
 });
