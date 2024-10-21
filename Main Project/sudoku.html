@@ -13,8 +13,16 @@
   </head>
 
   <body>
-    <button onclick="window.location.href='index.html'" style="position: absolute; top: 75%; left: 43%; transform: translate(-50%, -50%); z-index: 1000;">Back to Game</button>
-    <button onclick="autoComplete()" style="position: absolute; top: 75%; left: 57%; transform: translate(-50%, -50%); z-index: 1000;">Finish puzzle</button>
+    <div id="circleContainer">
+      <div id="err1"class="circle"></div>
+      <div id="err2"class="circle"></div>
+      <div id="err3"class="circle"></div>
+    </div>
+    <button id="initButton" onclick="startupToFalse()" style="position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">Start</button>
+    <button id="helpButton" onclick="helpToFalse()" style="position: absolute; top: 65%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">Go</button>
+    <button id="backToIndexButton" onclick="window.location.href='index.html'" style="position: absolute; top: 75%; left: 43%; transform: translate(-50%, -50%); z-index: 1000;">Back to Game</button>
+    <button id="completeButton" onclick="autoComplete()" style="position: absolute; top: 75%; left: 57%; transform: translate(-50%, -50%); z-index: 1000;">Finish puzzle</button>
+    <button id="finishButton" onclick="window.location.href='index.html'" style="position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">Collect Treasure</button>
     <script src="sudokuPick.js"></script>
     <script src="sudoku.js"></script>
   </body>
@@ -37,6 +45,22 @@
     button:hover {
       background-color: lightskyblue;
       transition: background-color 0.3s ease;
+    }
+    #circleContainer {
+      position: absolute;
+      top: 22%; /* Center vertically */
+      transform: translateY(-50%); /* Center the div vertically */
+      display: flex; /* Use flexbox layout */
+      flex-direction: row; /* Align items in a row */
+      align-items: center; /* Center vertically within the container */
+    }
+    .circle {
+      width: 50px;
+      height: 50px;
+      background-color: white; /* Circle color */
+      border-radius: 50%; /* Make it circular */
+      border: 1px solid black; /* Border thickness and color */
+      margin: 0 25px; /* Space between circles */
     }
   </style>
 </html>

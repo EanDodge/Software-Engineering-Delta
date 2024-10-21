@@ -3,8 +3,16 @@ let square_size = 45; //length and height of each square
 let square_states = 4; //number of color states each square can have
 let interval = 30;
 
-// Here for globlal, needed for testing
+// Num of errors allowed
+let errorNum = 3;
+let errorCount = 0;
+
+// Here for global, needed for testing
 let incompletedGame = true;
+// Initializes to begin screen
+let startupDisplay = true;
+// Moving to help display
+let helpDisplay = true;
 
 // Retrieves a random sudoku pattern from 'sudokuPick.js'
 let indexForSudoku = giveSudokuIndex();
@@ -23,6 +31,7 @@ function setup() {
     numberState = [];
     editable = [];
     currSquare = -1;
+    pastSquare = -1;
     sideLength = square_size;
     for (i = 0; i < cols; ++i) {
       for (j = 0; j < rows; ++j) {
@@ -50,19 +59,29 @@ function setup() {
     rectMode(CENTER);
 
     background(220); //gray background
+    textFont('Georgia');
 
   }
 
   
   function draw() {
+    // Upon startup shows intro graphic only
+    if (startupDisplay) {
+      initGame();
+      return;
+    } else if (helpDisplay) {
+      helpGame();
+      return;
+    }
+
+    textFont('sans-serif');
     //loop through all square position coordinates and color states
     for (i = 0; i < rows * cols; ++i) {
-      if (colorState[i] == 0) fill(255); //1 in colorState = white
-      if (colorState[i] == 1) fill(0, 0, 200); //-1 in colorState = blue
-      if (colorState[i] == 2) fill(220);
+      if (colorState[i] == 0) fill(255); //0 in colorState = white
+      if (colorState[i] == 1) fill(0, 0, 900); //1 in colorState = blue
+      if (colorState[i] == 2) fill(220); //2 in colorState = offWhite
       strokeWeight(1);
       rect(xpos[i], ypos[i], sideLength, sideLength); //create square
-      
 
       // Next four ifs:
       // Create the grid-like sanctions, divide the grid into 9 equal parts
@@ -100,25 +119,114 @@ function setup() {
         text(numberState[i], xpos[i], ypos[i]);
       }
     }
+    // Only runs check_sudoku upon certain frame interval
+    // Costly check to do every frame
     if (frameCount % interval === 0) check_sudoku();
   }
 
+
+  // Shows intro display graphic
+  function initGame() {
+    background(220);
+    fill('black');
+    textSize(50);
+    textAlign(CENTER, CENTER);
+    text("Sudoku", width/2, height/2);
+    noLoop();
+    document.getElementById('err1').style.display = 'none';
+    document.getElementById('err2').style.display = 'none';
+    document.getElementById('err3').style.display = 'none';
+    document.getElementById('helpButton').style.display = 'none';
+    document.getElementById('backToIndexButton').style.display = 'none';
+    document.getElementById('completeButton').style.display = 'none';
+    document.getElementById('finishButton').style.display = 'none';
+  }
+
+  // Invoked by 'initButton'
+  // Goes to help display
+  // Uses a slight delay to repel unwanted selection when pressing button
+  function startupToFalse() { 
+    setTimeout(() => {
+      startupDisplay = false; 
+      loop();
+      document.getElementById('initButton').style.display = 'none';
+    }, 100);
+  }
+
+  // Shows help display graphic
+  function helpGame() {
+    background(220);
+    fill('black');
+    textAlign(CENTER, CENTER);
+    textSize(50);
+    text("Rules", width/2, height/2-150);
+    textSize(30);
+    fill(0, 0, 900);
+    text("Blue", width/2-156, height/2-90);
+    fill('black');
+    text("Cell indicates selected.", width/2+37, height/2-90);
+    fill('white');
+    backspaceText = "BACKSPACE";
+    rectMode(CENTER);
+    rect(width/2-90, height/2-40, textWidth(backspaceText), 30);
+    fill('black');
+    text(backspaceText, width/2-90, height/2-40);
+    text("to clear cell.", width/2+100, height/2-40);
+    fill('red');
+    text("Red", width/2-145, height/2+10);
+    fill('black');
+    text("Text indicates error.", width/2+25, height/2+10);
+    text("Given 3 Errors:", width/2-45, height/2+60);
+    fill('white');
+    ellipse(width/2+100, height/2+60, 50, 50);
+    fill('black');
+    noLoop();
+    document.getElementById('helpButton').style.display = 'block';
+  }
+
+  // Invoked by 'helpButton'
+  // Returns to Sudoku board
+  // Uses a slight delay to repel unwanted selection when pressing button
+  function helpToFalse() { 
+    setTimeout(() => {
+      helpDisplay = false; 
+      loop();
+      document.getElementById('err1').style.display = 'block';
+      document.getElementById('err2').style.display = 'block';
+      document.getElementById('err3').style.display = 'block';
+      document.getElementById('helpButton').style.display = 'none';
+      document.getElementById('backToIndexButton').style.display = 'block';
+      document.getElementById('completeButton').style.display = 'block';
+    }, 100);
+  }
+
   function mouseClicked() {
+    // Stops unwanted selection as 'initButton' is pressed
+    if (startupDisplay || helpDisplay) return;
     //when the mouse is clicked, change the color state by negating the value
     for (i = 0; i < rows * cols; ++i) {
       //check if mouse position is within the current square
       if (dist(mouseX, 0, xpos[i], 0) < sideLength / 2 && dist(0, mouseY, 0, ypos[i]) < sideLength / 2 && editable[i]) {
+        currSquare = i; // sets currSquare to the current square clicked on by mouse
         if (colorState[i] == 0) {
           colorState[i] = 1;
         } else if (colorState[i] == 1) {
           colorState[i] = 0;
         }
-        currSquare = i; // sets currSquare to the current square clicked on by mouse
+        //pastSquare identifies which cell was previously selected
+        //Purpose is to clear old selection; Makes clicking more elegant
+        if (pastSquare != -1 && pastSquare != currSquare) colorState[pastSquare] = 0;
+        if (currSquare != -1) pastSquare = i;
         return;
       }
     }
+    //Clears selection if click off grid
+    if (pastSquare != -1) colorState[pastSquare] = 0;
+    pastSquare = -1;
     currSquare = -1;
+
   }
+
 
   function keyPressed() {
     // If a square has been clicked on by mouse
@@ -128,14 +236,22 @@ function setup() {
         // Sets value for corresponding square equal to key pressed
         numberState[currSquare] = key;
         colorState[currSquare] = 0;
+        if (numberState[currSquare] != +sudoku_solution[currSquare]) {
+          ++errorCount;
+          setErrorCircles();
+        }
       }
-      if (keyCode === BACKSPACE) {
+      // Resets cell state upon 'BACKSPACE'; I guess key 8 is BACKSPACE?
+      if (keyCode == 8) {
         numberState[currSquare] = 0;
         colorState[currSquare] = 0;
       }
+      // Resets currSquare to prevent accidental changing of numbers
+      currSquare = -1;
     }
   }
 
+  
   // Sets text to red if key entered is wrong
   function check_key_entered(i) {
     if (numberState[i] != +sudoku_solution[i]) {
@@ -145,6 +261,7 @@ function setup() {
 
   // Sets incompletedGame to false if game state doesn't match solution, true if complete
   function check_sudoku() {
+    incompletedGame = true;
     for (i = 0; i < rows*cols; ++i) {
       if (numberState[i] != +sudoku_solution[i]) {
         incompletedGame = false;
@@ -152,14 +269,45 @@ function setup() {
       }
     }
 
-    if (incompletedGame) {
-      background(220);
-      fill('black');
-      textSize(50);
-      textAlign(CENTER, CENTER);
-      text("Complete.", width/2, height/2);
-      noLoop();
+    textFont('Georgia');
+
+    if (errorCount == errorNum) {
+      lostSudoku();
+      return;
     }
+    // Displays completion overlay, if incompletedGame passes as TRUE
+    if (incompletedGame) wonSudoku();
+  }
+
+  function wonSudoku() {
+    background(220);
+    fill('black');
+    textSize(50);
+    textAlign(CENTER, CENTER);
+    text("Complete.", width/2, height/2);
+    noLoop();
+    document.getElementById('err1').style.display = 'none';
+    document.getElementById('err2').style.display = 'none';
+    document.getElementById('err3').style.display = 'none';
+    document.getElementById('backToIndexButton').style.display = 'none';
+    document.getElementById('completeButton').style.display = 'none';
+    document.getElementById('finishButton').style.display = 'block';
+  }
+
+  function lostSudoku() {
+    background(220);
+    fill('black');
+    textSize(50);
+    textAlign(CENTER, CENTER);
+    text("Lost.", width/2, height/2);
+    noLoop();
+    document.getElementById('err1').style.display = 'none';
+    document.getElementById('err2').style.display = 'none';
+    document.getElementById('err3').style.display = 'none';
+    document.getElementById('backToIndexButton').style.display = 'none';
+    document.getElementById('completeButton').style.display = 'none';
+    document.getElementById('finishButton').textContent = "Return to Ship.";
+    document.getElementById('finishButton').style.display = 'block';
   }
 
   // Sets game state to complete to show complete state; Demo purposes
@@ -167,4 +315,10 @@ function setup() {
     for (i = 0; i < rows*cols; ++i) {
       numberState[i] = +sudoku_solution[i];
     }
+  }
+
+  function setErrorCircles() {
+    if (errorCount == 1) document.getElementById('err1').style.backgroundColor = 'red';
+    if (errorCount == 2) document.getElementById('err2').style.backgroundColor = 'red';
+    if (errorCount == 3) document.getElementById('err3').style.backgroundColor = 'red';
   }
