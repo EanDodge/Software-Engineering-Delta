@@ -173,8 +173,6 @@ function draw() {
 }
 
 function mouseClicked() {
-  Event.preventDefault();
-
   //when the mouse is clicked, change the color state by negating the value
   for (i = 0; i < rows * cols; ++i) {
     //check if mouse position is within the current square
