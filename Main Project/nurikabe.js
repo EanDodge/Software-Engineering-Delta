@@ -4,6 +4,7 @@ let square_states = 2; //number of color states each square can have
 let puzzles = []; //will store the puzzle starting states and solution states
 let rulesPopup;
 let done, winnerPopup = false;
+let hintSquares = []; let cantBeHint = [];
 
 //==================================================================================================================
 // Nurikabe rules:
@@ -102,6 +103,10 @@ function setup() {
   solveButton.position(10, 160);
   solveButton.mousePressed(solve);
 
+  let hintButton = createButton('Hint');
+  hintButton.position(10, 210);
+  hintButton.mousePressed(hint);
+
   //Choose random puzzle
   const keys = Object.keys(puzzles); //get all keys from the stored puzzles
   const randomKey = keys[Math.floor(Math.random() * keys.length)]; //choose a key at random
@@ -149,6 +154,23 @@ function draw() {
           isSolved = false;
         }
       }
+      // Special case for hint squares
+      if (hintSquares && hintSquares.includes(i)) {
+        // For hint squares, show correct solution color
+        if (solution_colors[i] == 0) fill(0, 0, 200); // Water
+        if (solution_colors[i] == 1) fill('white'); // Land
+
+        if (!cantClick.has(i)) rect(xpos[i], ypos[i], sideLength, sideLength); // Redraw the square with the correct solution color
+
+        // Add a green border around hint squares
+        noFill(); // No fill for the border, just want the stroke
+        stroke('green'); // Green border for hint squares
+        strokeWeight(4); // Thicker stroke for visibility
+        rect(xpos[i], ypos[i], sideLength, sideLength); // Draw the green outline
+
+        stroke('black');
+        strokeWeight(1); // Reset stroke to default
+      }
     }
     else {
       if (solution_colors[i] == 0) fill('green');
@@ -156,7 +178,7 @@ function draw() {
     }
     rect(xpos[i], ypos[i], sideLength, sideLength); //create square
 
-    //draw numbers on the starting squares
+    // Draw numbers on starting squares
     if (cantClick.has(i)) {
       fill('black');
       textSize(square_size * 0.6);
@@ -165,8 +187,8 @@ function draw() {
     }
     // Uncomment for tile indices
     //==============================
-    //fill('black');
-    //text(i, xpos[i], ypos[i]);
+    // fill('black');
+    // text(i, xpos[i], ypos[i]);
     //==============================
   }
   if (isSolved && !done && !winnerPopup) {
@@ -226,6 +248,64 @@ function solve() {
   colorState = solution_colors;
 }
 
+//gives the player a hint
+async function hint() {
+  let availableHintIndices = [];
+  for (let i = 0; i < 72; ++i) {
+    if (i % 9 !== 8) availableHintIndices.push(i);
+  }
+  let topLeft; // Declare topLeft
+  do {
+    topLeft = Math.floor(Math.random() * 72); // Generate a random index between 0 and 71 (all rows but the bottom one)
+    
+    // Filter out any positions that are in cantBeHint
+    availableHintIndices = availableHintIndices.filter(pos => !cantBeHint.includes(pos));
+
+    //if there are no more available locations for hint
+    if (availableHintIndices.length === 0) {
+      console.log("No more available places for a hint.");
+      noMoreHint = createDiv(`<h2>No more available places for a hint.</h2>`).id(`noHint`);
+      noMoreHint.style('font-size', '16px');
+      noMoreHint.style('padding', '10px');
+      noMoreHint.style('background-color', '#fff');
+      noMoreHint.style('border', '1px solid #000');
+      noMoreHint.style('position', 'absolute');
+      noMoreHint.style('left', '50%');
+      noMoreHint.style('top', '50%');
+      noMoreHint.style('transform', 'translate(-50%, -50%)');
+      noMoreHint.style('z-index', '1000');
+      noMoreHint.style('opacity', '1');
+
+      await new Promise(r => setTimeout(r, 700)); //wait a lil
+      // Gradually decrease opacity
+      let opacity = 100;
+      let fadeInterval = setInterval(() => {
+        opacity -= 5; // Decrease opacity value, adjust as needed for speed
+        noMoreHint.style('opacity', opacity / 100);
+
+        // Stop the interval once fully invisible
+        if (opacity <= 0) {
+          clearInterval(fadeInterval);
+        }
+      }, 50); // Adjust the interval time to control the speed of the fade-out
+
+      return; // Terminate the function if there are no available positions left
+    }
+  } while (topLeft % 9 === 8 || cantBeHint.includes(topLeft)); // Keep generating until it's not in the right column and not in a place that would overlap another hint
+
+  hintSquares.push(topLeft, topLeft + 1, topLeft + 9, topLeft + 10); //generate the three other squares of the 2x2 hint square
+  cantBeHint.push(topLeft, topLeft + 1, topLeft + 9, topLeft + 10, topLeft - 10, topLeft - 9, topLeft - 8, topLeft - 1, topLeft + 8); //any topLeft whose hint square would intersect with another hintSquares cannot be hint
+
+  // For each square in hintSquares, set the colorState to the correct solution and make it unclickable
+  hintSquares.forEach((index) => {
+    colorState[index] = solution_colors[index]; // Set the correct color from the solution
+  });
+
+  console.log(topLeft);
+  console.log(hintSquares); // Log the value for debugging
+  console.log(cantBeHint);
+}
+
 async function winnerText() {
   await new Promise(r => setTimeout(r, 2000)); //wait a sec
 
@@ -267,4 +347,20 @@ async function winnerText() {
   player.gainCurrency(coins_earned); //give player their currency
   player.updateCoinCount();
   window.location.href = "index.html"; //send user back to their ship
+}
+
+//to fade out element
+function fadeOut(element, duration) {
+  let opacity = 1;
+  const interval = 10; // Adjust as needed for smoothness
+
+  const timer = setInterval(() => {
+    if (opacity <= 0) {
+      clearInterval(timer);
+      element.style.display = "none";
+    } else {
+      opacity -= interval / duration;
+      element.style.opacity = opacity;
+    }
+  }, interval);
 }
