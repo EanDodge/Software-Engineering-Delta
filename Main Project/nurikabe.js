@@ -125,6 +125,11 @@ function setup() {
   //                     0, 1, 0, 1, 0, 0, 0, 1, 0,
   //                     1, 1, 0, 1, 0, 1, 1, 1, 0,
   //                     0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+  // coins = createDiv(`<p>Coin Count: </p><script>player.currency</script>`);
+  // coins.style('position', 'absolute');
+  // coins.style('left', '10');
+  // coins.style('top', '200');
 }
 
 function draw() {
@@ -164,10 +169,9 @@ function draw() {
     //text(i, xpos[i], ypos[i]);
     //==============================
   }
-  if (isSolved) {
-    if (done && !winnerPopup) {
-      winnerText();
-    }
+  if (isSolved && !done && !winnerPopup) {
+    winnerPopup = true; // Set this to true before calling the function
+    winnerText();
     done = true;
   }
 }
@@ -223,11 +227,14 @@ function solve() {
 }
 
 async function winnerText() {
-  await new Promise(r => setTimeout(r, 2000)); //wait a second
+  await new Promise(r => setTimeout(r, 2000)); //wait a sec
+
+  var coins_earned = Math.floor(Math.random() * (1000 - 100) + 100); //generate random number between 100 and 1000
+
   winner = createDiv(`
     <h2>Congrats!</h2>
     <p>You have opened the treasure chest.</p>
-    <p>You've earned some doubloons!</p>
+    <p>You've earned ${coins_earned} doubloons!</p>
   `).id(`completionText`);
   // After creating the element, add an id to it
   winner.style('font-size', '16px');
@@ -239,6 +246,25 @@ async function winnerText() {
   winner.style('top', '50%');
   winner.style('transform', 'translate(-50%, -50%)');
   winner.style('z-index', '1000');
+  winner.style('opacity', '0'); // Start with 0 opacity
 
   winnerPopup = true;
+
+  // Gradually increase opacity
+  let opacity = 0;
+  let fadeInterval = setInterval(() => {
+    opacity += 5; // Increase opacity value, adjust as needed for speed
+    winner.style('opacity', opacity / 100);
+
+    // Stop the interval once fully visible
+    if (opacity >= 100) {
+      clearInterval(fadeInterval);
+    }
+  }, 50); // Adjust the interval time to control the speed of the fade-in
+
+  await new Promise(r => setTimeout(r, 5000)); //wait a sec or two
+
+  player.gainCurrency(coins_earned); //give player their currency
+  player.updateCoinCount();
+  window.location.href = "index.html"; //send user back to their ship
 }
