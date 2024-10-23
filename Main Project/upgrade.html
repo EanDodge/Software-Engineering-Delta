@@ -2,8 +2,8 @@
 <lang="en">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Upgrade Menu</title>
-        <script src ="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
         <style>    
         
         /* just some basic styling of the screen for now*/
@@ -14,7 +14,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: white;
+            background-image: url('./assets/inspiration_png.png');
             font-family: Arial, sans-serif;
         }
                 .menu {
@@ -62,7 +62,7 @@
         </style>    
     </head>
     <body>
-        <div class = "menu">
+        <!-- <div class = "menu">
             <div class = "coins">Coins: <span id = "coinCount">0</span></div>
             <div class = "upgrade option"></div>
             <h2>Armor Upgrades</h2>
@@ -91,12 +91,11 @@
             </div>
             <button onclick="defeatSeaMonster()">Defeat Sea Monster</button>
             <button onclick="completeLevel()">Complete Level</button>
-            <!-- New button to redirect back to index.html -->
             <button onclick="window.location.href='index.html'">Back to Game</button>
             <button onclick="window.location.href='nurikabe.html'">Continue to treasure nurikabe</button>
             <button onclick="window.location.href='sudoku.html'">Continue to treasure sudoku</button>
 
-        </div>
+        </div> -->
 		<script src="player.js"></script> <!-- Ensure player.js is included -->
 		<script src="sketch.js"></script> <!-- Ensure sketch.js is included -->
 		<script>	
