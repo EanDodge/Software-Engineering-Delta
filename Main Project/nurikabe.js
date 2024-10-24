@@ -3,6 +3,8 @@ let square_size = 50; //length and height of each square
 let square_states = 2; //number of color states each square can have
 let puzzles = []; //will store the puzzle starting states and solution states
 let rulesPopup;
+let done, winnerPopup = false;
+let hintSquares = []; let cantBeHint = [];
 
 //==================================================================================================================
 // Nurikabe rules:
@@ -15,1053 +17,350 @@ let rulesPopup;
 // (Sounds like a lot but it's really not too bad I swear)
 //==================================================================================================================
 
+function preload() {
+  console.log("Attempting to load puzzles");
+  puzzles = loadJSON('nurikabePuzzles.json', () => {
+    console.log("Puzzles loaded successfully");
+  }, () => {
+    console.log("Failed to load puzzles");
+  });
+}
+
 function setup() {
-    //create a canvas in the center of the screen
-    canvas = createCanvas(cols * square_size, rows * square_size);
-    var center_x = (windowWidth - width) / 2;
-    var center_y = (windowHeight - height) / 2;
-    canvas.position(center_x, center_y);
+  console.log("Setup is being called");
+  //create a canvas in the center of the screen
+  canvas = createCanvas(cols * square_size, rows * square_size);
+  var center_x = (windowWidth - width) / 2;
+  var center_y = (windowHeight - height) / 2;
+  canvas.position(center_x, center_y);
 
-    xpos = []; ypos = [];
-    colorState = []; 
-    sideLength = square_size;
-    for (i = 0; i < rows; ++i) {
-      for (j = 0; j < cols; ++j) {
-        //calculate the index where info will be stored
-        var index = (i * cols) + j;
+  xpos = []; ypos = [];
+  colorState = [];
+  sideLength = square_size;
+  for (i = 0; i < rows; ++i) {
+    for (j = 0; j < cols; ++j) {
+      //calculate the index where info will be stored
+      var index = (i * cols) + j;
 
-        //calculate and store all the x-coordinates of square centers
-        xpos[index] = (j * sideLength) + (sideLength / 2);
-        
-        //calculate and store all the y-coordinates of square centers
-        ypos[index] = (i * sideLength) + (sideLength / 2);
+      //calculate and store all the x-coordinates of square centers
+      xpos[index] = (j * sideLength) + (sideLength / 2);
 
-        colorState[index] = 0; //set all color states to 0 as default
-      }
+      //calculate and store all the y-coordinates of square centers
+      ypos[index] = (i * sideLength) + (sideLength / 2);
+
+      colorState[index] = 0; //set all color states to 0 as default
     }
-    
-    //set coordinates used to create square to be the center 
-    //of the square instead of the top-left corner
-    rectMode(CENTER);
+  }
 
-    background(220); //gray background
+  //set coordinates used to create square to be the center 
+  //of the square instead of the top-left corner
+  rectMode(CENTER);
 
-    // Create the pop-up text box using createDiv with the Nurikabe rules
-    rulesPopup = createDiv(`
+  background(220); //gray background
+
+  // Create the pop-up text box using createDiv with the Nurikabe rules
+  rulesPopup = createDiv(`
       <h2>Nurikabe rules:</h2>
       <ul>
           <li>"Islands" are made up of white squares, the blue squares are water</li>
-          <li>Each starting square is part of an island, the amount of white squares this island has is listed on the square</li>
+          <li>Each numbered square is part of an island, with the number being the amount of white squares this island has</li>
           <li>Each island has only one numbered square</li>
           <li>Islands cannot touch horizontally or vertically (diagonally is ok)</li>
           <li>There cannot be 2x2 squares of water</li>
           <li>All water blocks must be connected</li>
       </ul>
   `).id('rulesPopup');
-    rulesPopup.style('font-size', '16px');
-    rulesPopup.style('padding', '10px');
-    rulesPopup.style('background-color', '#fff');
-    rulesPopup.style('border', '1px solid #000');
-    rulesPopup.style('position', 'absolute');
-    rulesPopup.style('left', '50%');
-    rulesPopup.style('top', '50%');
-    rulesPopup.style('transform', 'translate(-50%, -50%)');
-    rulesPopup.style('display', 'none'); // Hide the pop-up initially
-
-    // Create a button to show the pop-up
-    let rulesButton = createButton('Rules');
-    rulesButton.position(10, 50);
-    rulesButton.mousePressed(showPopup);
-
-    // Create a button inside the pop-up to close it
-    let closeRules = createButton('Close');
-    closeRules.mousePressed(hidePopup);
-    closeRules.parent(rulesPopup); // Attach the button to the pop-up
-    closeRules.style('position', 'absolute');
-    closeRules.style('top', '10px');
-    closeRules.style('right', '10px');
-
-
-    // here is how all the puzzle start and puzzle solution states are stored:
-    // puzzles[0]
-    puzzles.push({
-      //[square index, square value]
-      cantClick: new Map([
-        [36, 2], [63, 3], [19, 3], [29, 1], [66, 3], [14, 4], [51, 3], [61, 4], [17, 2], [44, 4]
-      ]),
-      //0 = water, 1 = island (laid out to look just like the puzzle)
-      solution_colors: [0, 0, 0, 0, 0, 0, 0, 0, 0, 
-                        0, 1, 1, 0, 1, 1, 0, 1, 1, 
-                        0, 1, 0, 0, 1, 0, 0, 0, 0, 
-                        0, 0, 1, 0, 1, 0, 1, 1, 1,
-                        1, 1, 0, 0, 0, 1, 0, 0, 1,
-                        0, 0, 0, 1, 0, 1, 1, 0, 0,
-                        0, 1, 0, 1, 0, 0, 0, 1, 0,
-                        1, 1, 0, 1, 0, 1, 1, 1, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0]
-    });
-
-    //calls functions defined below to store cantClick and solution_colors in the format seen in puzzles[0]
-    //takes in strings for puzzle start and solution that I found on a nurikabe archive website: https://www.logicgamesonline.com/nurikabe/archive.php
-    var puzzle = "6...............1.2.....2.........4...........2.........7.....5.1...............2";
-    var solpuz = "6     ##########1#2 # # 2##### ###4## # #   ##2# #######7 #   5#1# # ########## 2";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".........4.........2............4...3.......5...7............5.........3.........";
-    var solpuz = "   ######4###  # ##2 ## # #### #4# #3 # ### 5# #7# ###### #  5##   # ##3#######  ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".5..............3.1..........5..2...............4..2..........2.5..............1.";
-    var solpuz = "#5    ##########3#1#  # # ## 5 #2# ###########  4 #2# ###### #2#5    ##########1#";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "..6.3....................3.3.........3.....2.........3.3....................1.6..";
-    var solpuz = "##6#3  ## # #### # #   # 3#3### #####3 ### 2### # ###3#3##   # #  ### # ####1#6##";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "......2.4.1.4.......3.......................................7.......2.5.6.5......";
-    var solpuz = "###  #2#4#1#4 # # ##3#####  #  #  #  ####  ## #  #  #  # ###7#  # # 2#5 6#5##### ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "..........4................7...1......4...4......2...6................4..........";
-    var solpuz = "##########4   # # ###### # 7# #1# #  #4 ##4#  # #2 # 6 ########   #   4##########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "..4.........2...4.......3......3.................2......4.......1...3.........5..";
-    var solpuz = "# 4###   # #2 ##4## ####3##### 3#  ## # ######  #2 # ###4#### ##1#  3# #######5 #";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "......2....4....1..3.................2.....4.................4..1....7....5......";
-    var solpuz = "##### 2## #4 ###1# 3# # ###### # #  #2### #4 # # # ###### # #4 #1# # 7# ##5 #### ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "................7.1.........1..3.................2..9.........3.3................";
-    var solpuz = "##########      7#1#########1# 3 # ######## ## # 2# 9## #### #3#3#    # ######## ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".......5....7..1......3...................................9......5..1....3.......";
-    var solpuz = "###  ##5 #  7##1# # ##3### # #  # # ###### ###  #    ### #9## # #5 #1# # 3#######";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "......4.........3....................2.6.2.2....................8.........6......";
-    var solpuz = "####  4###  # ##3###  ##  ## # # ####2#6#2#2 ##########       ##8#########6     #";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "1..............1..6............5......4...4......1............6..3..............4";
-    var solpuz = "1##########   #1# 6### ###  # #5# #  #4 ##4#  # #1# #  ##### #6 #3  #########   4";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "........7............3....18..........2...1..........36....2............8........";
-    var solpuz = "   #    7  #### ## ##3 # #18# # #### #2###1# ###  ###36   #2 # #########8       #";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "6..........4....3............1.....................2............4....6..........6";
-    var solpuz = "6######## #4  # 3# ### # ## #1#####  ### # #  # # #2# ## # ### #4 #  6# ########6";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "....9.......6.....4...3...................................5...2.....6.......2....";
-    var solpuz = "####9     # 6#### 4# #3  #  # #####  #  #  # ###### ###   5# #2# ###6 # ### 2####";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".............4...........4...4..1...............1..3...3...........4.............";
-    var solpuz = "##########   4#  ########4## 4 #1# ## ##########1# 3 ##3########  #4   ##########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".5..1......8.......................4...4.3...4.......................1......2..5.";
-    var solpuz = " 5##1###  #8### #  #     #  # #####4###4#3 ##4 # ## # # #  ### # ####1# ### 2##5 ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "...................2....3.3..........6.....4..........3.3....4...................";
-    var solpuz = "########## # # #  #2# # 3#3### ######6  #  4###### ###3#3 ###4#  # #   ##########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "2.............8.................3....3.....4....5.................2.............3";
-    var solpuz = "2 ##########  8  ## # ### ## # #3####3### #4### 5# # ##  ###  ## #2 ##########  3";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".2...............6................4.5.......3.1................6...............5.";
-    var solpuz = "#2######## #     6#########    #  4#5#### ##3#1# ###  ### # ###6   #   ########5#";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".3..........2....1..6....4.............................2....4..7....2..........5.";
-    var solpuz = " 3####### ##2 # #1##6### 4##    ## #### # #### ###  # #2# ##4# 7## #2##     # #5 ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "...........7....1.........3....1.1.............1.4....4.........5....7...........";
-    var solpuz = "########## 7   #1### #####3 # #1#1#  #### ##  #1#4  ##4## #### #5   #7  ######   ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "..6..................2............2.6..2.4..3.4............1..................6..";
-    var solpuz = " #6     # ######## # 2# # #  ##  #2#6##2#4##3#4# ###  # ###1####  # ## #####  6 #";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".......4.4....3..........3.8.........................2.3..........3....2.4.......";
-    var solpuz = "  #### 4 4 #  3## #######3#8    #  ##### #####  #  # 2#3####### ##3  # 2 4 ######";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".......3.4.........6....1............5.....2............4....2.........1.7.......";
-    var solpuz = "   ####3 4###  ## #6   #1######### ##5    #2########### 4  # 2#########1 7     ##";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "..3............4.4....2.......1...................4.......2....1.7............2..";
-    var solpuz = "##3#######  # #4#4####2# # # #1#  # # ###### #   #4 #### #2#  #1#7# ##########2 #";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".........4......3.........7.....5...............3.....6.........4......2.........";
-    var solpuz = "#########4   #  3#########7  # #5#    # # #   ##3# #  6# ## ####4  # # 2#########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "..6......3......4............1.....3.........2.....4............1......1......5..";
-    var solpuz = "##6######3#   # 4# ### # ## #1# # #3######## 2 #   4# ##########1#    #1######5##";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".3..................2.......4..........2.4..........7.......7..................5.";
-    var solpuz = "#3  ########## # # #2 # # # 4### # # # 2#4# ########7 #     7# # ##########    5#";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".....1...6.........3...4.......3.................3.......4...4.........3...3.....";
-    var solpuz = "    #1###6## ### ##3###4  ## # 3##### # ##  #####3 # ##  4# #4## ######3###3  #  ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "....3.......2....6..............1...............7..............3....5.......6....";
-    var solpuz = "####3 #### #2# # 6# # ### ## ###1# ##   ### ####7# # # # ## ###3#  #5  # #  6####";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "...1.........6..........5.1............2.1............3.3..........7.........5...";
-    var solpuz = "###1##   # ##6# ###    #5#1######### # 2#1# # #####  #3#3#   ###  #7### #####5   ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "6.2..1..........1....................6.....4....................7..........2..1.4";
-    var solpuz = "6#2 #1### ######1#   # # ## ### #  ##6   ##4###### ####     #  #7###### ###2 #1#4";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "..........2..5.............8....1...............2....3.............2..4..........";
-    var solpuz = "##########2 #5   ######## #8   #1#### #####  # #2 # #3# #### ### # 2# 4##########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".....1.........4...2..4.........1...............1.........4..4...5.........4.....";
-    var solpuz = "#####1#### # ##4 ##2# 4## #### #1# ## ######## #1#  # # ##4 #4 # 5##### ###4   ##";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "7............2....5.....3......6.................1......5.....2....1............5";
-    var solpuz = "7  ######## #2 # #5# ###3 # # #6 ### # ##   # ###1# #  #5#####2## #1# ##   ##   5";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "....3...................8.24.........4.....5.........42.1...................3....";
-    var solpuz = " #  3#### ##### #  # #  8#24# # #####4 # # 5##### # #42#1# # #  ##### # ##  3### ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "............4..........1.......7..3...........6..3.......1..........5............";
-    var solpuz = "###   #### #4### ## ###1# ##   7##3### ## ####6##3 # ## #1### ## ###5  ##   #####";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "........8..........8.........2.4.................4.5.........2..........3........";
-    var solpuz = "#       8######### 8#   # # #2#4## # # ###  # ###4#5##   # ##2#####  # #3  ######";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "....4.............4.1....3..1.......................4..5....5.5.............5....";
-    var solpuz = "  # 4#### ### #  #4#1# ##3##1#### #### # #  ##  # ##4##5 #  5#5########     5#   ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "..........8.6....1..............2...............1..............1....3.5..........";
-    var solpuz = "##########8#6   #1# # ###### # #2# ## ### # ## #1### ##  ## # #1# # 3#5##########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "..3..7......2......2.................4.....4.................3......4......2..3..";
-    var solpuz = "  3##7######2# # # 2# # # ###### # ##4#   #4## ###### # #   #3 # ###4##### 2##3  ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".....3....3...........3..1..2.......................7..2..3...........1....2.....";
-    var solpuz = "#####3  ##3 # ###### #3 #1##2######## #     #### ###7##2##3 #### # # #1####2#####";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "........4.3.......3................5....7....1................6.......4.2........";
-    var solpuz = "#####   4#3  #####3####      # ####5### 7# ##1#  #    ## #####6 # #   4#2########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "...............5.........3.....2.....6.....5.....2.....3.........3...............";
-    var solpuz = "########## #   5# # # ###3 # ##2 ####6 ####5### #2 # # 3##### # #3  #  ##########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "..6..3......3..........................3.3..........................5......6..8..";
-    var solpuz = "  6##3  # ##3##### #  # # # #### # ##  3#3# ######## # #    # # ####5# #   6##8 #";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".7...................2......7.........6...4.........4......3...................2.";
-    var solpuz = "#7      ########### #2 #  # 7#### ## #6  #4#  # ####4  # # 3# # # # ########## 2#";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "2.4............2.........3.......5.............3.......6.........5............2.5";
-    var solpuz = "2#4 ##### #  # 2# #######3  # #  5## # ### #  #3# # #  6## ###  #5  # # ######2#5";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".2...........2.2.......5............4.......3............6.......1.2...........3.";
-    var solpuz = "#2######## # 2#2 ######5####  #  # #4# ## # 3 #  # ### ##6### # #1#2 # ########3#";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".....................4......1...3...4.......5...2...3......7.....................";
-    var solpuz = "##########   # # ####4# # ##1###3#  4## ####5  #2# #3# ####7# ##     # ##########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "................1..4..............5....2.4....8..............6..6................";
-    var solpuz = "##########   # #1##4### ## ### # #5 # #2#4#  #8 ########    #6  6### #      ###  ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".............4....5............2..7...........3..5............1....2.............";
-    var solpuz = "#########   #4   #5######## # #2 #7###  ##  ##3# 5# ### #### #1# # 2#  ##########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "..5......5...............2......3....2.....3....2......6...............2......1..";
-    var solpuz = "##5   ###5#### # #    ###2######3### 2# # #3####2# # ##6##### ##     ##2######1# ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "..........4......4...............2...5..2..6...1...............2......5..........";
-    var solpuz = "##########4  #   4### ######  ## 2#  5##2##6  #1# #   #########2 #    5##########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".........4...........3..........5.2...........1.2..........6...........5.........";
-    var solpuz = "#########4 # #   ## #3# #### # #5#2 ##########1#2 #  ######6# ##     # 5#########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".5..2.5.3.............................4...4.............................3.4.5..1.";
-    var solpuz = " 5# 2#5#3# #### # #  #   # ########## 4  #4 ###### # # #  # # # # ## ###3#4#5 #1#";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".....4....4..........7.................4.4.................2..........3....3.....";
-    var solpuz = "#   #4####4###   ### 7######  ##   ## #4#4#### #  ## ## # #2# ###### #3##  3#####";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".2...................3.........3......4...9......3.........4...................7.";
-    var solpuz = "#2 #    ######## ##  3# # #####3 # ## 4###9 ## # 3##### # #4   ##########      7#";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".5.........1.....5.................4.........5.................7.....7.........2.";
-    var solpuz = " 5####### #1#    5 ######## # #   #4## ### # 5  # # # #### # # 7    #7#########2 ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".......6.4...............2.........2..4...3..3.........3...............1.7.......";
-    var solpuz = "####   6#4  # ###### # # 2# #######2 #4  #3# 3### #  ##3  ##########  #1#7    ###";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".2..............1.............2....2.........7....6.............5..............4.";
-    var solpuz = "#2 ##########  #1## # # #### #2# # 2# ### ###7   #6# ######## ##5    # ########4#";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".5..2...........2.4............2.................2............4.2...........4..7.";
-    var solpuz = " 5 #2###### # # 2#4# ###### ## 2# #   #### # ### 2# # # #### #4#2#  # ##### 4# 7#";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "...7.......2................5...4...............2...2................6.......5...";
-    var solpuz = "###7    ## 2#### ####   # ##5###4#### # ### ## #2# #2##  #   ########6 ##    5###";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".4...........7..............1.......5..4.2..1.......2..............2...........7.";
-    var solpuz = " 4#######  # 7   ######## ##1# # # #5##4#2##1  #  # 2## ######## # 2#   #####  7 ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".2............3.............3...........4...........7.............3............6.";
-    var solpuz = "#2######## #  3# ######## ##3# #   ## # 4## ## # # #7###### ####  3#   ########6#";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "......7.........3.1............4....1.......6....2............4.5.........4......";
-    var solpuz = "      7#########3#1#   #  #####4####1# ##   6## #2# ###  # # #4#5###### ##4   #  ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle),
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "....1.5..........1............3....4.........6....1............2..........7.5....";
-    var solpuz = "####1#5### # ## #1# # #  ##  #3# ##4 ######  6#  #1# ###   ####2# ###  # #7#5  ##";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".............3..5.............2...1.4.......4.1...2.............5..3.............";
-    var solpuz = "######### #  3# 5# ####  ## # 2# #1#4#######4#1# #2 # ##  #### #5 #3  # #########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    })
-
-    var puzzle = ".....2.................2..3....4......5...2......6....4..2.................7.....";
-    var solpuz = "#####2 # # # #### # # #2 #3# # 4##### 5###2 # ###6 ###4# 2#     ######## # 7     ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    })
-
-    var puzzle = ".5..2...............4......7...........1.2...........6......6...............5..1.";
-    var solpuz = " 5 #2 ###  ##### ###4   #  7#######   #1#2 #   ## ###6  #   6 ###########   5 #1#";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    })
-
-    var puzzle = "..........5..5.......7.................2.3.................1.......8..4..........";
-    var solpuz = "   ###### 5##5   ### 7### ##  ##  ### #2#3# ## # ### ## ###1# #### 8##4#      ###";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    })
-
-    var puzzle = "......3.................7.....1...5...........3...4.....4.................4......";
-    var solpuz = "######3 ##    ## #####  7### #1###5## ### # ##3# #4# ###4 # # # ## # # #  4######";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    })
-
-    var puzzle = "..2..6...........2....1...............2...7...............5....7...........1..2..";
-    var solpuz = "##2# 6 ## # ##  #2 ###1# #  # ###### #2#  7 # ###### # #  5 # #7# #### ####1# 2##";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    })
-
-    var puzzle = ".........1......7.........4.....5...............4.....2.........4......9.........";
-    var solpuz = "#########1#     7####### #4#    5## #######   # 4  ###2#####   #4   #  9######   ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    })
-
-    var puzzle = ".........2................64....2...............5....37................3.........";
-    var solpuz = "#########2 # #   #### ### 64 # #2# #  # # ######5##  37 ## #####    #  3#########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    })
-
-    var puzzle = "7...3...............4....5...........2.....1...........6....1...............6...3";
-    var solpuz = "7  #3  ##  ######  #4  # 5  ### # ###2 ####1#####  ####6   #1# ######## #   6  #3";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    })
-
-    var puzzle = "....2.........2...........26..........5...2..........38...........7.........5....";
-    var solpuz = "  # 2####  ###2 #  ## ####26#   # ####5###2#   ##  ##38 #    #   #7#####  ##5    ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    })
-
-    var puzzle = "...............5.4.........4.1....4...........4....4.2.........4.3...............";
-    var solpuz = " ######   #    5#4 ####### 4#1#   4###########4   #4#2 ##### # 4#3  #  #  #######";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    })
-
-    var puzzle = ".................6..........5...8...1.......3...2...4..........2.................";
-    var solpuz = "########## #     6# ########5  #8#  1#### ##3## 2# #4# ###  # #2#   #  ##########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    })
-
-    var puzzle = "..1....3..5...6...................................................7...2..2....4..";
-    var solpuz = "##1####3##5# #6# ## # # # ## # # #### # #   ## # ######## # # ## #7# #2##2### 4##";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    })
-
-    var puzzle = "...........8.....4.5.2..3...............................1..5.1.4.....3...........";
-    var solpuz = "       ####8#####4#5#2 #3# # #### # #  # # # # ## ######1# 5#1#4### #3##   ###  #";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    })
-
-    var puzzle = ".3.................1...........1....1.6...6.4....4...........2.................3.";
-    var solpuz = "#3 ######## #   # #1#### # ## #1# # 1#6###6#4## #4#####  # # 2## #  ########## 3 ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    })
-
-    var puzzle = ".3.8....................6.....2...................4.....4....................5.1.";
-    var solpuz = "#3#8    ## #  ##### ## #6 ####2### ## # # # ## ###4# ## 4#  # ###########    5#1#";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    })
-
-    var puzzle = "......4....8...........3......4...................3......1...........5....3......";
-    var solpuz = "####  4 ## 8####### # #3  ## #4 ##### # # # ## ###3# ## #1# # ## ####5 ###3  ####";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "...6.....2.........6......1.........5.......4.........4......4.........2.....3...";
-    var solpuz = " # 6    #2#########6     #1#########5   #   4## ######4###   4#   #####2#### 3 # ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "......3......4...........1.2..3...................2..3.3...........4......3......";
-    var solpuz = "######3 ##   4# #########1#2 #3  ########## ##  # 2# 3#3######### #4   ## 3######";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".........4....3.............6....2.............4....3.............1....4.........";
-    var solpuz = "#########4   #3  ###########6   #2 ##### ##### 4# # 3 # ######## #1#   4#########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".................6.......4..3..........4.3..........3..7.......1.................";
-    var solpuz = "####     # # ####6# # #  4##3# ### ####4#3#### ##  #3##7 #### #1#    # ##########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "...4.............2....1..5..2.......................1..3..5....6.............8...";
-    var solpuz = "## 4#### #  ##  #2####1# 5##2 #### #####  ####  #  #1##3##5### 6## ##       #8   ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "...................3......7.......5....3.4....4.......4......7...................";
-    var solpuz = "####     #  ##### #3# #  #7### ## 5## #3#4# ##4 ## ###4# #  #7# ###### #  #     #";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "..7..2.4..6...........................................................4..2.4..5..";
-    var solpuz = "##7 #2#4 #6# # # ## # ### ## #   #### ##### ## # # # ## # # # #### # #4# 2#4# 5##";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "...3..........6...............4...2.1.......2.6...2...............1..........4...";
-    var solpuz = "#  3#   ######6####   # # ####4# #2#1# #####2#6  #2 # # ######## #1#   ######4###";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "................8..3....1.........3...........4.........4....9..7................";
-    var solpuz = "####    ##  # ##8##3## #1#### # ##3##  ###  ##4## ######4  # 9  7####        #   ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "........1.3...3.........1.4...........................4.6.........4...5.3........";
-    var solpuz = "#####  #1#3  #3#########1#4 #   ###  # ### #  # # # # 4#6# # #####4 # 5#3  ######";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".....6....5..................3.......3.1.5.3.......1..................4....5.....";
-    var solpuz = "  #  6    5####### #  #   ###3## ####3#1#5#3 # ####1# # # # ###### #  4##  5#####";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "..........4..4......2......1...........4.2...........7......3......4..3..........";
-    var solpuz = "   ##### #4##4  # ##2# ### 1# ## #  ###4#2## #   ## #7##### 3###   4##3#######  #";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "........1.5..............3.........4...3.2...5.........2..............4.4........";
-    var solpuz = "########1#5   # ###### # 3#  # ####4  #3#2#  5## # # ##2 ##########   4#4   #####";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "....8...2.7..........1......4.......................4......3..........2.2...2....";
-    var solpuz = "   #8 # 2 7 ## ### ##1# # ##4### # ## #   # ## #####4## #  3######### 2#2 # 2####";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "...............4.5..............6.....2...5.....4..............7.2...............";
-    var solpuz = "#####  ## #  ##4#5 ##  # #  # # 6##  #2###5#  ##4 # #  # # # ##7#2# #  ##########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "....5.........3................4.2..1.......1..2.3................3.........6....";
-    var solpuz = "### 5#####   #3  ###########   4#2 #1#######1# 2#3  ######### ##  3#   #####6 ###";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "..3.............7.2.2............1.............2............2.8.5.............1..";
-    var solpuz = "  3##########   7#2#2# ###  # # #1# #### ##  # 2### # #### #2#8#5   ### ######1# ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "..6................4..4..............6.....6..............1..6................2..";
-    var solpuz = "##6     # ######## 4 #4   ###########6#    6## # #### # ##1# 6 #   #### ##### 2# ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "........6.1.......4.....3.............3...2.............1.....5.......7.6........";
-    var solpuz = "###     6#1#######4# #  3#  # #####  #3# #2#  ### # # ##1#  ##5  ###  7#6   #####";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "................1..6............1...7.......6...2............6..1................";
-    var solpuz = "##########     #1##6#########  #1#  7  ###  6  #2 # #########6##1#     ##########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".......8..3...6...4..............1.............3..............4...2...3..3.......";
-    var solpuz = "###### 8 #3 # 6#  4# # ##   ### #1#  # # #### #3# #   ## #####4 ##2#  3# 3# #####";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "......7...3...1......3..................1..................1......5...7...4......";
-    var solpuz = "######7 ##3# #1# ## #3### ## # #   #####1#####  ###  ###  #1# # ##5###7#  4##   #";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "......3.........2....5.................1.6.................2....7.........4......";
-    var solpuz = "####  3### # ###2## #5  # ## ## ##### #1#6  ## ##### ## # #2# ##7# # # ###4 #####";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "2............1...........9.....1.4.............5.1.....5...........5............3";
-    var solpuz = "2######## # #1#   ## ####9  # #1#4#  # ### #  #5#1# #  5#### # ### 5#####   ##  3";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".....4.........7...4...3.................................3...3...6.........2.....";
-    var solpuz = "##   4### #####7 # 4 # 3# ##### ## ##  ###  ## ## # ### #3 ##3## 6###  ####2 ####";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "..4.........5......6...................6.1...................5......2.........2..";
-    var solpuz = "  4###### ##5    ##6######## #  #  ## #6#1# ## # ### ## # # #5## # #2#########2 #";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".1..1.......4..........................7.3..........................4.......1..9.";
-    var solpuz = "#1##1#######4##  ##   # # ###### # ##  7#3# ## ##### ## #   # ##  ##4# #####1##9#";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".1.........1.....1...........3.....5.........9.....1...........5.....1.........5.";
-    var solpuz = "#1#########1# # #1# ## # ### 3# #  5#### ####9    #1# ######## 5    #1# #######5 ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "...2...6......5.........7...............................1.........6......9...4...";
-    var solpuz = "## 2###6  ### 5##  #   #7#  ##### #  #     #  ######## #1#    # ##6 #### 9###4   ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".8........................2..4.......4.1.1.4.......6..4........................5.";
-    var solpuz = "#8     ######## #  #   # #2 #4###### 4#1#1#4 ######6# 4#     #  ########  #    5#";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "......2.........4..2.2..............2.......4..............2.2..2.........6......";
-    var solpuz = "##### 2### # ###4##2#2#   ##########2 # #   4### ###### # #2#2##2# # # ###6 #####";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "........7.....2.......5.4...............................7.5.......4.....2........";
-    var solpuz = "##### # 7#   #2## ### 5#4# # #### # #   #  # #  ##### ##7#5  ## ##4##  #2#   ####";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".............7.2...4...2......3...................5......1...3...2.1.............";
-    var solpuz = "     #### ###7#2 ##4# #2#### #3# # ## # ##  ## ###5 #####1###3## 2#1#  ##########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "..1....3..2............1..........2...........6..........6............1..3....8..";
-    var solpuz = "##1##  3##2# ###### # #1# #### ###2#  # # ### 6# #   #  #6# ######## #1##3  # 8##";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "...........3............3.....8.....2.......4.....3.....1............8...........";
-    var solpuz = "########## 3#  # ## ## #3 ####8 ####2#  ## #4 ## #3 # ##1##### # ##  8# #    ####";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".....5.6.5..2..........................3.2..........................2..1.3.3.....";
-    var solpuz = " ####5#6#5# 2# # # ###  # # # # ## # # 3#2# ###### # ## # ###### # #2 #1#3#3#####";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".....7.3...6........................3.......3........................2...5.2.....";
-    var solpuz = "#####7#3## 6 # # #### # # ## # # ###3 # # # 3##### # ##   # #### ####2 ##5#2 ####";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".3..4................3...4.........5.........6.........2...4................1..2.";
-    var solpuz = "#3##4   ## # ###### #3 # 4####### #5     # # 6####### #2#  4#  # # #########1# 2#";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".........4.............4..........1.4.......5.3..........8.............4.........";
-    var solpuz = "#########4   #   ######4###   # ##1#4###  ##5#3#  #   # #8## ### #  ###4######   ";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "4......8..........7...............3...........2...............1..........2......7";
-    var solpuz = "4   ###8######   #7   # ###### # #3## # # # ##2# # # #########1# #    ###2####  7";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = ".......3..1.1.................3...................2.................5.7..6.......";
-    var solpuz = "#####  3##1#1######### #  ## #3 ## ## ### # ## # #2# ## # ### ## #  5#7##6#######";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-    var puzzle = "..........1...............5...3...5...........5...4...4...............1..........";
-    var solpuz = "##########1# #    ### ####5# #3#  5## ##### ##5  #4# #4#### ###   #  #1##########";
-    puzzles.push({
-      cantClick: generateStartingColors(puzzle), 
-      solution_colors: generateSolutionColors(solpuz)
-    });
-
-  //choose index of random puzzle
-  puzzle_index = Math.floor(Math.random() * puzzles.length);
+  rulesPopup.style('font-size', '16px');
+  rulesPopup.style('padding', '10px');
+  rulesPopup.style('background-color', '#fff');
+  rulesPopup.style('border', '1px solid #000');
+  rulesPopup.style('position', 'absolute');
+  rulesPopup.style('left', '50%');
+  rulesPopup.style('top', '50%');
+  rulesPopup.style('transform', 'translate(-50%, -50%)');
+  rulesPopup.style('display', 'none'); // Hide the pop-up initially
+
+  // Create a button to show rules pop-up
+  let rulesButton = createButton('Rules');
+  rulesButton.position(10, 60);
+  rulesButton.mousePressed(showPopup);
+
+  // Create a button inside rules pop-up to close it
+  let closeRules = createButton('Close');
+  closeRules.mousePressed(hidePopup);
+  closeRules.parent(rulesPopup); // Attach the button to the pop-up
+  closeRules.style('position', 'absolute');
+  closeRules.style('top', '10px');
+  closeRules.style('right', '10px');
+
+  // Create a button to restart the puzzle
+  let restartButton = createButton('Restart');
+  restartButton.position(10, 110);
+  restartButton.mousePressed(restart);
+
+  // Create a button to restart the puzzle
+  let solveButton = createButton('Solve');
+  solveButton.position(10, 160);
+  solveButton.mousePressed(solve);
+
+  let hintButton = createButton('Hint');
+  hintButton.position(10, 210);
+  hintButton.mousePressed(hint);
+
+  //Choose random puzzle
+  const keys = Object.keys(puzzles); //get all keys from the stored puzzles
+  const randomKey = keys[Math.floor(Math.random() * keys.length)]; //choose a key at random
+  selectedPuzzle = puzzles[randomKey]; //select the puzzle with this random key
+
+  // format the puzzle start and puzzle solution like we need to use it: 
+  window.cantClick = generateStartingColors(selectedPuzzle.puzzle); //cantClick = map(square index, value)
+  window.solution_colors = generateSolutionColors(selectedPuzzle.solpuz); //solution_colors = array (0 for water, 1 for land, size 81)
+
+  // Here is how the puzzle start and puzzle solution state is stored after generateStartingColors and generateSolutionColors:
+  //   cantClick: new Map([
+  //     [36, 2], [63, 3], [19, 3], [29, 1], [66, 3], [14, 4], [51, 3], [61, 4], [17, 2], [44, 4]
+  //   ]);
+  //   //0 = water, 1 = island (laid out to look just like the puzzle)
+  //   solution_colors: [0, 0, 0, 0, 0, 0, 0, 0, 0, 
+  //                     0, 1, 1, 0, 1, 1, 0, 1, 1, 
+  //                     0, 1, 0, 0, 1, 0, 0, 0, 0, 
+  //                     0, 0, 1, 0, 1, 0, 1, 1, 1,
+  //                     1, 1, 0, 0, 0, 1, 0, 0, 1,
+  //                     0, 0, 0, 1, 0, 1, 1, 0, 0,
+  //                     0, 1, 0, 1, 0, 0, 0, 1, 0,
+  //                     1, 1, 0, 1, 0, 1, 1, 1, 0,
+  //                     0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+  // coins = createDiv(`<p>Coin Count: </p><script>player.currency</script>`);
+  // coins.style('position', 'absolute');
+  // coins.style('left', '10');
+  // coins.style('top', '200');
 }
-  
-  function draw() {
-    var isSolved = true;
-    //loop through all square position coordinates and color states
-    for (i = 0; i < rows * cols; ++i) {
+
+function draw() {
+  var isSolved = true;
+  //loop through all square position coordinates and color states
+  for (i = 0; i < rows * cols; ++i) {
+    if (!done) {
       //making all the starting squares unclickable
-      if (puzzles[puzzle_index].cantClick.has(i)) {
+      if (cantClick.has(i)) {
         fill('white');
       }
       else {
         if (colorState[i] == 0) fill(0, 0, 200); //0 in colorState = blue
         if (colorState[i] == 1) fill('white'); //1 in colorState = white
         //if there's any difference between the current color states and the solution's color states, the puzzle is not solved
-        if (colorState[i] != puzzles[puzzle_index].solution_colors[i]) {
+        if (colorState[i] != solution_colors[i]) {
           isSolved = false;
         }
       }
-      rect(xpos[i], ypos[i], sideLength, sideLength); //create square
-      
-      //draw numbers on the starting squares
-      if (puzzles[puzzle_index].cantClick.has(i)) {
-        fill('black');
-        textSize(square_size * 0.6);
-        textAlign(CENTER, CENTER);
-        text(puzzles[puzzle_index].cantClick.get(i), xpos[i], ypos[i]);
-      }
-      // Uncomment for tile indexes
-      //==============================
-      //fill('black');
-      //text(i, xpos[i], ypos[i]);
-      //==============================
-    }
-    if (isSolved) {
-      fill(0, 250, 200);
-      rect(width / 2, height / 2, 100, 100);
-    }
-  }
+      // Special case for hint squares
+      if (hintSquares && hintSquares.includes(i)) {
+        // For hint squares, show correct solution color
+        if (solution_colors[i] == 0) fill(0, 0, 200); // Water
+        if (solution_colors[i] == 1) fill('white'); // Land
 
-  function mouseClicked() {
-    //when the mouse is clicked, change the color state by negating the value
-    for (i = 0; i < rows * cols; ++i) {
-      //check if mouse position is within the current square
-      if (dist(mouseX, 0, xpos[i], 0) < sideLength / 2 && dist(0, mouseY, 0, ypos[i]) < sideLength / 2) {
-        ++colorState[i];
-        colorState[i] = colorState[i] % square_states;
-        return;
+        if (!cantClick.has(i)) rect(xpos[i], ypos[i], sideLength, sideLength); // Redraw the square with the correct solution color
+
+        // Add a green border around hint squares
+        noFill(); // No fill for the border, just want the stroke
+        stroke('green'); // Green border for hint squares
+        strokeWeight(4); // Thicker stroke for visibility
+        rect(xpos[i], ypos[i], sideLength, sideLength); // Draw the green outline
+
+        stroke('black');
+        strokeWeight(1); // Reset stroke to default
       }
     }
-  }
+    else {
+      if (solution_colors[i] == 0) fill('green');
+      else fill('white');
+    }
+    rect(xpos[i], ypos[i], sideLength, sideLength); //create square
 
-  function generateStartingColors(puzzle) {
-    cantClickMap = new Map();
-    for (let i = 0; i < puzzle.length; ++i) {
-        const char = puzzle[i];
-        if (char !== '.' && char !== ' ') { // Only process numbers
-            const key = parseInt(char); // Convert character to integer
-            cantClickMap.set(i, key);
+    // Draw numbers on starting squares
+    if (cantClick.has(i)) {
+      fill('black');
+      textSize(square_size * 0.6);
+      textAlign(CENTER, CENTER);
+      text(cantClick.get(i), xpos[i], ypos[i]);
+    }
+    // Uncomment for tile indices
+    //==============================
+    // fill('black');
+    // text(i, xpos[i], ypos[i]);
+    //==============================
+  }
+  if (isSolved && !done && !winnerPopup) {
+    winnerPopup = true; // Set this to true before calling the function
+    winnerText();
+    done = true;
+  }
+}
+
+function mouseClicked() {
+  //when the mouse is clicked, change the color state by negating the value
+  for (i = 0; i < rows * cols; ++i) {
+    //check if mouse position is within the current square
+    if (dist(mouseX, 0, xpos[i], 0) < sideLength / 2 && dist(0, mouseY, 0, ypos[i]) < sideLength / 2) {
+      ++colorState[i];
+      colorState[i] = colorState[i] % square_states;
+      return;
+    }
+  }
+}
+
+function generateStartingColors(puzzle) {
+  cantClickMap = new Map();
+  for (let i = 0; i < puzzle.length; ++i) {
+    const char = puzzle[i];
+    if (char !== '.' && char !== ' ') { // Only process numbers
+      const key = parseInt(char); // Convert character to integer
+      cantClickMap.set(i, key);
+    }
+  }
+  return cantClickMap;
+}
+
+function generateSolutionColors(solpuz) {
+  var solution_colors = [];
+  for (var i = 0; i < solpuz.length; i++) {
+    solution_colors.push(solpuz[i] !== '#' ? 1 : 0);
+  }
+  return solution_colors;
+}
+
+function showPopup() {
+  rulesPopup.style('display', 'block'); // Show the pop-up
+}
+
+function hidePopup() {
+  rulesPopup.style('display', 'none'); // Hide the pop-up
+}
+
+//Reset all the colors when "Restart" button is pressed
+function restart() {
+  for (let i = 0; i < colorState.length; ++i) colorState[i] = 0;
+}
+
+//Set current color state to the solution colors to solve the puzzle
+function solve() {
+  colorState = solution_colors;
+}
+
+//gives the player a hint
+async function hint() {
+  let availableHintIndices = [];
+  for (let i = 0; i < 72; ++i) {
+    if (i % 9 !== 8) availableHintIndices.push(i);
+  }
+  let topLeft; // Declare topLeft
+  do {
+    topLeft = Math.floor(Math.random() * 72); // Generate a random index between 0 and 71 (all rows but the bottom one)
+    
+    // Filter out any positions that are in cantBeHint
+    availableHintIndices = availableHintIndices.filter(pos => !cantBeHint.includes(pos));
+
+    //if there are no more available locations for hint
+    if (availableHintIndices.length === 0) {
+      console.log("No more available places for a hint.");
+      noMoreHint = createDiv(`<h2>No more available places for a hint.</h2>`).id(`noHint`);
+      noMoreHint.style('font-size', '16px');
+      noMoreHint.style('padding', '10px');
+      noMoreHint.style('background-color', '#fff');
+      noMoreHint.style('border', '1px solid #000');
+      noMoreHint.style('position', 'absolute');
+      noMoreHint.style('left', '50%');
+      noMoreHint.style('top', '50%');
+      noMoreHint.style('transform', 'translate(-50%, -50%)');
+      noMoreHint.style('z-index', '1000');
+      noMoreHint.style('opacity', '1');
+
+      await new Promise(r => setTimeout(r, 700)); //wait a lil
+      // Gradually decrease opacity
+      let opacity = 100;
+      let fadeInterval = setInterval(() => {
+        opacity -= 5; // Decrease opacity value, adjust as needed for speed
+        noMoreHint.style('opacity', opacity / 100);
+
+        // Stop the interval once fully invisible
+        if (opacity <= 0) {
+          clearInterval(fadeInterval);
         }
-    }
-    return cantClickMap;
-  }
-  
-  function generateSolutionColors(solpuz) {
-    var solution_colors = [];
-    for (var i = 0; i < solpuz.length; i++) {
-        solution_colors.push(solpuz[i] !== '#' ? 1 : 0);
-    }
-    return solution_colors;
-  }
+      }, 50); // Adjust the interval time to control the speed of the fade-out
 
-  function showPopup() {
-    rulesPopup.style('display', 'block'); // Show the pop-up
-  }
-  
-  function hidePopup() {
-    rulesPopup.style('display', 'none'); // Hide the pop-up
-  }
+      return; // Terminate the function if there are no available positions left
+    }
+  } while (topLeft % 9 === 8 || cantBeHint.includes(topLeft)); // Keep generating until it's not in the right column and not in a place that would overlap another hint
+
+  hintSquares.push(topLeft, topLeft + 1, topLeft + 9, topLeft + 10); //generate the three other squares of the 2x2 hint square
+  cantBeHint.push(topLeft, topLeft + 1, topLeft + 9, topLeft + 10, topLeft - 10, topLeft - 9, topLeft - 8, topLeft - 1, topLeft + 8); //any topLeft whose hint square would intersect with another hintSquares cannot be hint
+
+  // For each square in hintSquares, set the colorState to the correct solution and make it unclickable
+  hintSquares.forEach((index) => {
+    colorState[index] = solution_colors[index]; // Set the correct color from the solution
+  });
+
+  console.log(topLeft);
+  console.log(hintSquares); // Log the value for debugging
+  console.log(cantBeHint);
+}
+
+async function winnerText() {
+  await new Promise(r => setTimeout(r, 2000)); //wait a sec
+
+  var coins_earned = Math.floor(Math.random() * (1000 - 100) + 100); //generate random number between 100 and 1000
+
+  winner = createDiv(`
+    <h2>Congrats!</h2>
+    <p>You have opened the treasure chest.</p>
+    <p>You've earned ${coins_earned} doubloons!</p>
+  `).id(`completionText`);
+  // After creating the element, add an id to it
+  winner.style('font-size', '16px');
+  winner.style('padding', '10px');
+  winner.style('background-color', '#fff');
+  winner.style('border', '1px solid #000');
+  winner.style('position', 'absolute');
+  winner.style('left', '50%');
+  winner.style('top', '50%');
+  winner.style('transform', 'translate(-50%, -50%)');
+  winner.style('z-index', '1000');
+  winner.style('opacity', '0'); // Start with 0 opacity
+
+  winnerPopup = true;
+
+  // Gradually increase opacity
+  let opacity = 0;
+  let fadeInterval = setInterval(() => {
+    opacity += 5; // Increase opacity value, adjust as needed for speed
+    winner.style('opacity', opacity / 100);
+
+    // Stop the interval once fully visible
+    if (opacity >= 100) {
+      clearInterval(fadeInterval);
+    }
+  }, 50); // Adjust the interval time to control the speed of the fade-in
+
+  await new Promise(r => setTimeout(r, 5000)); //wait a sec or two
+
+  player.gainCurrency(coins_earned); //give player their currency
+  player.updateCoinCount();
+  window.location.href = "index.html"; //send user back to their ship
+}
+
+//to fade out element
+function fadeOut(element, duration) {
+  let opacity = 1;
+  const interval = 10; // Adjust as needed for smoothness
+
+  const timer = setInterval(() => {
+    if (opacity <= 0) {
+      clearInterval(timer);
+      element.style.display = "none";
+    } else {
+      opacity -= interval / duration;
+      element.style.opacity = opacity;
+    }
+  }, interval);
+}
