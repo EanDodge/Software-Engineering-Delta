@@ -1,5 +1,5 @@
-const mapXSize = 500;
-const mapYSize = 500;
+const mapXSize = 2156;
+const mapYSize = 2000;
 
 let player = new Player(mapXSize/2, mapYSize/2);
 

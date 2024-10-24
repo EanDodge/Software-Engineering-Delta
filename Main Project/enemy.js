@@ -27,7 +27,7 @@ class Enemy {
         image(this.enemyImage, 0, 0, this.size, this.size);  // Draw image at the new origin (0, 0 after translation)
         pop();  // Restore original transformation state
 
-        imageMode(CORNER);  // Return draw mode to default
+        //imageMode(CORNER);  // Return draw mode to default
         tint('none');
         console.log("Enemy health: " + this.health);
     }
