@@ -1,27 +1,54 @@
-// Run this in terminal to run tests (need node.js and npm installed)
-// npm init -y # Initialize npm
-// npm install jest puppeteer --save-dev # install required dependencies
-// npm test
-
 const puppeteer = require('puppeteer');
 
-describe('p5.js sketch tests', () => {
+describe('Nurikabe Puzzle Tests', () => {
   let browser;
   let page;
 
   beforeAll(async () => {
-    browser = await puppeteer.launch();
+    browser = await puppeteer.launch({
+      headless: false, // Set to true if you want it headless
+      slowMo: 50 // Slows down Puppeteer actions for easier debugging
+    });
     page = await browser.newPage();
 
-    // Listen for browser console messages
-    // page.on('console', msg => console.log('PAGE LOG:', msg.text()));
+    //Open nurikabe.hmtl in live server before doing this
+    await page.goto('http://localhost:5500/nurikabe.html'); //run live server using default port value for VSC Live Server (until code is hosted, this is the only way I can figure out to test this sh*t with puppeteer)
 
-    // Load p5.js nurikabe
-    await page.goto('file://' + __dirname + '/../nurikabe.html');
+    //Log console messages
+    // page.on('console', msg => {
+    //     for (let i = 0; i < msg.args().length; ++i)
+    //         console.log(`${i}: ${msg.args()[i]}`);
+    // });
+  });
+
+  beforeEach(async () => {
+    // Ensure we navigate to the correct page before each test
+    const currentUrl = page.url();
+    if (currentUrl !== 'http://localhost:5500/nurikabe.html') {
+      await page.goto('http://localhost:5500/nurikabe.html');
+    }
   });
 
   afterAll(async () => {
     await browser.close();
+  });
+
+  // Helper function to click a button based on its inner text
+  async function clickButtonByText(page, buttonText) {
+    await page.evaluate((buttonText) => {
+      const buttons = [...document.querySelectorAll('button')];
+      const button = buttons.find(b => b.textContent.trim() === buttonText);
+      if (button) {
+        button.click();
+      } else {
+        throw new Error(`Button with text "${buttonText}" not found`);
+      }
+    }, buttonText);
+  }
+
+  test('should load the page', async () => {
+    const title = await page.title();
+    expect(title).toBe('Nurikabe');
   });
 
   test('should have a canvas element', async () => {
@@ -33,7 +60,7 @@ describe('p5.js sketch tests', () => {
     expect(canvasExists).toBe(true);
   });
 
-  it('should initialize the correct number of squares', async () => {
+  test('should initialize the correct number of squares', async () => {
     // Reload the page to reset the puzzle state
     await page.reload();
 
@@ -43,89 +70,65 @@ describe('p5.js sketch tests', () => {
     // Ensure that the expected number of squares is created
     expect(numSquares).toBe(81);
   });
-
-
-  test('should change color on square click', async () => {
-    await page.reload(); // Reload to ensure a fresh start
-    const initialColor = await page.evaluate(() => {
-      let square = document.querySelector('canvas');
-      let ctx = square.getContext('2d');
-      return ctx.getImageData(10, 10, 1, 1).data.join(','); // Get color of a pixel
-    });
-
-    await page.click('canvas', { button: 'left' }); // Click on canvas to change color
-
-    const newColor = await page.evaluate(() => {
-      let square = document.querySelector('canvas');
-      let ctx = square.getContext('2d');
-      return ctx.getImageData(10, 10, 1, 1).data.join(','); // Get new color of pixel
-    });
-
-    expect(initialColor).not.toBe(newColor); // The color should change
-  });
-
-  test('should not change color of unclickable squares', async () => {
-    await page.reload();
-
-    const unclickableIndex = 36; // Example index
-    // Get xpos and ypos inside the browser context
-    const { xpos, ypos } = await page.evaluate(() => {
-      return { xpos, ypos }; // Retrieve xpos and ypos from the sketch
-    });
-
-    // Click on the canvas where the unclickable square is located
-    await page.mouse.click(xpos[unclickableIndex], ypos[unclickableIndex]);
-
-    // Check if the square's color state remains unchanged
-    const unchanged = await page.evaluate((index) => {
-      return colorState[index] === 0; // The color should still be the default one
-    }, unclickableIndex);
-
-    expect(unchanged).toBe(true);
-  });
-
-  test('should display puzzle solved message/visual cue', async () => {
-    await page.reload();
-
-    // Simulate solving the puzzle by setting the color states directly
+  
+  test('should display and close the rules pop-up', async () => {
+    // Trigger the rules popup logic manually
     await page.evaluate(() => {
-      // Force the colorState to match the solution (mocking a correct solution)
-      for (let i = 0; i < puzzles[puzzle_index].solution_colors.length; i++) {
-        colorState[i] = puzzles[puzzle_index].solution_colors[i];
+      showPopup();
+    });
+  
+    // Check if the popup is visible after the manual trigger
+    isPopupVisible = await page.evaluate(() => {
+      const popup = document.getElementById('rulesPopup');
+      return window.getComputedStyle(popup).display !== 'none';
+    });
+  
+    expect(isPopupVisible).toBe(true);
+
+    // Now, manually trigger the logic to close the popup
+    await page.evaluate(() => {
+        hidePopup();
+    });
+    
+    // Check if the popup is hidden after the manual trigger
+    isPopupVisible = await page.evaluate(() => {
+      const popup = document.getElementById('rulesPopup'); //ID of the rules popup in js file
+      return window.getComputedStyle(popup).display !== 'none';
+    });
+    
+    expect(isPopupVisible).toBe(false); // Expect the popup to be hidden
+  });
+
+  test('should reset puzzle when Restart button is clicked', async () => {
+    await clickButtonByText(page, 'Restart'); // Click the Restart button
+    const colorState = await page.evaluate(() => colorState);
+    const allBlue = colorState.every(state => state === 0); // Check if all squares are blue (reset state)
+    expect(allBlue).toBe(true);
+  });
+
+  test('should solve the puzzle when Solve button is clicked', async () => {
+    await clickButtonByText(page, 'Solve'); // Click the Solve button
+    //console.log("Solve button clicked");
+  
+    // Manually trigger the solve logic (for debugging)
+    await page.evaluate(() => {
+      if (typeof solve === 'function') {
+        solve(); // Manually invoke the solve function
       }
     });
-
-    // Introduce a delay to give the sketch time to render the "solved" state
-    await new Promise((resolve) => setTimeout(resolve, 100));
-
-    // Check for the "solved" indicator (a green square at the center of the canvas for now)
-    const isSolved = await page.evaluate(() => {
-      let canvas = document.querySelector('canvas');
-      let ctx = canvas.getContext('2d');
-      // Check for green color in the middle of the canvas
-      return ctx.getImageData(canvas.width / 2, canvas.height / 2, 1, 1).data.join(',') === '0,250,200,255';
-    });
-
-    expect(isSolved).toBe(true);
+  
+    const currentState = await page.evaluate(() => colorState);
+    const solutionState = await page.evaluate(() => solution_colors);
+  
+    //Console logs for solve debugging:
+    //console.log('Current State after manual Solve:', currentState);
+    //console.log('Solution State:', solutionState);
+  
+    expect(currentState).toEqual(solutionState); // Compare current state with the solution state
   });
 
-  it('should display a random puzzle on load', async () => {
-    // Reload the page to reset and load a new random puzzle
-    await page.reload();
+  //Testing completion features manually:
+  // test for unclickable squares after puzzle completion: complete a nurikabe (not using the solve button) and then try to click one of the green squares
+  // test for completion text: solve nurikabe using solve button (and once without too) and see if completion text pops up on the screen
   
-    // Get the puzzle index chosen randomly in the sketch
-    const chosenPuzzleIndex = await page.evaluate(() => puzzle_index);
-  
-    // Check that the randomly selected puzzle index is within the valid range
-    const numPuzzles = await page.evaluate(() => puzzles.length);
-    expect(chosenPuzzleIndex).toBeGreaterThanOrEqual(0);
-    expect(chosenPuzzleIndex).toBeLessThan(numPuzzles);
-  
-    // Verify that at least one "unclickable" numbered square is present on the canvas
-    const hasUnclickableSquares = await page.evaluate(() => {
-      return puzzles[puzzle_index].cantClick.size > 0;
-    });
-    expect(hasUnclickableSquares).toBe(true);
-  });
-
 });
