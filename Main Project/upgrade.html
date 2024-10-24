@@ -5,7 +5,15 @@
     <title>upgrade screen</title>
     <style>
 
-.button{
+    .button-container{
+            
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+            
+        }
+    .button-container button {
             background-color: hotpink;
             border: none;
             color: white;
@@ -13,8 +21,12 @@
             text-align: center;
             display: inline-block;
             font-size: 16px;
-            
-        }
+
+
+}
+canvas{
+    display:block;
+}
         body, html {
             margin: 0;
             padding: 0;
@@ -46,7 +58,7 @@
     <div class ="button-container">
     <button onclick="window.location.href='index.html'" type="button" >Back Button</button>
     </div>
-    <canvas id="gameCanvas"  width="1500" height ="900"></canvas>
+    <canvas id="gameCanvas" ></canvas>
     <script>
         var c = document.getElementById("gameCanvas");
         var c2 = document.getElementById("gameCanvas");
@@ -59,15 +71,6 @@
 
         var img2 = new Image();
         img2.src = './assets/upgradeIslandAlt.png';
-
-
-        img2.onload = function () {
-            // c.width = document.body.clientWidth;
-            // c.height = document.body.clientHeight;
-            contextSea.drawImage(img1,100, 500,c.width * 2, c.height);
-            contextIsland.drawImage(img2, 0, 0, c.width, c.height);
-
-        }
 
     </script>
     <script src="pirate.js"></script>

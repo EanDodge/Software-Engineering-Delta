@@ -10,11 +10,11 @@ class Pirate {
     draw(ctx) {
         ctx.save();
         if(this.direction ==='right'){
-                ctx.translate(this.x + 25, this.y);
+                ctx.translate(this.x , this.y);
                 ctx.scale(-1,1);
-                ctx.drawImage(this.image, 0 , 0 , 25, 25);
+                ctx.drawImage(this.image, 0, 0, 40, 40);
         }else{
-            ctx.drawImage(this.image, this.x, this.y, 25, 25);
+            ctx.drawImage(this.image, this.x, this.y, 40, 40);
         }
         ctx.restore();
     }

@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const backgroundImgUrl = './assets/upgradeislandAlt.png';
     //const backgroundImgUrl = './assets/upgrade.png';
 
-    const pirate = new Pirate(800, 650, pirateImgUrl);
+    const pirate = new Pirate(750, 630, pirateImgUrl);
 
     const seaImage = new Image();
     const background = new Image();
@@ -15,20 +15,39 @@ document.addEventListener('DOMContentLoaded', () => {
     background.src = backgroundImgUrl;
     seaImage.src = seaImgUrl;
 
-    seaImage.onload = () => {
-        //backgroundImage.onload = () => {
-        ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-        ctx.drawImage(background, 0, 0, canvas.width/2, canvas.height/2);
+    function resizeCanvas(){
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        drawScene();
+    }
+
+    function drawScene(){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(seaImage, 0, 0, canvas.width , canvas.height);
+        
+        //need to scale the island.
+        //default size is not big enough for entire browser scree
+        let scaleFactor = 1.5;
+        const newWidth = background.width * scaleFactor;
+        const newHeight = background.height * scaleFactor;
+
+    
+        const centerX = (canvas.width - newWidth) / 2;
+        const centerY = (canvas.height - newHeight) / 2;
+        ctx.drawImage(background, centerX, centerY, newWidth, newHeight);
         pirate.draw(ctx);
+    }
+
+    seaImage.onload = () => {
+        background.onload = () => {
+        resizeCanvas()
+        window.addEventListener('resize', resizeCanvas);
         gameLoop();
-    //};
+    };
 };
 
     function gameLoop() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(seaImage, 0, 0, canvas.width, canvas.height);
-        ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-        pirate.draw(ctx);
+        drawScene();
         requestAnimationFrame(gameLoop);
     }
 
