@@ -26,6 +26,7 @@ class Player {
         this.playerImage;
 		    this.health = 10;
 		    this.lastCollisionTime = 0; //Tracks the time of last collision
+        this.difficulty = localStorage.setItem('difficulty', 'easy');
         
     }
 

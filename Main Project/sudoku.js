@@ -1,6 +1,5 @@
 let rows = 9; let cols = 9;
 let square_size = 45; //length and height of each square
-let square_states = 4; //number of color states each square can have
 let interval = 30;
 
 // Num of errors allowed
@@ -18,6 +17,9 @@ let helpDisplay = true;
 let indexForSudoku = giveSudokuIndex();
 let sudoku = sudoku_samples[indexForSudoku];
 let sudoku_solution = sudoku_answers[indexForSudoku];
+
+let f = localStorage.getItem('difficulty');
+console.log(f);
 
 function setup() {
     //create a canvas in the center of the screen
@@ -343,7 +345,9 @@ function setup() {
     document.getElementById('backToIndexButton').style.display = 'none';
     document.getElementById('completeButton').style.display = 'none';
     document.getElementById('finishButton').style.display = 'block';
-    player.gainCurrency(500);
+    let currency = parseInt(localStorage.getItem('playerCurrency'));
+    currency += 500;
+    localStorage.setItem('playerCurrency', currency);
   }
 
   function lostSudoku() {
