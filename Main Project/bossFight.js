@@ -1,7 +1,7 @@
 
-// import Enemy from './enemy.js';
-// import Boss from './boss.js';
-// import Player from './player.js';
+//  import Enemy from './enemy.js';
+//  import Boss from './boss.js';
+//  import Player from './player.js';
 
 // const boss = new Boss(300, 300, 200, 'bossImage');
 // let minions = [];
@@ -151,8 +151,8 @@
 // }
 
  
-const mapXSize = 500;
-const mapYSize = 500;
+const mapXSize = 1500;
+const mapYSize = 1500;
 
 let player = new Player(mapXSize/2, mapYSize/2);
 
@@ -163,6 +163,14 @@ let gameObjects = [];
 let projectiles = [];
 
 let frameCount = 0;
+
+
+let minions = [];
+let inkProjectiles = [];
+let tentacles = [];
+let boss;
+
+
 
 let enemySpawnNumber = parseInt(localStorage.getItem("enemySpawnNumber")) || 0;
 let enemyHealth = parseInt(localStorage.getItem("enemyHealth")) || 1;
@@ -176,19 +184,25 @@ let projectileFrameCount = 0;
  let islandImage;
  let backgroundImage;
  let enemyImage; 
+ let bossImage;
+ let minionImage;
+
+ let inkEffectDuration = 0;
 
 
  function preload() {
      player.playerImage = loadImage('./assets/shiplvl1Top.png');
-
+	 islandImage = loadImage('./assets/islandDock.png');
 	 //backgroundImage = loadImage('./assets/sea.png');
-	 enemyImage = loadImage('./assets/shiplvl2Top.png');
+	 //enemyImage = loadImage('./assets/shiplvl2Top.png');
+	 bossImage = loadImage('./assets/krakenDelozier.png');
+	 minionImage = loadImage('./assets/greg.png');
  }
  
 function setup() {
 	//createCanvas(mapXSize, mapYSize, WEBGL);
 	//makes canvas size dependent on display size (- values because full display size was to big)
-	createCanvas(displayWidth / 1.5, displayHeight / 1.5, WEBGL);
+	createCanvas(displayWidth, displayHeight, WEBGL);
 
 	clearStorageButton = createButton("Clear Storage");
 	clearStorageButton.position(0, 0);
@@ -196,14 +210,43 @@ function setup() {
 	
 	console.log("Display h x w = " + displayHeight + ", " + displayWidth);
 
+	 boss = new Boss(300, 300);
+	 boss.bossImage = bossImage
 	
+	 setInterval(() => {
+        const attack = boss.attack(player);
+        if (attack) {
+            if (Array.isArray(attack)) {
+				for (let i = 0; i < attack.length; i++) {
+					attack[i].playerImage = minionImage;
+					attack[i].string = "minion";
+				}
+                minions = minions.concat(attack);
+            } else if (attack.move) {
+                inkProjectiles.push(attack);
+            } else if (attack.draw) {
+                tentacles.push(attack);
+            }
+        }
+    }, 5000); // 5000 milliseconds = 5 seconds
+
+	// Draw and move minions
+    
 	//camera to follow player
 	cam = createCamera();
 
 	//sets the standard frame rate to 45fps
 	frameRate(45);
 
-	
+	//random object to show screen move
+	let island = new GameObject(100, 100);
+	//island.collision = true;
+	gameObjects.push(island);
+
+	//random object to show screen move
+	island = new GameObject(250, 100);
+	//island.collision = true;
+	gameObjects.push(island);
 
 }
 
@@ -212,56 +255,48 @@ function draw() {
 	//image(backgroundImage, mapXSize / 2 - mapXSize, mapYSize / 2 - mapYSize, mapXSize * 2, mapYSize * 2);
 
 	//border lines
-	// stroke(255, 255, 255);
-	// line(0, mapXSize, 0, 0);
-	// line(mapXSize, mapXSize, 0, mapYSize);
-	// line(mapXSize, 0, mapYSize, mapYSize);
-	// line(0, 0, mapYSize, 0);
-	// stroke(0, 0, 0);
+	stroke(255, 255, 255);
+	line(0, mapXSize, 0, 0);
+	line(mapXSize, mapXSize, 0, mapYSize);
+	line(mapXSize, 0, mapYSize, mapYSize);
+	line(0, 0, mapYSize, 0);
+	stroke(0, 0, 0);
 
 	//enemy generation
 	// enemyFrameCount = 200 - (enemySpawnNumber/2)^1.5
 	// y = 200 - (x/2)^1.5 if want to graph
-	let enemySpawnTimer = 200 - Math.ceil(Math.pow(enemySpawnNumber, 2));
-	if (enemyFrameCount % enemySpawnTimer === 0) {
-		let generateXFirst = Math.random() > 0.5;
-		let rand1;
-		let rand2;
-		if (generateXFirst) {
-			rand1 = Math.random() * mapXSize;
-			rand2 = Math.random() > 0.5 ? mapYSize + 20 : -20;
-		}
-		else {
-			rand2 = Math.random() * mapYSize;
-			rand1 = Math.random() > 0.5 ? mapXSize + 20 : -20;
-		}
-		let enemy = new Enemy(rand1, rand2, enemyHealth, enemyImage);
-		enemies.push(enemy);
-
-		// parabolic generation
-		// cap of spawn every 100 frames (can be generated into less)
-		if (enemySpawnTimer > 100) {
-			enemySpawnNumber++;
-		} else {
-			enemyHealth++;
-			enemySpawnNumber = 0;
-		}
-
-		localStorage.setItem("enemySpawnNumber", enemySpawnNumber);
-		localStorage.setItem("enemyHealth", enemyHealth);
-
-		enemyFrameCount = 0;
-	}
-
-	// enemies.forEach((enemy, index) => {
-	// 	enemy.drawEnemy();
-	// 	enemy.moveEnemy(player);
-	// 	enemy.checkCollisionProjectiles(projectiles);
-	// 	if (enemy.health <= 0) {
-	// 		enemies.splice(index, 1);
-	// 		player.gainCurrency(enemy.currencyValue);
+	//let enemySpawnTimer = 200 - Math.ceil(Math.pow(enemySpawnNumber, 2));
+	// if (enemyFrameCount % enemySpawnTimer === 0) {
+	// 	let generateXFirst = Math.random() > 0.5;
+	// 	let rand1;
+	// 	let rand2;
+	// 	if (generateXFirst) {
+	// 		rand1 = Math.random() * mapXSize;
+	// 		rand2 = Math.random() > 0.5 ? mapYSize + 20 : -20;
 	// 	}
-	// });
+	// 	else {
+	// 		rand2 = Math.random() * mapYSize;
+	// 		rand1 = Math.random() > 0.5 ? mapXSize + 20 : -20;
+	// 	}
+	// 	let enemy = new Enemy(rand1, rand2, enemyHealth, enemyImage);
+	// 	enemies.push(enemy);
+
+	// 	// parabolic generation
+	// 	// cap of spawn every 100 frames (can be generated into less)
+	// 	if (enemySpawnTimer > 100) {
+	// 		enemySpawnNumber++;
+	// 	} else {
+	// 		enemyHealth++;
+	// 		enemySpawnNumber = 0;
+	// 	}
+
+	// 	localStorage.setItem("enemySpawnNumber", enemySpawnNumber);
+	// 	localStorage.setItem("enemyHealth", enemyHealth);
+
+	// 	enemyFrameCount = 0;
+	//}
+
+	
 
 	controllerInput();
 
@@ -269,12 +304,45 @@ function draw() {
 
 	player.drawPlayer();
 	player.movePlayer();
-	//player.checkCollisionEnemies(enemies);
+	player.checkCollisionEnemies(enemies);
 
-	// player.checkCollisionIslands(gameObjects);
-	// if (player.hitIslant) {
-	// 	window.location.href = 'upgrade.html'; // Navigate to upgrades.html
-	// }
+	boss.drawBoss();
+
+	minions.forEach((minion, index) => {
+		minion.drawEnemy();
+		minion.moveEnemy(player);
+		minion.checkCollisionProjectiles(projectiles);
+		if (minion.health <= 0) {
+			minions.splice(index, 1);
+			player.gainCurrency(minion.currencyValue);
+		}
+	});
+
+	// Draw and move ink projectiles
+		inkProjectiles.forEach((ink, index) => {
+			ink.move();
+			ink.draw();
+			if (checkCollision(ink, player)) {
+				player.inked = true;
+				inkEffectDuration = 3000; // 3 seconds
+				inkProjectiles.splice(index, 1); // Remove the ink projectile after collision
+			}
+		});
+
+		// Draw tentacles and remove them after 1 second
+		tentacles.forEach((tentacle, index) => {
+			if (tentacle.isExpired()) {
+				tentacles.splice(index, 1); // Remove the tentacle after 1 second
+			} else {
+				tentacle.draw();
+				tentacle.hitPlayer();
+			}
+		});
+
+	player.checkCollisionIslands(gameObjects);
+	if (player.hitIslant) {
+		window.location.href = 'upgrade.html'; // Navigate to upgrades.html
+	}
 
 
 	if (projectileFrameCount % 30 === 0) {
@@ -298,17 +366,34 @@ function draw() {
 	});
 
 
-	gameObjects.forEach((gameObject) => {
-		gameObject.drawObject(islandImage);
-	});
+	// gameObjects.forEach((gameObject) => {
+	// 	gameObject.drawObject(islandImage);
+	// });
 
+	// Overlay semi-transparent black rectangle if ink effect is active
+    if (player.inked) {
+        fill(0, 0, 0, 200); // Semi-transparent black
+        rect(0, 0, width, height);
+	}
+	if (inkEffectDuration <= 0) {
+		player.inked = false;
+	}
+	inkEffectDuration -= deltaTime; // Decrease the duration
+	
 	//moves cam to centered on player, z=800 default
 	//MUST BE 801 FOR 2d LINES TO RENDER ABOVE IMAGES
-	//cam.setPosition(player.x, player.y, 801);
+	cam.setPosition(player.x, player.y, 801);
 
 	frameCount++;
 	projectileFrameCount++;
 	enemyFrameCount++;
+
+	
+}
+// Function to check collision between ink projectile and player
+function checkCollision(ink, player) {
+    let distance = dist(ink.x, ink.y, player.x, player.y);
+    return distance < (ink.size / 2 + player.size / 2);
 }
 
 //debuging function currently

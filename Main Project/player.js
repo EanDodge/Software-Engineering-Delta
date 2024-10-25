@@ -26,7 +26,7 @@ class Player {
         this.playerImage;
 		    this.health = 10;
 		    this.lastCollisionTime = 0; //Tracks the time of last collision
-        
+        this.inked = false;
     }
 
     //runs all test for the Player Class
