@@ -7,12 +7,45 @@
     <title>Tetris</title>
 
     <link rel="stylesheet" type="text/css" href="style.css">
-
+    <script>
+      console.log('p5.js script is loading');
+    </script>
     <script src="libraries/p5.min.js"></script>
     <script src="libraries/p5.sound.min.js"></script>
   </head>
 
   <body>
+    <button onclick="window.location.href='index.html'" style="position: absolute; top: 10%; left: 10%; transform: translate(-50%, -50%); z-index: 1000;">Back to Game</button>
     <script src="tetris.js"></script>
+
   </body>
+  <style>
+    body{
+      background-image: url('./assets/harbor3.png');
+      background-size: cover;
+      background-repeat: no-repeat; 
+    }
+    button { 
+      background-color: slategray;
+      color: black;
+      text-align: center;
+      font-size: 16px;
+      font-family: monospace;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-block;
+      border: 2px solid lightgray;
+      border-radius: 10px; /*curved corners*/
+      padding: 10px;
+      transition-duration: 0.2s;
+    }
+    button:hover {
+      color: rgb(112, 199, 233);
+      background-color: rgb(130, 148, 168);
+      border: 2px solid gray;
+    }
+
+    h2{font-family: monospace;}
+    ul{font-family: monospace;}
+  </style>
 </html>
