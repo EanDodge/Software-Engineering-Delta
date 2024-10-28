@@ -15,10 +15,10 @@ let helpDisplay = true;
 
 // Retrieves a random sudoku pattern from 'sudokuPick.js'
 let indexForSudoku = giveSudokuIndex();
-/* let sudoku = sudoku_samples[indexForSudoku];
-let sudoku_solution = sudoku_answers[indexForSudoku]; */
-let sudoku = sudoku_samples[sudoku_samples.length-1];
-let sudoku_solution = sudoku_answers[sudoku_answers.length-1];
+let sudoku = sudoku_samples[indexForSudoku];
+let sudoku_solution = sudoku_answers[indexForSudoku];
+/* let sudoku = sudoku_samples[sudoku_samples.length-1];
+let sudoku_solution = sudoku_answers[sudoku_answers.length-1]; */
 
 function setup() {
     //create a canvas in the center of the screen
