@@ -20,13 +20,13 @@ class Player {
         this.turningSpeed = 0.075;  //how fast the boat will turn (radians per sec?)
         this.timer = 0;
         this.angle = 0;             //angle of the boat in radians
-		    this.currency = parseInt(localStorage.getItem('playerCurrency')) || 100; // Retrieve from localStorage or default to 100
+		this.currency = parseInt(localStorage.getItem('playerCurrency')) || 100; // Retrieve from localStorage or default to 100
         this.hitEnemy = false;
         this.hitIsland = false;
         this.playerImage;
-		    this.health = 10;
-		    this.lastCollisionTime = 0; //Tracks the time of last collision
-        this.difficulty = localStorage.setItem('difficulty', 'easy');
+		this.health = parseInt(localStorage.getItem('playerHealth')) || 10;
+		this.lastCollisionTime = 0; //Tracks the time of last collision
+		this.cannonDamage = parseInt(localStorage.getItem('cannons')) || 1;
         
     }
 
@@ -408,7 +408,7 @@ class Player {
 
             if (hit && (currentTime - this.lastCollisionTime) > collisionCooldown) {
                 this.takeDamage(1); // Decrease player health by 1
-                // console.log(`Player health: ${this.health}`);
+                console.log(`Player health: ${this.health}`);
                 this.lastCollisionTime = currentTime; // Update the last collision time
                 if (this.health <= 0) {
                     window.location.href = 'gameover.html'; // Navigate to gameover.html
@@ -550,6 +550,7 @@ class Player {
     takeDamage(amount) {
         this.health -= amount;
         if (this.health < 0) this.health = 0;
+		localStorage.setItem('playerHealth', this.health);
         this.updateHealthBar();
     }
 }
