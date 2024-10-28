@@ -3,7 +3,7 @@ let square_size = 45; //length and height of each square
 let interval = 30;
 
 // Num of errors allowed
-let errorNum = 3;
+let errorNum = 5;
 let errorCount = 0;
 
 // Here for global, needed for testing
