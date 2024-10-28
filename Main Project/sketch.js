@@ -29,7 +29,7 @@ let projectileFrameCount = 0;
  function preload() {
      player.playerImage = loadImage('./assets/shiplvl1Top.png');
 	 islandImage = loadImage('./assets/islandDock.png');
-	 backgroundImage = loadImage('./assets/sea.png');
+	 //backgroundImage = loadImage('./assets/sea.png');
 	 enemyImage = loadImage('./assets/shiplvl2Top.png');
  }
  
@@ -65,7 +65,7 @@ function setup() {
 
 function draw() {
 	background(0, 0, 0, 0);
-	image(backgroundImage, mapXSize / 2 - mapXSize, mapYSize / 2 - mapYSize, mapXSize * 2, mapYSize * 2);
+	//image(backgroundImage, mapXSize / 2 - mapXSize, mapYSize / 2 - mapYSize, mapXSize * 2, mapYSize * 2);
 
 	//border lines
 	stroke(255, 255, 255);
