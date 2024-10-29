@@ -210,8 +210,13 @@ function setup() {
 	
 	console.log("Display h x w = " + displayHeight + ", " + displayWidth);
 
-	 boss = new Boss(300, 300);
-	 boss.bossImage = bossImage
+	const healthBarContainer = document.getElementById('boss-health-bar-container');
+    const healthBar = document.getElementById('boss-health-bar');
+    const defeatMessage = document.getElementById('defeat-message');
+
+    // Initialize the boss with the new constructor
+    boss = new Boss(300, 300, 10, healthBarContainer, healthBar, defeatMessage); // Example position and health
+	boss.bossImage = bossImage
 	
 	 setInterval(() => {
         const attack = boss.attack(player);
@@ -307,6 +312,7 @@ function draw() {
 	player.checkCollisionEnemies(enemies);
 
 	boss.drawBoss();
+	boss.checkCollisionProjectiles(projectiles, player);
 
 	minions.forEach((minion, index) => {
 		minion.drawEnemy();

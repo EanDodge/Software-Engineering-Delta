@@ -1,6 +1,6 @@
 //import Enemy from './enemy.js';
 class Boss {
-    constructor(x, y) {
+    constructor(x, y, health, healthBarContainer, healthBar, defeatMessage) {
        this.x = x;
 	   this.y = y;
         this.size = 150; // Boss size
@@ -8,15 +8,23 @@ class Boss {
         this.attackCooldown = 0; // Cooldown for attacks
 		this.lastAttackTime = 0;
 		this.bossImage;
+        this.maxHealth = health;
+        this.health = health;
+        this.isDead = false;
+        this.bossHealthBarContainer = healthBarContainer;
+        this.bossHealthBar = healthBar;
+        this.defeatMessage = defeatMessage;
     }
 
     drawBoss() {
         fill(255, 0, 0);
+        if (this.isDead) {
+            tint(128, 128, 128); // Apply grey tint if the boss is dead
+        }
         imageMode(CENTER);  //sets the image to be drawn ontop of the enemy x, y
         image(bossImage, this.x, this.y, this.size, this.size);
         imageMode(CORNER);  //returns draw mode to default
-        tint('none');
-		
+        tint('none');	
     }
 
     spawnMinions() {
@@ -102,6 +110,60 @@ class Boss {
             
         }
     }
+
+    checkCollisionProjectiles(projectiles, player) {
+        projectiles.forEach((projectile, index) => {
+            //distance formuala between enemy and projectile midpoints
+            let distance = Math.sqrt((projectile.x - this.x) * (projectile.x - this.x)
+                + (projectile.y - this.y) * (projectile.y - this.y));
+
+            if (distance < projectile.size / 2 + this.size / 2) {
+                this.takeDamage(1, player);
+				console.log("Enemy hit! Health: " + this.health);
+                projectiles.splice(index, 1);
+				
+                
+            }
+        });
+    }
+
+    updateHealthBar() {
+        this.bossHealthBarContainer.style.display = 'block';
+        const healthPercentage = (this.health / this.maxHealth) * 100;
+        this.bossHealthBar.style.width = `${healthPercentage}%`;
+    }
+
+    // Call this method whenever the player's health changes
+    takeDamage(amount, player) {
+        this.health -= amount;
+        if (this.health < 0) this.health = 0;
+        this.updateHealthBar();
+        if (this.health <= 0) {
+            this.death(player);
+        }
+    }
+
+    death(player) {
+
+        this.isDead = true;
+
+        // Make the boss disappear after a short delay
+        setTimeout(() => {
+            this.x = -9999;
+            this.y = -9999;
+            this.bossHealthBarContainer.style.display = 'none';
+        }, 3000);
+
+        // Award the player with the boss's currency value
+        player.gainCurrency(this.currencyValue);
+        console.log("Player received " + this.currencyValue + " currency. Total: " + player.currency);
+        
+        this.defeatMessage.classList.remove('hidden');
+        
+        setTimeout(() => {
+            this.defeatMessage.classList.add('hidden');
+        }, 5000);
+    }
 }
 
-//export default Boss;
+module.exports = Boss;

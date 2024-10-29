@@ -27,3 +27,5 @@ class Projectile {
         this.x += this.speed * cos(-this.angle) * this.sign + this.extraXMove;
     }
 }
+
+module.exports =  Projectile;

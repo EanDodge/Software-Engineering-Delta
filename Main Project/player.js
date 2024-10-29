@@ -533,8 +533,8 @@ class Player {
 	}
 
 	gainCurrency(amount) {
-		player.currency += amount;
-		player.updateCoinCount();
+		this.currency += amount;
+		this.updateCoinCount();
 	}
 
 	updateHealthBar() {
