@@ -1,10 +1,9 @@
 let rows = 9; let cols = 9;
 let square_size = 45; //length and height of each square
-let square_states = 4; //number of color states each square can have
 let interval = 30;
 
 // Num of errors allowed
-let errorNum = 3;
+let errorNum = 5;
 let errorCount = 0;
 
 // Here for global, needed for testing
@@ -18,12 +17,14 @@ let helpDisplay = true;
 let indexForSudoku = giveSudokuIndex();
 let sudoku = sudoku_samples[indexForSudoku];
 let sudoku_solution = sudoku_answers[indexForSudoku];
+/* let sudoku = sudoku_samples[sudoku_samples.length-1];
+let sudoku_solution = sudoku_answers[sudoku_answers.length-1]; */
 
 function setup() {
     //create a canvas in the center of the screen
     canvas = createCanvas(cols * square_size, rows * square_size);
-    var center_x = (windowWidth - width) / 2;
-    var center_y = (windowHeight - height) / 2;
+    center_x = (windowWidth - width) / 2;
+    center_y = (windowHeight - height) / 2;
     canvas.position(center_x, center_y);
 
     xpos = []; ypos = [];
@@ -63,9 +64,17 @@ function setup() {
 
   }
 
+  //Repositions Canvas upon windowResize
+  function windowResized() {
+    center_x = (windowWidth - width) / 2;
+    center_y = (windowHeight - height) / 2;
+    canvas.position(center_x, center_y);
+  }
+
   
   function draw() {
     // Upon startup shows intro graphic only
+    // Navigates to helpDisplay after button click
     if (startupDisplay) {
       initGame();
       return;
@@ -78,8 +87,11 @@ function setup() {
     //loop through all square position coordinates and color states
     for (i = 0; i < rows * cols; ++i) {
       if (colorState[i] == 0) fill(255); //0 in colorState = white
-      if (colorState[i] == 1) fill(0, 0, 900); //1 in colorState = blue
-      if (colorState[i] == 2) fill(220); //2 in colorState = offWhite
+      if (colorState[i] == 1) fill(40, 100, 600); //1 in colorState = lightblue
+      if (colorState[i] == 2) fill(200); //2 in colorState = offWhite
+      if (colorState[i] == 3) fill(0, 50, 200); //3 in colorState = darkblue
+      if (colorState[i] == 4) fill(255, 150, 100); //4 in colorState = darkgrey
+      if (colorState[i] == 5) fill(200, 70, 50); //4 in colorState = darkergrey
       strokeWeight(1);
       rect(xpos[i], ypos[i], sideLength, sideLength); //create square
 
@@ -136,6 +148,8 @@ function setup() {
     document.getElementById('err1').style.display = 'none';
     document.getElementById('err2').style.display = 'none';
     document.getElementById('err3').style.display = 'none';
+    document.getElementById('err4').style.display = 'none';
+    document.getElementById('err5').style.display = 'none';
     document.getElementById('helpButton').style.display = 'none';
     document.getElementById('backToIndexButton').style.display = 'none';
     document.getElementById('completeButton').style.display = 'none';
@@ -161,7 +175,7 @@ function setup() {
     textSize(50);
     text("Rules", width/2, height/2-150);
     textSize(30);
-    fill(0, 0, 900);
+    fill(40, 100, 600);
     text("Blue", width/2-156, height/2-90);
     fill('black');
     text("Cell indicates selected.", width/2+37, height/2-90);
@@ -172,7 +186,7 @@ function setup() {
     fill('black');
     text(backspaceText, width/2-90, height/2-40);
     text("to clear cell.", width/2+100, height/2-40);
-    fill('red');
+    fill('rgb(200, 40, 60)');
     text("Red", width/2-145, height/2+10);
     fill('black');
     text("Text indicates error.", width/2+25, height/2+10);
@@ -194,6 +208,8 @@ function setup() {
       document.getElementById('err1').style.display = 'block';
       document.getElementById('err2').style.display = 'block';
       document.getElementById('err3').style.display = 'block';
+      if (errorNum > 3) document.getElementById('err4').style.display = 'block';
+      if (errorNum > 4) document.getElementById('err5').style.display = 'block';
       document.getElementById('helpButton').style.display = 'none';
       document.getElementById('backToIndexButton').style.display = 'block';
       document.getElementById('completeButton').style.display = 'block';
@@ -204,24 +220,36 @@ function setup() {
     // Stops unwanted selection as 'initButton' is pressed
     if (startupDisplay || helpDisplay) return;
     //when the mouse is clicked, change the color state by negating the value
+    for (i = 0; i < rows * cols; ++i) resetColor(i);
     for (i = 0; i < rows * cols; ++i) {
       //check if mouse position is within the current square
-      if (dist(mouseX, 0, xpos[i], 0) < sideLength / 2 && dist(0, mouseY, 0, ypos[i]) < sideLength / 2 && editable[i]) {
+      if (dist(mouseX, 0, xpos[i], 0) < sideLength / 2 && dist(0, mouseY, 0, ypos[i]) < sideLength / 2) {
         currSquare = i; // sets currSquare to the current square clicked on by mouse
-        if (colorState[i] == 0) {
-          colorState[i] = 1;
-        } else if (colorState[i] == 1) {
-          colorState[i] = 0;
+        if (editable[i]) {
+          if (colorState[i] == 0) {
+            colorState[i] = 1;
+          }  else if (colorState[i] == 1) {
+            colorState[i] = 0;
+          }
+        } else {
+          if (colorState[i] == 2) {
+            colorState[i] = 3;
+          }  else if (colorState[i] == 3) {
+            colorState[i] = 2;
+          }
         }
+        if (numberState[i] != 0) highlightCommonCell();
         //pastSquare identifies which cell was previously selected
         //Purpose is to clear old selection; Makes clicking more elegant
-        if (pastSquare != -1 && pastSquare != currSquare) colorState[pastSquare] = 0;
+        if (pastSquare != -1 && pastSquare != currSquare && editable[pastSquare]) colorState[pastSquare] = 0;
+        if (pastSquare != -1 && pastSquare != currSquare && !editable[pastSquare]) colorState[pastSquare] = 2;
         if (currSquare != -1) pastSquare = i;
         return;
       }
     }
     //Clears selection if click off grid
-    if (pastSquare != -1) colorState[pastSquare] = 0;
+    if (pastSquare != -1 && editable[pastSquare]) colorState[pastSquare] = 0;
+    if (pastSquare != -1 && !editable[pastSquare]) colorState[pastSquare] = 2;
     pastSquare = -1;
     currSquare = -1;
 
@@ -230,7 +258,7 @@ function setup() {
 
   function keyPressed() {
     // If a square has been clicked on by mouse
-    if (currSquare != -1) {
+    if (currSquare != -1 && editable[currSquare]) {
       // And the key pressed is between [1-9](range is set by values reflected in Sudoku)
       if (key >= '1' && key <= '9') {
         // Sets value for corresponding square equal to key pressed
@@ -244,7 +272,7 @@ function setup() {
       // Resets cell state upon 'BACKSPACE'; I guess key 8 is BACKSPACE?
       if (keyCode == 8) {
         numberState[currSquare] = 0;
-        colorState[currSquare] = 0;
+        for (i = 0; i < rows*cols; ++i) resetColor(i);
       }
       // Resets currSquare to prevent accidental changing of numbers
       currSquare = -1;
@@ -255,7 +283,29 @@ function setup() {
   // Sets text to red if key entered is wrong
   function check_key_entered(i) {
     if (numberState[i] != +sudoku_solution[i]) {
-      fill('red');
+      fill('rgb(200, 40, 60)');
+    }
+  }
+
+  function highlightCommonCell() {
+    if (currSquare != -1 && numberState[currSquare] != 0) {
+      var highlightedNumber = numberState[currSquare];
+      for (i = 0; i < rows*cols; ++i) {
+        if (numberState[i] == highlightedNumber) {
+          if (currSquare != i && editable[i]) colorState[i] = 4;
+          if (currSquare != i && !editable[i]) colorState[i] = 5;
+        } else {
+          resetColor(i);
+        }
+      }
+    }
+  }
+
+  function resetColor(cell) {
+    if (editable[cell]) {
+      colorState[cell] = 0;
+    } else {
+      colorState[cell] = 2
     }
   }
 
@@ -289,9 +339,14 @@ function setup() {
     document.getElementById('err1').style.display = 'none';
     document.getElementById('err2').style.display = 'none';
     document.getElementById('err3').style.display = 'none';
+    document.getElementById('err4').style.display = 'none';
+    document.getElementById('err5').style.display = 'none';
     document.getElementById('backToIndexButton').style.display = 'none';
     document.getElementById('completeButton').style.display = 'none';
     document.getElementById('finishButton').style.display = 'block';
+    let currency = parseInt(localStorage.getItem('playerCurrency'));
+    currency += 500;
+    localStorage.setItem('playerCurrency', currency);
   }
 
   function lostSudoku() {
@@ -304,6 +359,8 @@ function setup() {
     document.getElementById('err1').style.display = 'none';
     document.getElementById('err2').style.display = 'none';
     document.getElementById('err3').style.display = 'none';
+    document.getElementById('err4').style.display = 'none';
+    document.getElementById('err5').style.display = 'none';
     document.getElementById('backToIndexButton').style.display = 'none';
     document.getElementById('completeButton').style.display = 'none';
     document.getElementById('finishButton').textContent = "Return to Ship.";
@@ -318,7 +375,9 @@ function setup() {
   }
 
   function setErrorCircles() {
-    if (errorCount == 1) document.getElementById('err1').style.backgroundColor = 'red';
-    if (errorCount == 2) document.getElementById('err2').style.backgroundColor = 'red';
-    if (errorCount == 3) document.getElementById('err3').style.backgroundColor = 'red';
+    if (errorCount == 1) document.getElementById('err1').style.backgroundColor = 'rgb(200, 40, 60)';
+    if (errorCount == 2) document.getElementById('err2').style.backgroundColor = 'rgb(200, 40, 60)';
+    if (errorCount == 3) document.getElementById('err3').style.backgroundColor = 'rgb(200, 40, 60)';
+    if (errorCount == 4) document.getElementById('err4').style.backgroundColor = 'rgb(200, 40, 60)';
+    if (errorCount == 5) document.getElementById('err5').style.backgroundColor = 'rgb(200, 40, 60)';
   }
