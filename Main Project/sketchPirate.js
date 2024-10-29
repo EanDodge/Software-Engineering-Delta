@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const pirateImgUrl = './assets/pirate.png';
     const seaImgUrl = './assets/sea.png';
     const backgroundImgUrl = './assets/upgradeislandAlt.png';
-    //const backgroundImgUrl = './assets/upgrade.png';
 
     const pirate = new Pirate(750, 630, pirateImgUrl);
 
