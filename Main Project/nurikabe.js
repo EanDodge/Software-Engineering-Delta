@@ -139,64 +139,62 @@ function setup() {
 
 function draw() {
   var isSolved = true;
-  //loop through all square position coordinates and color states
+  
+  // Loop through all square position coordinates and color states
   for (i = 0; i < rows * cols; ++i) {
     if (!done) {
-      //making all the starting squares unclickable
+      // Draw the background for the square based on its state
       if (cantClick.has(i)) {
         fill('white');
-      }
+      } 
       else {
-        if (colorState[i] == 0) fill(0, 0, 200); //0 in colorState = blue
-        if (colorState[i] == 1) fill('white'); //1 in colorState = white
-        //if there's any difference between the current color states and the solution's color states, the puzzle is not solved
-        if (colorState[i] != solution_colors[i]) {
-          isSolved = false;
-        }
+        if (colorState[i] == 0) fill(0, 0, 200); // 0 = blue (water)
+        if (colorState[i] == 1) fill('white');   // 1 = white (land)
+        if (colorState[i] != solution_colors[i]) isSolved = false;
       }
-      // Special case for hint squares
-      if (hintSquares && hintSquares.includes(i)) {
-        // For hint squares, show correct solution color
-        if (solution_colors[i] == 0) fill(0, 0, 200); // Water
-        if (solution_colors[i] == 1) fill('white'); // Land
 
-        if (!cantClick.has(i)) rect(xpos[i], ypos[i], sideLength, sideLength); // Redraw the square with the correct solution color
-
-        // Add a green border around hint squares
-        noFill(); // No fill for the border, just want the stroke
-        stroke('green'); // Green border for hint squares
-        strokeWeight(4); // Thicker stroke for visibility
-        rect(xpos[i], ypos[i], sideLength, sideLength); // Draw the green outline
-
-        stroke('black');
-        strokeWeight(1); // Reset stroke to default
-      }
+      rect(xpos[i], ypos[i], sideLength, sideLength); // Create square
     }
     else {
+      //make water squares green when puzzle completes
       if (solution_colors[i] == 0) fill('green');
       else fill('white');
+      rect(xpos[i], ypos[i], sideLength, sideLength);
     }
-    rect(xpos[i], ypos[i], sideLength, sideLength); //create square
 
-    // Draw numbers on starting squares
-    if (cantClick.has(i)) {
-      fill('black');
-      textSize(square_size * 0.6);
-      textAlign(CENTER, CENTER);
-      text(cantClick.get(i), xpos[i], ypos[i]);
-    }
-    // Uncomment for tile indices
-    //==============================
-    // fill('black');
-    // text(i, xpos[i], ypos[i]);
-    //==============================
+    //Draw number on starting squares
+    strokeWeight(0); // Set no stroke weight so text doesn't get borders
+      // Draw numbers on starting squares
+      if (cantClick.has(i)) {
+        fill('black');
+        textSize(square_size * 0.6);
+        textAlign(CENTER, CENTER);
+        text(cantClick.get(i), xpos[i], ypos[i]); // Draw number
+      }
+    strokeWeight(1); // Reset stroke weight for next iteration
   }
+
+  if (!done) {
+    //Draw green outline for hint squares last so they appear on top
+    hintSquares.forEach((index) => {
+      noFill();                // No fill for outline
+      stroke('green');         // Green border for hint squares
+      strokeWeight(3);         // Thicker stroke for visibility
+      rect(xpos[index], ypos[index], sideLength, sideLength); // Draw the green outline
+    });
+
+    // Reset stroke settings after drawing outlines
+    strokeWeight(1);
+    stroke('black');
+  }
+  
   if (isSolved && !done && !winnerPopup) {
-    winnerPopup = true; // Set this to true before calling the function
+    winnerPopup = true;
     winnerText();
     done = true;
   }
 }
+
 
 function mouseClicked() {
   //when the mouse is clicked, change the color state by negating the value
