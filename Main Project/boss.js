@@ -14,6 +14,7 @@ class Boss {
         this.bossHealthBarContainer = healthBarContainer;
         this.bossHealthBar = healthBar;
         this.defeatMessage = defeatMessage;
+        this.awardReceived = false;
     }
 
     drawBoss() {
@@ -38,18 +39,21 @@ class Boss {
     }
 
     shootInk(player) {
+        // Calculate the angle once when the projectile is created
+        let distanceX = player.x - this.x;
+        let distanceY = player.y - this.y;
+        let angle = Math.atan2(distanceY, distanceX);
         // Shoot ink projectile
         let inkProjectile = {
             x: this.x,
             y: this.y,
             speed: 5,
             size: 20,
+            damage: 2,
+            angle: angle,
             move: function() {
-                let distanceX = player.x - this.x;
-                let distanceY = player.y - this.y;
-                let angle = Math.atan2(distanceY, distanceX);
-                this.x += this.speed * Math.cos(angle);
-                this.y += this.speed * Math.sin(angle);
+                this.x += this.speed * Math.cos(this.angle);
+                this.y += this.speed * Math.sin(this.angle);
             },
             draw: function() {
                 fill(0);
@@ -154,9 +158,7 @@ class Boss {
             this.bossHealthBarContainer.style.display = 'none';
         }, 3000);
 
-        // Award the player with the boss's currency value
-        player.gainCurrency(this.currencyValue);
-        console.log("Player received " + this.currencyValue + " currency. Total: " + player.currency);
+        
         
         this.defeatMessage.classList.remove('hidden');
         

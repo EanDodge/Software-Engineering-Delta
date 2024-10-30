@@ -151,8 +151,8 @@
 // }
 
  
-const mapXSize = 1500;
-const mapYSize = 1500;
+const mapXSize = 1000;
+const mapYSize = 1000;
 
 let player = new Player(mapXSize/2, mapYSize/2);
 
@@ -309,10 +309,11 @@ function draw() {
 
 	player.drawPlayer();
 	player.movePlayer();
-	player.checkCollisionEnemies(enemies);
+	player.checkCollisionEnemies(minions);
+	player.checkCollisionProjectiles(inkProjectiles);
 
 	boss.drawBoss();
-	boss.checkCollisionProjectiles(projectiles, player);
+	boss.checkCollisionProjectiles(projectiles);
 
 	minions.forEach((minion, index) => {
 		minion.drawEnemy();
@@ -332,6 +333,8 @@ function draw() {
 				player.inked = true;
 				inkEffectDuration = 3000; // 3 seconds
 				inkProjectiles.splice(index, 1); // Remove the ink projectile after collision
+				player.takeDamage(ink.damage);
+				console.log("I've been hit! Health: " + player.health);
 			}
 		});
 
@@ -344,11 +347,6 @@ function draw() {
 				tentacle.hitPlayer();
 			}
 		});
-
-	player.checkCollisionIslands(gameObjects);
-	if (player.hitIslant) {
-		window.location.href = 'upgrade.html'; // Navigate to upgrades.html
-	}
 
 
 	if (projectileFrameCount % 30 === 0) {
@@ -379,16 +377,25 @@ function draw() {
 	// Overlay semi-transparent black rectangle if ink effect is active
     if (player.inked) {
         fill(0, 0, 0, 200); // Semi-transparent black
-        rect(0, 0, width, height);
+        rect(0, 0, mapXSize, mapYSize);
 	}
 	if (inkEffectDuration <= 0) {
 		player.inked = false;
 	}
 	inkEffectDuration -= deltaTime; // Decrease the duration
-	
+
+	// Award the player with the boss's currency value
+	if (boss.isDead && !boss.awardReceived)
+	{
+		player.gainCurrency(boss.currencyValue);
+		console.log("Player received " + boss.currencyValue + " currency. Total: " + player.currency);
+		boss.awardReceived = true;
+	}
 	//moves cam to centered on player, z=800 default
 	//MUST BE 801 FOR 2d LINES TO RENDER ABOVE IMAGES
 	cam.setPosition(player.x, player.y, 801);
+
+	player.checkPlayerDeath();
 
 	frameCount++;
 	projectileFrameCount++;

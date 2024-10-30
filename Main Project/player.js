@@ -409,9 +409,9 @@ class Player {
                 this.takeDamage(1); // Decrease player health by 1
                 // console.log(`Player health: ${this.health}`);
                 this.lastCollisionTime = currentTime; // Update the last collision time
-                if (this.health <= 0) {
-                    window.location.href = 'gameover.html'; // Navigate to gameover.html
-                }
+                // if (this.health <= 0) {
+                //     window.location.href = 'gameover.html'; // Navigate to gameover.html
+                // }
             }
         });
 
@@ -550,6 +550,28 @@ class Player {
         this.health -= amount;
         if (this.health < 0) this.health = 0;
         this.updateHealthBar();
+    }
+
+    checkCollisionProjectiles(projectiles) {
+        projectiles.forEach((projectile, index) => {
+            //distance formuala between enemy and projectile midpoints
+            let distance = Math.sqrt((projectile.x - this.x) * (projectile.x - this.x)
+                + (projectile.y - this.y) * (projectile.y - this.y));
+
+            if (distance < projectile.size / 2 + this.size / 2) {
+                this.takeDamage(projectile.damage, player);
+				console.log("Enemy hit! Health: " + this.health);
+                projectiles.splice(index, 1);
+				
+                
+            }
+        });
+    }
+
+    checkPlayerDeath() {
+        if (this.health <= 0) {
+            window.location.href = 'gameover.html'; // Navigate to gameover.html
+        }
     }
 }
 
