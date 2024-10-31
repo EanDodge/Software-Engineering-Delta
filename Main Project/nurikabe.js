@@ -139,11 +139,18 @@ function setup() {
 
 function draw() {
   var isSolved = true;
+  // Variable that will track which square is hovered
+  let hoverSquare = -1;
   
   // Loop through all square position coordinates and color states
   for (i = 0; i < rows * cols; ++i) {
     if (!done) {
-      // Draw the background for the square based on its state
+      //get index of square currently hovered over
+      if (dist(mouseX, 0, xpos[i], 0) < sideLength / 2 && dist(0, mouseY, 0, ypos[i]) < sideLength / 2) {
+        hoverSquare = i;
+      }
+
+      // Draw the background for the current square based on its state
       if (cantClick.has(i)) {
         fill('white');
       } 
@@ -151,6 +158,15 @@ function draw() {
         if (colorState[i] == 0) fill(0, 0, 200); // 0 = blue (water)
         if (colorState[i] == 1) fill('white');   // 1 = white (land)
         if (colorState[i] != solution_colors[i]) isSolved = false;
+      }
+      //apply hover effect for squares that aren't numbered squares or hint squares
+      if (!hintSquares.includes(i) && !cantClick.has(i)) {
+        if (i === hoverSquare) {
+          if (colorState[i] == 0) {
+            fill(0, 0, 175); //slightly darker blue
+          }
+          else fill(230, 230, 230); //light grey
+        }
       }
 
       rect(xpos[i], ypos[i], sideLength, sideLength); // Create square
@@ -248,10 +264,18 @@ function restart() {
 //Set current color state to the solution colors to solve the puzzle
 function solve() {
   colorState = solution_colors;
+  //freeze canvas after one more loop of draw()
+  redraw();
+  noLoop();
 }
 
 //gives the player a hint
 async function hint() {
+  // Check if the no more hints popup already exists
+  if (document.getElementById("noHint")) {
+    return; // Exit the function if the popup is already displayed
+  }
+
   let availableHintIndices = [];
   for (let i = 0; i < 72; ++i) {
     if (i % 9 !== 8) availableHintIndices.push(i);
@@ -266,7 +290,7 @@ async function hint() {
     //if there are no more available locations for hint
     if (availableHintIndices.length === 0) {
       console.log("No more available places for a hint.");
-      noMoreHint = createDiv(`<h2>No more available places for a hint.</h2>`).id(`noHint`);
+      let noMoreHint = createDiv(`<h2>No more available places for a hint.</h2>`).id(`noHint`);
       noMoreHint.style('font-size', '16px');
       noMoreHint.style('padding', '10px');
       noMoreHint.style('background-color', '#fff');
@@ -288,6 +312,7 @@ async function hint() {
         // Stop the interval once fully invisible
         if (opacity <= 0) {
           clearInterval(fadeInterval);
+          noMoreHint.remove(); // Remove the popup from the DOM, so it can appear again if the hint button is clicked again
         }
       }, 50); // Adjust the interval time to control the speed of the fade-out
 
@@ -303,9 +328,9 @@ async function hint() {
     colorState[index] = solution_colors[index]; // Set the correct color from the solution
   });
 
-  console.log(topLeft);
-  console.log(hintSquares); // Log the value for debugging
-  console.log(cantBeHint);
+  // console.log(topLeft);
+  // console.log(hintSquares); // Log the value for debugging
+  // console.log(cantBeHint);
 }
 
 async function winnerText() {
