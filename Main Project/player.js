@@ -604,5 +604,5 @@ if(typeof document !== 'undefined') {
     });
 }
 
-module.exports = Player;
+//module.exports = Player;
 
