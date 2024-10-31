@@ -196,7 +196,8 @@ let projectileFrameCount = 0;
 	 //backgroundImage = loadImage('./assets/sea.png');
 	 //enemyImage = loadImage('./assets/shiplvl2Top.png');
 	 bossImage = loadImage('./assets/krakenDelozier.png');
-	 minionImage = loadImage('./assets/greg.png');
+	 minionImage = loadImage('./assets/krakenDelozier.png');
+	 tentacleImage = loadImage('./assets/grakenTentacle.png');	
  }
  
 function setup() {
@@ -216,16 +217,16 @@ function setup() {
 
     // Initialize the boss with the new constructor
     boss = new Boss(300, 300, 10, healthBarContainer, healthBar, defeatMessage); // Example position and health
-	boss.bossImage = bossImage
+	boss.bossImage = bossImage;
 	
 	 setInterval(() => {
-        const attack = boss.attack(player);
+        const attack = boss.attack(player, minionImage, tentacleImage);
         if (attack) {
             if (Array.isArray(attack)) {
-				for (let i = 0; i < attack.length; i++) {
-					attack[i].playerImage = minionImage;
-					attack[i].string = "minion";
-				}
+				// for (let i = 0; i < attack.length; i++) {
+				// 	attack[i].playerImage = minionImage;
+				// 	attack[i].string = "minion";
+				// }
                 minions = minions.concat(attack);
             } else if (attack.move) {
                 inkProjectiles.push(attack);

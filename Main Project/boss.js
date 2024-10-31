@@ -28,11 +28,11 @@ class Boss {
         tint('none');	
     }
 
-    spawnMinions() {
+    spawnMinions(minionImage) {
         // Spawn smaller enemies
         let minions = [];
         for (let i = 0; i < 5; i++) {
-            let minion = new Enemy(this.x + random(-50, 50), this.y + random(-50, 50), 1);
+            let minion = new Enemy(this.x + random(-50, 50), this.y + random(-50, 50), 1, minionImage);
             minions.push(minion);
         }
         return minions;
@@ -65,7 +65,7 @@ class Boss {
         return inkProjectile;
     }
 
-    tentacleSmash(player) {
+    tentacleSmash(player, tentacleImage) {
         // Tentacle smash attack
         let tentacle = {
             x: this.x,
@@ -75,12 +75,12 @@ class Boss {
             angle: Math.atan2(player.y - this.y, player.x - this.x),
 			creationTime: millis(),
             draw: function() {
-                push();
-                translate(this.x, this.y);
-                rotate(this.angle);
-                fill(100, 100, 100);
-                rect(0, -this.width / 2, this.length, this.width);
-                pop();
+				push();
+				translate(this.x, this.y); // Move origin to the tentacle's coordinates
+				rotate(this.angle); // Rotate by the tentacle's angle
+				imageMode(CENTER); // Set image mode to CENTER
+				image(tentacleImage, this.length / 2 + 30, -this.width / 2, this.length, this.width); // Draw the tentacle image				
+				pop();
             },
             hitPlayer: function() {
                 let distance = dist(this.x, this.y, player.x, player.y);
@@ -95,11 +95,12 @@ class Boss {
         return tentacle;
     }
 
-    attack(player, minionImage) {
+    attack(player, minionImage, tentacleImage) {
 		const currentTime = millis();
         if (currentTime - this.lastAttackTime >= 5000) {
 			this.lastAttackTime = currentTime;
             let attackType = Math.floor(Math.random() * 3);
+			//let attackType = 2;
             switch (attackType) {
                 case 0:
 					console.log("Spawning minions");
@@ -109,7 +110,7 @@ class Boss {
                     return this.shootInk(player);
                 case 2:
 					console.log("Tentacle smash");
-                    return this.tentacleSmash(player);
+                    return this.tentacleSmash(player, tentacleImage);
             }
             
         }
