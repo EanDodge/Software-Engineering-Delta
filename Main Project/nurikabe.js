@@ -75,7 +75,7 @@ function setup() {
   rulesPopup.style('background-color', '#fff');
   rulesPopup.style('border', '1px solid #000');
   rulesPopup.style('position', 'absolute');
-  rulesPopup.style('left', '50%');
+  rulesPopup.style('left', '77%'); //put rules popup to the right of the puzzle
   rulesPopup.style('top', '50%');
   rulesPopup.style('transform', 'translate(-50%, -50%)');
   rulesPopup.style('display', 'none'); // Hide the pop-up initially
@@ -199,11 +199,13 @@ function draw() {
 function mouseClicked() {
   //when the mouse is clicked, change the color state by negating the value
   for (i = 0; i < rows * cols; ++i) {
-    //check if mouse position is within the current square
-    if (dist(mouseX, 0, xpos[i], 0) < sideLength / 2 && dist(0, mouseY, 0, ypos[i]) < sideLength / 2) {
-      ++colorState[i];
-      colorState[i] = colorState[i] % square_states;
-      return;
+    if (!hintSquares.includes(i)) {
+      //check if mouse position is within the current square
+      if (dist(mouseX, 0, xpos[i], 0) < sideLength / 2 && dist(0, mouseY, 0, ypos[i]) < sideLength / 2) {
+        ++colorState[i];
+        colorState[i] = colorState[i] % square_states;
+        return;
+      }
     }
   }
 }
@@ -238,7 +240,9 @@ function hidePopup() {
 
 //Reset all the colors when "Restart" button is pressed
 function restart() {
-  for (let i = 0; i < colorState.length; ++i) colorState[i] = 0;
+  for (let i = 0; i < colorState.length; ++i) {
+    if (!hintSquares.includes(i)) colorState[i] = 0; //only reset squares not part of hints
+  }
 }
 
 //Set current color state to the solution colors to solve the puzzle
