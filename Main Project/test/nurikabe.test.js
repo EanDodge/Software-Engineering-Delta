@@ -8,8 +8,9 @@ describe('Nurikabe Puzzle Tests', () => {
 
   beforeAll(async () => {
     browser = await puppeteer.launch({
-      headless: false, // Set to true if you want it headless
-      slowMo: 50 // Slows down Puppeteer actions for easier debugging
+      headless: true, // Use headless mode for CI environments like GitHub Actions
+      args: ['--no-sandbox', '--disable-setuid-sandbox'], // Add these args to avoid permission issues in GitHub Actions
+      slowMo: 50
     });
     page = await browser.newPage();
 
