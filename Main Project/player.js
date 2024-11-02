@@ -13,7 +13,7 @@ class Player {
     constructor(x, y) {
         this.x = x;                 //current x
         this.y = y;                 //current y
-        this.speed = parseInt(localStorage.getItem('speed')) || 2;  //speed of the boat in pixels (how many pixels it moves in one tic)
+        this.speed = parseInt(localStorage.getItem('speed')) || 3;  //speed of the boat in pixels (how many pixels it moves in one tic)
         //this.sizeH = 40;          //height of the test rectangle
         //this.sizeW = 20;          //width of the test rectangle
         this.size = 45;
