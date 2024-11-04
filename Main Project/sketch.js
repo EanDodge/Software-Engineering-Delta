@@ -12,7 +12,8 @@ let projectiles = [];
 let frameCount = 0;
 
 let enemySpawnNumber = parseInt(localStorage.getItem("enemySpawnNumber")) || 0;
-let enemyHealth = parseInt(localStorage.getItem("enemyHealth")) || 1;
+//let enemyHealth = parseInt(localStorage.getItem("enemyHealth")) || 3;
+let enemyHealth = 3;
 
 // frame counts for each use case because if not reset 
 // % can return true because frame count isnt back to 0
@@ -111,7 +112,7 @@ function draw() {
 	enemies.forEach((enemy, index) => {
 		enemy.drawEnemy();
 		enemy.moveEnemy(player);
-		enemy.checkCollisionProjectiles(projectiles);
+		enemy.checkCollisionProjectiles(projectiles, player);
 		if (enemy.health <= 0) {
 			enemies.splice(index, 1);
 			player.gainCurrency(enemy.currencyValue);
