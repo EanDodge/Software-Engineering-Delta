@@ -13,12 +13,13 @@ let startupDisplay = true;
 // Moving to help display
 let helpDisplay = true;
 
+// Counts number of available hints
+let hintNum = 3;
+
 // Retrieves a random sudoku pattern from 'sudokuPick.js'
 let indexForSudoku = giveSudokuIndex();
 let sudoku = sudoku_samples[indexForSudoku];
 let sudoku_solution = sudoku_answers[indexForSudoku];
-/* let sudoku = sudoku_samples[sudoku_samples.length-1];
-let sudoku_solution = sudoku_answers[sudoku_answers.length-1]; */
 
 function setup() {
     //create a canvas in the center of the screen
@@ -151,6 +152,7 @@ function setup() {
     document.getElementById('err4').style.display = 'none';
     document.getElementById('err5').style.display = 'none';
     document.getElementById('helpButton').style.display = 'none';
+    document.getElementById('hintButton').style.display = 'none';
     document.getElementById('backToIndexButton').style.display = 'none';
     document.getElementById('completeButton').style.display = 'none';
     document.getElementById('finishButton').style.display = 'none';
@@ -190,7 +192,7 @@ function setup() {
     text("Red", width/2-145, height/2+10);
     fill('black');
     text("Text indicates error.", width/2+25, height/2+10);
-    text("Given 3 Errors:", width/2-45, height/2+60);
+    text("Given " + errorNum + " Errors:", width/2-45, height/2+60);
     fill('white');
     ellipse(width/2+100, height/2+60, 50, 50);
     fill('black');
@@ -213,6 +215,7 @@ function setup() {
       document.getElementById('helpButton').style.display = 'none';
       document.getElementById('backToIndexButton').style.display = 'block';
       document.getElementById('completeButton').style.display = 'block';
+      if (hintNum > 0) document.getElementById('hintButton').style.display = 'block';
     }, 100);
   }
 
@@ -225,6 +228,11 @@ function setup() {
       //check if mouse position is within the current square
       if (dist(mouseX, 0, xpos[i], 0) < sideLength / 2 && dist(0, mouseY, 0, ypos[i]) < sideLength / 2) {
         currSquare = i; // sets currSquare to the current square clicked on by mouse
+
+        // Implements clicking behavior
+        // When clicking on a cell it should:
+        // Highlight in corresponding color
+        // If cell is already in selection, should return to origin color
         if (editable[i]) {
           if (colorState[i] == 0) {
             colorState[i] = 1;
@@ -238,6 +246,8 @@ function setup() {
             colorState[i] = 2;
           }
         }
+
+
         if (numberState[i] != 0) highlightCommonCell();
         //pastSquare identifies which cell was previously selected
         //Purpose is to clear old selection; Makes clicking more elegant
@@ -287,6 +297,9 @@ function setup() {
     }
   }
 
+  // Orchestrates common Sudoku interface
+  // When selecting/clicking a numbered cell (editable or not):
+  // Highlights cells with the same number throughout the puzzle
   function highlightCommonCell() {
     if (currSquare != -1 && numberState[currSquare] != 0) {
       var highlightedNumber = numberState[currSquare];
@@ -301,6 +314,8 @@ function setup() {
     }
   }
 
+  // Changes color back to origin
+  // Used for number identifying
   function resetColor(cell) {
     if (editable[cell]) {
       colorState[cell] = 0;
@@ -329,6 +344,7 @@ function setup() {
     if (incompletedGame) wonSudoku();
   }
 
+  // Displays Won Sudoku screen
   function wonSudoku() {
     background(220);
     fill('black');
@@ -343,12 +359,14 @@ function setup() {
     document.getElementById('err5').style.display = 'none';
     document.getElementById('backToIndexButton').style.display = 'none';
     document.getElementById('completeButton').style.display = 'none';
+    document.getElementById('hintButton').style.display = 'none';
     document.getElementById('finishButton').style.display = 'block';
     let currency = parseInt(localStorage.getItem('playerCurrency'));
     currency += 500;
     localStorage.setItem('playerCurrency', currency);
   }
 
+  // Displays Lost Sudoku screen
   function lostSudoku() {
     background(220);
     fill('black');
@@ -363,6 +381,7 @@ function setup() {
     document.getElementById('err5').style.display = 'none';
     document.getElementById('backToIndexButton').style.display = 'none';
     document.getElementById('completeButton').style.display = 'none';
+    document.getElementById('hintButton').style.display = 'none';
     document.getElementById('finishButton').textContent = "Return to Ship.";
     document.getElementById('finishButton').style.display = 'block';
   }
@@ -374,10 +393,92 @@ function setup() {
     }
   }
 
+  // Sets number of Errors allowed, dependent upon whether the player has bought an upgrade for it.
   function setErrorCircles() {
     if (errorCount == 1) document.getElementById('err1').style.backgroundColor = 'rgb(200, 40, 60)';
     if (errorCount == 2) document.getElementById('err2').style.backgroundColor = 'rgb(200, 40, 60)';
     if (errorCount == 3) document.getElementById('err3').style.backgroundColor = 'rgb(200, 40, 60)';
     if (errorCount == 4) document.getElementById('err4').style.backgroundColor = 'rgb(200, 40, 60)';
     if (errorCount == 5) document.getElementById('err5').style.backgroundColor = 'rgb(200, 40, 60)';
+  }
+
+  // Fills out column upon requesting a hint
+  function giveHint() {
+    // Random number 1-9
+    // First makes sure that the column of num chosen isn't already finished
+    do {
+      columnToSolve = Math.floor((Math.random() * 9) +1);
+    }while(!checkColumn(columnToSolve));
+    switch(columnToSolve) {
+      case 1:
+        for (i = 0; i < 9; ++i) numberState[i] = +sudoku_solution[i];
+        break;
+      case 2:
+        for (i = 9; i < 18; ++i) numberState[i] = +sudoku_solution[i];
+        break;
+      case 3:
+        for (i = 18; i < 27; ++i) numberState[i] = +sudoku_solution[i];
+        break;
+      case 4:
+        for (i = 27; i < 36; ++i) numberState[i] = +sudoku_solution[i];
+        break;
+      case 5:
+        for (i = 36; i < 45; ++i) numberState[i] = +sudoku_solution[i];
+        break;
+      case 6:
+        for (i = 45; i < 54; ++i) numberState[i] = +sudoku_solution[i];
+        break;
+      case 7:
+        for (i = 54; i < 63; ++i) numberState[i] = +sudoku_solution[i];
+        break;
+      case 8:
+        for (i = 63; i < 72; ++i) numberState[i] = +sudoku_solution[i];
+        break;
+      case 9:
+        for (i = 72; i < 81; ++i) numberState[i] = +sudoku_solution[i];
+        break;
+      default:
+        break;
+    }
+    --hintNum;
+    if (hintNum == 0) document.getElementById('hintButton').style.display = 'none';
+  }
+
+  // Used to deter hint from giving an already finished row
+  function checkColumn(col) {
+    let columnIsComplete = true;
+    switch(col) {
+      case 1:
+        for (i = 0; i < 9; ++i) {if (numberState[i] != +sudoku_solution[i]){ columnIsComplete = false; break; }}
+        break;
+      case 2:
+        for (i = 9; i < 18; ++i) {if (numberState[i] != +sudoku_solution[i]){ columnIsComplete = false; break; }}
+        break;
+      case 3:
+        for (i = 18; i < 27; ++i) {if (numberState[i] != +sudoku_solution[i]){ columnIsComplete= false; break; }}
+        break;
+      case 4:
+        for (i = 27; i < 36; ++i) {if (numberState[i] != +sudoku_solution[i]){ columnIsComplete = false; break; }}
+        break;
+      case 5:
+        for (i = 36; i < 45; ++i) {if (numberState[i] != +sudoku_solution[i]){ columnIsComplete = false; break; }}
+        break;
+      case 6:
+        for (i = 45; i < 54; ++i) {if (numberState[i] != +sudoku_solution[i]){ columnIsComplete = false; break; }}
+        break;
+      case 7:
+        for (i = 54; i < 63; ++i) {if (numberState[i] != +sudoku_solution[i]){ columnIsComplete = false; break; }}
+        break;
+      case 8:
+        for (i = 63; i < 72; ++i) {if (numberState[i] != +sudoku_solution[i]){ columnIsComplete = false; break; }}
+        break;
+      case 9:
+        for (i = 72; i < 81; ++i) {if (numberState[i] != +sudoku_solution[i]){ columnIsComplete = false; break; }}
+        break;
+      default:
+        break;
+    }
+
+    if (!columnIsComplete) return 1;
+    return 0;
   }
