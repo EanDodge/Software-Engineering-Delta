@@ -32,6 +32,22 @@ class Enemy {
 
     }
 
+    drawMinion() {
+        fill(255, 0, 0);
+        imageMode(CENTER);  //sets the image to be drawn ontop of the enemy x, y
+        //tint('green');
+        image(minionImage, this.x, this.y, this.size, this.size);
+        imageMode(CORNER);  //returns draw mode to default
+        tint('none');
+		    console.log("Enemy health: " + this.health);
+
+		// fill(255, 0, 0); // Set the fill color to red
+        // ellipseMode(CENTER); // Set the ellipse mode to center
+        // ellipse(this.x, this.y, this.size, this.size); // Draw a red circle
+        // console.log("Enemy health: " + this.health);
+
+    }
+
     moveEnemy(player) {
         let distanceX = player.x - this.x;
         let distanceY = player.y - this.y;
