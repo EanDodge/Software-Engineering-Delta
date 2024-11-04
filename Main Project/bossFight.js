@@ -319,7 +319,7 @@ function draw() {
 	minions.forEach((minion, index) => {
 		minion.drawEnemy();
 		minion.moveEnemy(player);
-		minion.checkCollisionProjectiles(projectiles);
+		minion.checkCollisionProjectiles(projectiles, player);
 		if (minion.health <= 0) {
 			minions.splice(index, 1);
 			player.gainCurrency(minion.currencyValue);
