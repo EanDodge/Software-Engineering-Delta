@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
 
-    const pirateImgUrl = './assets/pirate.png';
+    const pirateImgUrl = './assets/pirate.gif';
     const seaImgUrl = './assets/sea.png';
     const backgroundImgUrl = './assets/upgradeislandAlt.png';
 
@@ -13,6 +13,18 @@ document.addEventListener('DOMContentLoaded', () => {
     
     background.src = backgroundImgUrl;
     seaImage.src = seaImgUrl;
+
+    //added container to keep track of key presses
+    const keys = {
+        ArrowUp: false,
+        w: false,
+        ArrowDown: false,
+        s: false,
+        ArrowLeft: false,
+        a: false,
+        ArrowRight: false,
+        d: false
+    };
 
     function resizeCanvas(){
         canvas.width = window.innerWidth;
@@ -37,6 +49,32 @@ document.addEventListener('DOMContentLoaded', () => {
         pirate.draw(ctx);
     }
 
+
+    function updateMovement(){
+        const stepSize = 1.5;
+        if (keys.ArrowUp || keys.w) {
+            pirate.move(0, -stepSize);
+        }
+        if (keys.ArrowDown || keys.s) {
+            pirate.move(0, stepSize);
+        }
+        if (keys.ArrowLeft || keys.a) {
+            pirate.setDirection('left');
+            pirate.move(-stepSize, 0);
+        }
+        if (keys.ArrowRight || keys.d) {
+            pirate.setDirection('right');
+            pirate.move(stepSize, 0);
+        }
+    
+    }
+
+    function gameLoop() {
+        updateMovement();
+        drawScene();
+        requestAnimationFrame(gameLoop);
+    }
+
     seaImage.onload = () => {
         background.onload = () => {
         resizeCanvas()
@@ -45,37 +83,51 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 };
 
-    function gameLoop() {
-        drawScene();
-        requestAnimationFrame(gameLoop);
-    }
-
-    //gameLoop();
-
-function onKeyPress(e){
-    switch(e.key){
-        case 'ArrowUp':
-        case 'w':
-            pirate.move(0, -10);
-            break;
-        case 'ArrowDown':
-        case 's':
-            pirate.move(0, 10);
-            break;
-        case 'ArrowLeft':
-        case 'a':
-            pirate.setDirection('left');
-            pirate.move(-10, 0);                       
-            break;
-        case 'ArrowRight':
-        case 'd':
-            pirate.setDirection('right');
-            pirate.move(10, 0);
-            break;
-
+function onKeyDown(e) {
+    if (keys.hasOwnProperty(e.key)) {
+        keys[e.key] = true;
     }
 }
 
-window.addEventListener('keydown', onKeyPress)
+function onKeyUp(e) {
+    if (keys.hasOwnProperty(e.key)) {
+        keys[e.key] = false;
+    }
+}
+
+window.addEventListener('keydown', onKeyDown);
+window.addEventListener('keyup', onKeyUp);
 });
+
+
+   
+
+    //gameLoop();
+
+// function onKeyPress(e){
+//     switch(e.key){
+//         case 'ArrowUp':
+//         case 'w':
+//             pirate.move(0, -10);
+//             break;
+//         case 'ArrowDown':
+//         case 's':
+//             pirate.move(0, 10);
+//             break;
+//         case 'ArrowLeft':
+//         case 'a':
+//             pirate.setDirection('left');
+//             pirate.move(-10, 0);                       
+//             break;
+//         case 'ArrowRight':
+//         case 'd':
+//             pirate.setDirection('right');
+//             pirate.move(10, 0);
+//             break;
+
+//     }
+// }
+
+// window.addEventListener('keydown', onKeyPress)
+// });
 

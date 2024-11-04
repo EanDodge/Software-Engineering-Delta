@@ -3,7 +3,7 @@ class Pirate {
         this.x = x;
         this.y = y;
         this.image = new Image();
-        this.image.src = pirateImgSrc;
+         this.image.src = pirateImgSrc;
         this.direction = 'left';
     }
 
@@ -12,9 +12,9 @@ class Pirate {
         if(this.direction ==='right'){
                 ctx.translate(this.x , this.y);
                 ctx.scale(-1,1);
-                ctx.drawImage(this.image, 0, 0, 40, 40);
+                ctx.drawImage(this.image, 0, 0, 70, 70);
         }else{
-            ctx.drawImage(this.image, this.x, this.y, 40, 40);
+            ctx.drawImage(this.image, this.x, this.y, 70, 70);
         }
         ctx.restore();
     }
