@@ -161,7 +161,7 @@ function draw() {
 	//moves cam to centered on player, z=800 default
 	//MUST BE 801 FOR 2d LINES TO RENDER ABOVE IMAGES
 	cam.setPosition(player.x, player.y, 801);
-
+	player.checkPlayerDeath();
 	frameCount++;
 	projectileFrameCount++;
 	enemyFrameCount++;
