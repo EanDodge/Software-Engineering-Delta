@@ -20,7 +20,7 @@ class Enemy {
         fill(255, 0, 0);
         imageMode(CENTER);  //sets the image to be drawn ontop of the enemy x, y
         //tint('green');
-        image(this.playerimage, this.x, this.y, this.size, this.size);
+        image(enemyImage, this.x, this.y, this.size, this.size);
         imageMode(CORNER);  //returns draw mode to default
         tint('none');
 		    console.log("Enemy health: " + this.health);
