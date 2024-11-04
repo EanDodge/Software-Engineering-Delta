@@ -24,10 +24,14 @@ class Player {
         this.hitEnemy = false;
         this.hitIsland = false;
         this.playerImage;
-		this.health = parseInt(localStorage.getItem('playerHealth')) || 10;
-		this.lastCollisionTime = 0; //Tracks the time of last collision
-		this.cannonDamage = parseInt(localStorage.getItem('cannons')) || 1;
-        
+
+  
+		   this.health = parseInt(localStorage.getItem('playerHealth')) || 10;
+		    this.lastCollisionTime = 0; //Tracks the time of last collision
+      this.cannonDamage = parseInt(localStorage.getItem('cannons')) || 1;
+        this.inked = false;
+      
+
     }
 
     //runs all test for the Player Class
@@ -410,9 +414,9 @@ class Player {
                 this.takeDamage(1); // Decrease player health by 1
                 console.log(`Player health: ${this.health}`);
                 this.lastCollisionTime = currentTime; // Update the last collision time
-                if (this.health <= 0) {
-                    window.location.href = 'gameover.html'; // Navigate to gameover.html
-                }
+                // if (this.health <= 0) {
+                //     window.location.href = 'gameover.html'; // Navigate to gameover.html
+                // }
             }
         });
 
@@ -534,8 +538,8 @@ class Player {
 	}
 
 	gainCurrency(amount) {
-		player.currency += amount;
-		player.updateCoinCount();
+		this.currency += amount;
+		this.updateCoinCount();
 	}
 
 	updateHealthBar() {
@@ -552,6 +556,28 @@ class Player {
         if (this.health < 0) this.health = 0;
 		localStorage.setItem('playerHealth', this.health);
         this.updateHealthBar();
+    }
+
+    checkCollisionProjectiles(projectiles) {
+        projectiles.forEach((projectile, index) => {
+            //distance formuala between enemy and projectile midpoints
+            let distance = Math.sqrt((projectile.x - this.x) * (projectile.x - this.x)
+                + (projectile.y - this.y) * (projectile.y - this.y));
+
+            if (distance < projectile.size / 2 + this.size / 2) {
+                this.takeDamage(projectile.damage, player);
+				console.log("Enemy hit! Health: " + this.health);
+                projectiles.splice(index, 1);
+				
+                
+            }
+        });
+    }
+
+    checkPlayerDeath() {
+        if (this.health <= 0) {
+            window.location.href = 'gameover.html'; // Navigate to gameover.html
+        }
     }
 }
 

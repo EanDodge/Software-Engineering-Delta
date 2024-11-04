@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boss Fight</title>
+    <link rel="stylesheet" href="style.css">
+
+	<script src="libraries/p5.min.js"></script>
+	<script src="libraries/p5.sound.min.js"></script>
+	<script src="gamepad.js"></script>
+    <script  src="enemy.js"></script>
+    <script  src="player.js"></script>
+	<script src="gameObject.js"></script>
+	<script src="projectile.js"></script>
+	<script src="boss.js"></script>
+	<script src="bossFight.js"></script>
+</head>
+<body>
+    <div id="health-bar-container">
+        <div id="health-bar"></div>
+    </div>
+	<div id="boss-health-bar-container">
+		<div id="boss-health-bar-title">THE GRAKEN</div>
+		<div id="boss-health-bar"></div>
+	</div>
+	<div id="defeat-message" class="hidden">
+		You have defeated The Graken. The skies have cleared and you may now sail to MSB island.
+	</div>
+	<div class = "coins">Dabloons: <span id = "coinCount"></span></div>
+	
+	<script>
+		// Initial update to display the starting currency
+		document.addEventListener('DOMContentLoaded', function() {
+			player.updateCoinCount();
+		});
+	  </script>
+</body>
+<style>
+	body{
+	.coins{
+	  color: white;
+	  font-family: Georgia, serif;
+	  font-size: 1.5em;
+	}
+	background-image: url('./assets/sea.png');
+	background-size: cover;
+	background-repeat: no-repeat; 
+  }
+  </style>
+</html>
