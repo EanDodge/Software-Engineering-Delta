@@ -197,7 +197,7 @@ let projectileFrameCount = 0;
 	 enemyImage = loadImage('./assets/shiplvl2Top.png');
 	 bossImage = loadImage('./assets/krakenDelozier.png');
 	 minionImage = loadImage('./assets/kraken.png');
-	 tentacleImage = loadImage('./assets/grakenTentacle.png');	
+	 tentacleImage = loadImage('./assets/tentacle.png');	
  }
  
 function setup() {
