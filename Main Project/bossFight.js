@@ -196,7 +196,7 @@ let projectileFrameCount = 0;
 	 //backgroundImage = loadImage('./assets/sea.png');
 	 //enemyImage = loadImage('./assets/shiplvl2Top.png');
 	 bossImage = loadImage('./assets/krakenDelozier.png');
-	 minionImage = loadImage('./assets/krakenDelozier.png');
+	 minionImage = loadImage('./assets/kraken.png');
 	 tentacleImage = loadImage('./assets/grakenTentacle.png');	
  }
  
@@ -385,9 +385,10 @@ function draw() {
 	}
 	inkEffectDuration -= deltaTime; // Decrease the duration
 
-	// Award the player with the boss's currency value
+	// Award the player with the boss's currency value and change background
 	if (boss.isDead && !boss.awardReceived)
-	{
+	{	
+		changeBackgroundToSea();
 		player.gainCurrency(boss.currencyValue);
 		console.log("Player received " + boss.currencyValue + " currency. Total: " + player.currency);
 		boss.awardReceived = true;
@@ -414,4 +415,9 @@ function checkCollision(ink, player) {
 function mousePressed() {
 	console.log("mouse: " + mouseX + ", " + mouseY);
 	console.log("player: " + player.x + ", " + player.y);
+}
+
+// Function to change the background to sea.png
+function changeBackgroundToSea() {
+    document.body.style.backgroundImage = "url('./assets/sea.png')";
 }
