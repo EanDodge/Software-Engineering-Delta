@@ -1,113 +1,79 @@
 <!DOCTYPE html>
-<lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Upgrade Menu</title>
-        <script src ="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-        <style>    
-        
-        /* just some basic styling of the screen for now*/
-        body, html{
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>upgrade screen</title>
+    <style>
+
+    .button-container{
+            
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+            
+        }
+    .button-container button {
+            background-color: hotpink;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+
+
+}
+canvas{
+    display:block;
+}
+        body, html {
             margin: 0;
             padding: 0;
             height: 100%;
+            width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: aqua;
-            font-family: Arial, sans-serif;
+            overflow: hidden;
+            /* background-color: aqua; Fallback color */
         }
-                .menu {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    padding: 200px;
-                    background-color: aqua;
-                    border-radius: 10px;
-                    box-shadow: 0 0 100px rgba(0,0,0,1);
-                }
-                .upgrade-option{
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    margin-bottom: 20px;
-                }
+        /* #button{
+            position: absolute;
+            left: 70%;
+            width: 1200;
+            height: 700;
+        }
+        .button-container{
+            position: relative;
+            
+        } */
 
-                .coins{
-                    margin-bottom: 20px;
-                    font-size: 20px;
-                    font-weight: bold;
-                }
-                button{
-                margin-top: 10px;
-                padding: 7px 10px;
-                font-size: 14px;
-                cursor: pointer;
-                border: none;
-                border-radius: 5px;
-                background-color: #007BFF;
-                color: white;
-                transition: background-color 0.3s ease;
-                }
-
-                button:hover{
-                    background-color: blanchedalmond;
-                }
-                h2{
-                    margin: 10px 0px 5px 0px;
-                }
-
-
-
-        </style>    
-    </head>
-    <body>
-        <div class = "menu">
-            <div class = "coins">Coins: <span id = "coinCount">0</span></div>
-            <div class = "upgrade option"></div>
-            <h2>Armor Upgrades</h2>
-            <button onclick="upgrade('armor')">Upgrade</button>
-            <span id="armorLevel">Tier: 1 - BasicArmor</span>
         
-            <div class="upgrade-option">
-                <h2>Upgrade Cannons</h2>
-                <button onclick="upgrade('cannons')">Upgrade</button>
-                <span id="cannonsLevel">Tier: 1</span>
-            </div>
-            <div class="upgrade-option">
-                <h2>Upgrade Speed</h2>
-                <button onclick="upgrade('speed')">Upgrade</button>
-                <span id="speedLevel">Tier: 1</span>
-            </div>
-            <div class="upgrade-option">
-                <h2>Upgrade Ammo Capacity</h2>
-                <button onclick="upgrade('AmmoCapacity')">Upgrade</button>
-                <span id="CapacityLevel">Tier: 1</span>
-            </div>
-            <div class="upgrade-option">
-                <h2>Hints</h2>
-                <button onclick="upgrade('Hints')">Upgrade</button>
-                <span id="HintLevel">Tier: 1</span>
-            </div>
-            <button onclick="window.location.href='bossFight.html'">Defeat Sea Monster</button>
-            <button onclick="completeLevel()">Complete Level</button>
-            <!-- New button to redirect back to index.html -->
-            <button onclick="window.location.href='index.html'">Back to Game</button>
-            <button onclick="window.location.href='nurikabe.html'">Continue to treasure nurikabe</button>
-            <button onclick="window.location.href='sudoku.html'">Continue to treasure sudoku</button>
+        
+    </style>
+</head>
+<body>
+    <!-- <img src='./assets/sea.png' > -->
+    <div class ="button-container">
+    <button onclick="window.location.href='index.html'" type="button" >Back Button</button>
+    </div>
+    <canvas id="gameCanvas" ></canvas>
+    <script>
+        var c = document.getElementById("gameCanvas");
+        var c2 = document.getElementById("gameCanvas");
 
-        </div>
-		<script src="player.js"></script> <!-- Ensure player.js is included -->
-		<script src="sketch.js"></script> <!-- Ensure sketch.js is included -->
-		<script>	
-			// Call the function to initialize the coin count display
-			player.updateCoinCount();
-		</script>
-		<script src="upgradeMenu.js"></script>
-        <script>
-            //set upgrade values to what they currently are
-            let tier = parseInt(localStorage.getItem('speed')) || 1;
-            document.getElementById('speedLevel').innerText = 'Tier: ' + tier + ' - ' + tierNames['speed'][tier - 1];
-        </script>   
-	</body>
-	</html>
+        var contextIsland = c2.getContext("2d");
+        var contextSea = c.getContext("2d");
+
+        var img1 = new Image();
+        img1.src = './assets/sea.png';
+
+        var img2 = new Image();
+        img2.src = './assets/upgradeIslandAlt.png';
+
+    </script>
+    <script src="pirate.js"></script>
+    <script src="sketchPirate.js"></script>
+</body>
+</html>

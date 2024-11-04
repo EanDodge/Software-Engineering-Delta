@@ -1,50 +1,122 @@
-let coins = 100;// Initial coin count and upgrade levels
+let coins = 100; // Initial coin count
 
-let upgrades = {
-    armor: 1,
-    cannons: 1,
-    speed: parseInt(localStorage.getItem('speed')) || 1,
-    AmmoCapacity: 1,
-    Hints: 1
-};
+class Upgrade {
+    constructor(name, cost, tierNames) {
+        this.name = name;
+        this.cost = cost;
+        this.tierNames = tierNames;
+        this.value = parseInt(localStorage.getItem(name)) || 1;
+    }
 
-// Cost per tier of upgrade
-const upgradeCost = {
-    armor: [1, 2, 3, 4, 5, 6],
-    cannons: [2, 3, 4, 5, 6, 7],
-    speed: [3, 4, 5, 6, 7, 8],
-    AmmoCapacity: [4, 5, 6, 7, 8, 9],
-    Hints: [5, 6, 7, 8, 9, 10]
-};
-
-const tierNames = {
-    armor: ["a", "b", "c", "d", "e", "f"],
-    cannons: ["a", "b", "c", "d", "e", "f"],
-    speed: ["a", "b", "c", "d", "e", "f"],
-    AmmoCapacity: ["a", "b", "c", "d", "e", "f"],
-    Hints: ["a", "b", "c", "d", "e", "f"]
-}
-
-// Function to upgrade a specific attribute
-function upgrade(attribute) {
-    if (upgrades[attribute] < 6) { // Maximum tier is 4
-        let cost = upgradeCost[attribute][upgrades[attribute] - 1] ;
-		console.log(cost);
-        if (player.buyUpgrade(cost)) {
-            upgrades[attribute]++;
-            localStorage.setItem(attribute, upgrades[attribute]);
-            player.updateCoinCount();
-            let tier = upgrades[attribute];
-            document.getElementById(attribute + 'Level').innerText = 'Tier: ' + tier + ' - ' + tierNames[attribute][tier - 1];
-			//document.getElementById('coinCount').innerText = coins;
+    upgrade() {
+        if (this.value < 6) { // Maximum tier is 6
+            let cost = this.cost[this.value - 1];
+            console.log(cost);
+            if (player.buyUpgrade(cost)) {
+                this.value++;
+                localStorage.setItem(this.name, this.value);
+                player.updateCoinCount();
+                let tier = this.value;
+                document.getElementById(this.name + 'Level').innerText = 'Tier: ' + tier + ' - ' + this.tierNames[tier - 1];
+                this.applyUpgradeEffect(tier);
+            } else {
+                alert('Not enough coins!');
+            }
         } else {
-            alert('Not enough coins!');
+            alert(this.name.charAt(0).toUpperCase() + this.name.slice(1) + ' is already at maximum tier!');
         }
-    } else {
-        alert(attribute.charAt(0).toUpperCase() + attribute.slice(1) + ' is already at maximum tier!');
+    }
+
+    applyUpgradeEffect(tier) {
+        // This method can be overridden by subclasses to apply specific effects
     }
 }
 
+class ArmorUpgrade extends Upgrade {
+    constructor() {
+        super('armor', [1, 2, 3, 4, 5, 6], ["a", "b", "c", "d", "e", "f"]);
+    }
+
+    applyUpgradeEffect(tier) {
+        // Specific effect for armor upgrade
+        console.log('Armor upgraded to tier:', tier);
+    }
+}
+
+class CannonsUpgrade extends Upgrade {
+    constructor() {
+        super('cannons', [2, 3, 4, 5, 6, 7], ["a", "b", "c", "d", "e", "f"]);
+    }
+
+    applyUpgradeEffect(tier) {
+        // Specific effect for cannons upgrade
+		console.log('Cannons upgraded to tier:', tier);
+        this.increaseProjectileDamage(tier);
+		console.log('Cannon damage:', player.cannonDamage);
+    }
+
+	increaseProjectileDamage(tier) {
+		// Assuming base damage is 1 and each tier increases damage by 1
+		const baseDamage = 1;
+		const damageIncreasePerTier = 1;
+		const newDamage = baseDamage + (tier - 1) * damageIncreasePerTier;
+		
+		// Update the projectile damage
+		player.cannonDamage = newDamage;
+		localStorage.setItem('cannonDamage', newDamage); // Save to localStorage
+		console.log('New projectile damage:', newDamage);
+	}
+}
+
+class SpeedUpgrade extends Upgrade {
+    constructor() {
+        super('speed', [3, 4, 5, 6, 7, 8], ["a", "b", "c", "d", "e", "f"]);
+    }
+
+    applyUpgradeEffect(tier) {
+        // Specific effect for speed upgrade
+        console.log('Speed upgraded to tier:', tier);
+    }
+}
+
+class AmmoCapacityUpgrade extends Upgrade {
+    constructor() {
+        super('AmmoCapacity', [4, 5, 6, 7, 8, 9], ["a", "b", "c", "d", "e", "f"]);
+    }
+
+    applyUpgradeEffect(tier) {
+        // Specific effect for ammo capacity upgrade
+        console.log('Ammo capacity upgraded to tier:', tier);
+    }
+}
+
+class HintsUpgrade extends Upgrade {
+    constructor() {
+        super('Hints', [5, 6, 7, 8, 9, 10], ["a", "b", "c", "d", "e", "f"]);
+    }
+
+    applyUpgradeEffect(tier) {
+        // Specific effect for hints upgrade
+        console.log('Hints upgraded to tier:', tier);
+    }
+}
+
+// Create instances for each upgrade type
+const armorUpgrade = new ArmorUpgrade();
+const cannonsUpgrade = new CannonsUpgrade();
+const speedUpgrade = new SpeedUpgrade();
+const ammoCapacityUpgrade = new AmmoCapacityUpgrade();
+const hintsUpgrade = new HintsUpgrade();
+
+
+// Function to initialize upgrade values from localStorage
+function initializeUpgrades() {
+    const upgrades = [armorUpgrade, cannonsUpgrade, speedUpgrade, ammoCapacityUpgrade, hintsUpgrade];
+    upgrades.forEach(upgrade => {
+        let tier = upgrade.value;
+        document.getElementById(upgrade.name + 'Level').innerText = 'Tier: ' + tier + ' - ' + upgrade.tierNames[tier - 1];
+    });
+}
 
 function defeatSeaMonster() {
     console.log('defeatSeaMonster called');
@@ -57,5 +129,4 @@ function defeatSeaMonster() {
 function completeLevel() {
     coins += 999999;
     document.getElementById('coinCount').innerText = coins;
-
 }

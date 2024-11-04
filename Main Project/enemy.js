@@ -49,14 +49,14 @@ class Enemy {
         this.y += moveY * Math.sign(distanceX);
     }
 
-    checkCollisionProjectiles(projectiles) {
+    checkCollisionProjectiles(projectiles, player) {
         projectiles.forEach((projectile, index) => {
             //distance formuala between enemy and projectile midpoints
             let distance = Math.sqrt((projectile.x - this.x) * (projectile.x - this.x)
                 + (projectile.y - this.y) * (projectile.y - this.y));
 
             if (distance < projectile.size / 2 + this.size / 2) {
-                this.health--;
+                this.health -= player.cannonDamage;
 				console.log("Enemy hit! Health: " + this.health);
                 projectiles.splice(index, 1);
 				

@@ -1,18 +1,21 @@
 const puppeteer = require('puppeteer');
 
+jest.setTimeout(60000); // 60 seconds
+
 describe('Nurikabe Puzzle Tests', () => {
   let browser;
   let page;
 
   beforeAll(async () => {
     browser = await puppeteer.launch({
-      headless: false, // Set to true if you want it headless
-      slowMo: 50 // Slows down Puppeteer actions for easier debugging
+      headless: true, // Use headless mode for CI environments like GitHub Actions
+      args: ['--no-sandbox', '--disable-setuid-sandbox'], // Add these args to avoid permission issues in GitHub Actions
+      slowMo: 50
     });
     page = await browser.newPage();
 
     //Open nurikabe.hmtl in live server before doing this
-    await page.goto('http://localhost:5500/nurikabe.html'); //run live server using default port value for VSC Live Server (until code is hosted, this is the only way I can figure out to test this sh*t with puppeteer)
+    await page.goto('https://sopatz.github.io/SoftwareEngineering_PersonalFork/Main%20Project/nurikabe.html'); //run live server using default port value for VSC Live Server (until code is hosted, this is the only way I can figure out to test this sh*t with puppeteer)
 
     //Log console messages
     // page.on('console', msg => {
@@ -24,8 +27,8 @@ describe('Nurikabe Puzzle Tests', () => {
   beforeEach(async () => {
     // Ensure we navigate to the correct page before each test
     const currentUrl = page.url();
-    if (currentUrl !== 'http://localhost:5500/nurikabe.html') {
-      await page.goto('http://localhost:5500/nurikabe.html');
+    if (currentUrl !== 'https://sopatz.github.io/SoftwareEngineering_PersonalFork/Main%20Project/nurikabe.html') {
+      await page.goto('https://sopatz.github.io/SoftwareEngineering_PersonalFork/Main%20Project/nurikabe.html');
     }
   });
 

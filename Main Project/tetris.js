@@ -152,7 +152,7 @@ class Tetris {
     h = this.tGrid.ny * cell;
     x = parseInt((canvasW - w) / 2.0);
     y = parseInt((canvasH - h) / 2.0);
-    canvas.background(255);
+    //canvas.background(255);
     canvas.strokeWeight(1);
     canvas.noStroke();
     canvas.fill(16);
@@ -219,7 +219,7 @@ class Tetris {
       canvas.textAlign(LEFT);
       canvas.noStroke();
       canvas.textSize(14);
-      canvas.fill(96);
+      canvas.fill(0);
       canvas.text("UP", tx1, ty);
       canvas.text("- ROTATE", tx2, ty);
       ty += 15;
