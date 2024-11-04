@@ -194,7 +194,7 @@ let projectileFrameCount = 0;
      player.playerImage = loadImage('./assets/shiplvl1Top.png');
 	 islandImage = loadImage('./assets/islandDock.png');
 	 //backgroundImage = loadImage('./assets/sea.png');
-	 //enemyImage = loadImage('./assets/shiplvl2Top.png');
+	 enemyImage = loadImage('./assets/shiplvl2Top.png');
 	 bossImage = loadImage('./assets/krakenDelozier.png');
 	 minionImage = loadImage('./assets/kraken.png');
 	 tentacleImage = loadImage('./assets/grakenTentacle.png');	
@@ -317,7 +317,7 @@ function draw() {
 	boss.checkCollisionProjectiles(projectiles);
 
 	minions.forEach((minion, index) => {
-		minion.drawEnemy();
+		minion.drawMinion();
 		minion.moveEnemy(player);
 		minion.checkCollisionProjectiles(projectiles, player);
 		if (minion.health <= 0) {

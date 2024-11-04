@@ -29,6 +29,7 @@ let projectileFrameCount = 0;
  let backgroundImage;
  let enemyImage; 
  let stormImage;
+ let minionImage;
 
 
  function preload() {
@@ -37,6 +38,7 @@ let projectileFrameCount = 0;
 	 //backgroundImage = loadImage('./assets/sea.png');
 	 enemyImage = loadImage('./assets/shiplvl2Top.png');
 	 stormImage = loadImage('./assets/stormWater.png')
+	 minionImage = loadImage('./assets/kraken.png');
 
  }
  
