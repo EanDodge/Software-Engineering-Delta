@@ -109,8 +109,8 @@ function draw() {
 	player.checkCollisionEnemies(enemies);
 
 	player.checkCollisionIslands(gameObjects);
-	if (player.hitIslant) {
-		window.location.href = 'upgrade.html'; // Navigate to upgrades.html
+	if (player.hitIsland) {
+		window.location.href = 'islandIndex.html'; // Navigate to upgrade island
 	}
 
 	goal.drawObject(stormImage);

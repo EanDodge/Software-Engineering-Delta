@@ -486,9 +486,9 @@ class Player {
         if (hit) {
             //this.color = "blue";
             this.hitIsland = true;
-            if(typeof document !== 'undefined') {   //allows tests to ignore this line
-            window.location.href = 'upgrade.html'; // Navigate to upgrades.html
-            }
+            // if(typeof document !== 'undefined') {   //allows tests to ignore this line
+            // window.location.href = 'islandIndex.html'; // Navigate to upgrades.html
+            // }
         }
     }
 

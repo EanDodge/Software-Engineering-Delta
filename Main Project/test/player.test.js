@@ -1,9 +1,21 @@
 const Player = require('../player');
 const GameObject = require('../gameObject');
 const Enemy = require('../enemy');
+const puppeteer = require('puppeteer');
 
 describe('player.js class tests', () => {
     let player;
+    let browser;
+    let page;
+
+    beforeAll(async () => {
+        browser = await puppeteer.launch();
+        page = await browser.newPage();
+    });
+
+    afterAll(async () => {
+        await browser.close();
+    });
 
     
     beforeAll(() => {
