@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     background.src = backgroundImgUrl;
     seaImage.src = seaImgUrl;
 
+    const puzzle = new islandObject(0,0);
+
     function resizeCanvas(){
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -37,20 +39,26 @@ document.addEventListener('DOMContentLoaded', () => {
         pirate.draw(ctx);
     }
 
+    //runs once
     seaImage.onload = () => {
         background.onload = () => {
         resizeCanvas()
         window.addEventListener('resize', resizeCanvas);
         gameLoop();
+        circle(0,0, 50);
     };
 };
 
+    //runs constantly
     function gameLoop() {
         drawScene();
         requestAnimationFrame(gameLoop);
+
+        // if(pirate.isColliding(puzzle)) {
+        //     window.location.href = 'nurikabe.html'
+        // }
     }
 
-    //gameLoop();
 
 function onKeyPress(e){
     switch(e.key){
