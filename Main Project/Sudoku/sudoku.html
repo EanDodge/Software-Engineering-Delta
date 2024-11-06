@@ -6,9 +6,9 @@
 
     <title>Sudoku</title>
 
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="../style.css">
 
-    <script src="libraries/p5.min.js"></script>
+    <script src="../libraries/p5.min.js"></script>
     <!--<script src="libraries/p5.sound.min.js"></script>-->
   </head>
 
@@ -25,19 +25,20 @@
       <div id="err4"class="circle"></div>
       <div id="err5"class="circle"></div>
     </div>
-    <button id="initButton" onclick="startupToFalse()" style="position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">Start</button>
-    <button id="helpButton" onclick="helpToFalse()" style="position: absolute; top: 63%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">Go</button>
-    <button id="backToIndexButton" onclick="window.location.href='index.html'" style="position: absolute; top: 75%; left: 44.7%; transform: translate(-50%, -50%); z-index: 1000;">Back to Game</button>
-    <button id="completeButton" onclick="autoComplete()" style="position: absolute; top: 75%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">Finish puzzle</button>
-    <button id="hintButton" onclick="giveHint()" style="position: absolute; top: 75%; left: 56%; transform: translate(-50%, -50%); z-index: 1000;">Hint</button>
-    </button>
-    <button id="finishButton" onclick="window.location.href='index.html'" style="position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">Collect Treasure</button>
+    <button id="initButton" style="position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;" onclick="startupToFalse()">Start</button>
+    <button id="helpButton" style="position: absolute; top: 68%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;" onclick="helpToFalse()">Go</button>
+    <div id="buttonContainer" style="display: flex; justify-content: space-evenly; position: absolute; bottom: 20%; left: 50%; transform: translateX(-50%); z-index: 1000; gap: 80px;">
+      <button id="backToIndexButton" onclick="helpToFalse()">Back</button>      
+      <button id="completeButton" onclick="autoComplete()">Finish</button>
+      <button id="hintButton" onclick="giveHint()">Hint</button>
+    </div>
+    <button id="finishButton" style="position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;" onclick="window.location.href='../index.html'">Collect Treasure</button>
     <script src="sudokuPick.js"></script>
     <script src="sudoku.js"></script>
   </body>
   <style>
     body{
-      background-image: url('./assets/harbor2.png');
+      background-image: url('../assets/harbor2.png');
       background-size: cover;
       background-repeat: no-repeat; 
     }
