@@ -30,4 +30,4 @@ class Pirate {
 }
 
 //make pirate class available globally
-window.Pirate = Pirate;
+// window.Pirate = Pirate;

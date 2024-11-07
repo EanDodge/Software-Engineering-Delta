@@ -8,7 +8,7 @@
   },
   "name": "main-project",
   "version": "1.0.0",
-  "main": "enemy.js",
+  "main": "./gameClasses/enemy.js",
   "directories": {
     "test": "test"
   },

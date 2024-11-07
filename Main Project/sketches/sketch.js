@@ -110,7 +110,7 @@ function draw() {
 
 	player.checkCollisionIslands(gameObjects);
 	if (player.hitIsland) {
-		window.location.href = 'islandIndex.html'; // Navigate to upgrade island
+		window.location.href = './islandIndex.html'; // Navigate to upgrade island
 	}
 
 	goal.drawObject(stormImage);

@@ -1,7 +1,7 @@
 
-//  import Enemy from './enemy.js';
-//  import Boss from './boss.js';
-//  import Player from './player.js';
+//  import Enemy from '././gameClasses/enemy.js';
+//  import Boss from '././gameClasses/enemy.js';
+//  import Player from '././gameClasses/player.js';
 
 // const boss = new Boss(300, 300, 200, 'bossImage');
 // let minions = [];

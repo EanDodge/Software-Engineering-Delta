@@ -4,9 +4,9 @@ const mapYSize = 500;
 let player = new Pirate(355,383);
 
 function preload()  {
-    islandImg = loadImage('assets/upgradeislandAlt.png');
-    player.img = loadImage('assets/pirate.png');
-    seaImg = loadImage('assets/sea.png');
+    islandImg = loadImage('./assets/upgradeislandAlt.png');
+    player.img = loadImage('./assets/pirate.png');
+    seaImg = loadImage('./assets/sea.png');
 }
 
 function setup() {

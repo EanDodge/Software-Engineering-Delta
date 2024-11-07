@@ -1,4 +1,4 @@
-//import Enemy from './enemy.js';
+//import Enemy from '././gameClasses/enemy.js';
 class Boss {
     constructor(x, y, health, healthBarContainer, healthBar, defeatMessage) {
        this.x = x;
