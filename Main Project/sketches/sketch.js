@@ -9,7 +9,7 @@ let selectedLevel = highestLevelBeat + 1;
 
 let enemies = [];
 
-let gameObjects = [];
+let dockIslands = [];
 
 let goal;
 
@@ -24,23 +24,24 @@ let enemyHealth = 3;
 let enemyFrameCount = 0;
 let projectileFrameCount = 0;
 
- //let playerImage; made playerimage part of the player object
- let islandImage;
- let backgroundImage;
- let enemyImage; 
- let stormImage;
- let minionImage;
+//let playerImage; made playerimage part of the player object
+let islandImage;
+let rockIslandImage;
+let backgroundImage;
+let enemyImage; 
+let stormImage;
+let minionImage;
 
 
- function preload() {
-     player.playerImage = loadImage('./assets/shiplvl1Top.png');
-	 islandImage = loadImage('./assets/islandDock.png');
-	 //backgroundImage = loadImage('./assets/sea.png');
-	 enemyImage = loadImage('./assets/shiplvl2Top.png');
-	 stormImage = loadImage('./assets/stormWater.png')
-	 minionImage = loadImage('./assets/kraken.png');
-
- }
+function preload() {
+    player.playerImage = loadImage('./assets/shiplvl1Top.png');
+	islandImage = loadImage('./assets/islandDock.png');
+	grassIslandImage = loadImage('./assets/island.png')
+	//backgroundImage = loadImage('./assets/sea.png');
+	enemyImage = loadImage('./assets/shiplvl2TopCopy.png');
+	stormImage = loadImage('./assets/stormWater.png')
+	minionImage = loadImage('./assets/kraken.png');
+}
  
 function setup() {
 	//createCanvas(mapXSize, mapYSize, WEBGL);
@@ -67,7 +68,7 @@ function setup() {
 	goal = new GameObject(mapXSize / 2, 100);
 
 	let island = new GameObject(mapXSize -200, mapYSize-300);
-	gameObjects.push(island);
+	dockIslands.push(island);
 }
 
 function draw() {
@@ -108,7 +109,7 @@ function draw() {
 	player.movePlayer();
 	player.checkCollisionEnemies(enemies);
 
-	player.checkCollisionIslands(gameObjects);
+	player.checkCollisionIslands(dockIslands);
 	if (player.hitIsland) {
 		window.location.href = './islandIndex.html'; // Navigate to upgrade island
 	}
@@ -138,7 +139,7 @@ function draw() {
 	});
 
 
-	gameObjects.forEach((gameObject) => {
+	dockIslands.forEach((gameObject) => {
 		gameObject.drawObject(islandImage);
 	});
 

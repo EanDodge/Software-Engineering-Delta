@@ -23,7 +23,7 @@ class Player {
 		this.currency = parseInt(localStorage.getItem('playerCurrency')) || 100; // Retrieve from localStorage or default to 100
         this.hitEnemy = false;
         this.hitIsland = false;
-        this.playerImage;
+        // this.playerImage;
 		this.health = parseInt(localStorage.getItem('playerHealth')) || 10;
 		this.lastCollisionTime = 0; //Tracks the time of last collision
         this.cannonDamage = parseInt(localStorage.getItem('cannons')) || 1;
@@ -122,6 +122,40 @@ class Player {
         return false
     }
 
+    checkCollisionIslands(islands) {
+        islands.forEach((island, index) => {
+            this.hitIsland = this.isColliding(island);
+            // console.log(hit)
+        });
+    }
+
+    isCollidingEnemy(enemy) {
+        //New Formula
+        let pf = [this.sizeW / 2, -this.sizeH / 2]
+        let pr = [this.sizeW / 2, this.sizeH / 2]
+        let df = [-this.sizeW / 2, -this.sizeH / 2]
+        let dr = [-this.sizeW / 2, this.sizeH / 2]
+        let corners = [pf, pr, df, dr];
+        
+        corners.forEach(corner => {
+            let W = corner[0];
+            let H = corner[1];
+            corner[0] = this.x + cos(-this.angle) * W - sin(-this.angle) * H;
+            corner[1] = this.y + sin(-this.angle) * W + cos(-this.angle) * H;
+            // circle(corner[0], corner[1], 10);
+        });
+
+        if (
+            collideLineCircle(pf[0], pf[1], pr[0], pr[1], enemy.x, enemy.y, enemy.size) || 
+            collideLineCircle(pr[0], pr[1], dr[0], dr[1], enemy.x, enemy.y, enemy.size) ||
+            collideLineCircle(dr[0], dr[1], df[0], df[1], enemy.x, enemy.y, enemy.size) ||
+            collideLineCircle(df[0], df[1], pf[0], pf[1], enemy.x, enemy.y, enemy.size)
+            ) {
+            return true
+        }
+        return false
+    }
+
     checkCollisionEnemies(enemies) {
         let hit = false;
         const currentTime = Date.now();
@@ -129,13 +163,16 @@ class Player {
 
         enemies.forEach((enemy) => {
             // Distance formula between enemy and player midpoints
-            let distance = Math.sqrt((enemy.x - this.x) * (enemy.x - this.x)
-                + (enemy.y - this.y) * (enemy.y - this.y));
+            // let distance = Math.sqrt((enemy.x - this.x) * (enemy.x - this.x)
+            //     + (enemy.y - this.y) * (enemy.y - this.y));
 
-            if (distance < enemy.size / 2 + this.size / 2) {
+            // if (distance < enemy.size / 2 + this.size / 2) {
+            //     hit = true;
+            // }
+
+            if(this.isCollidingEnemy(enemy)) {
                 hit = true;
             }
-
             if (hit && (currentTime - this.lastCollisionTime) > collisionCooldown) {
                 this.takeDamage(1); // Decrease player health by 1 
                 // console.log(`Player health: ${this.health}`);
@@ -157,13 +194,6 @@ class Player {
             if (this.timer > 0)
                 this.timer--;
         }
-    }
-
-    checkCollisionIslands(islands) {
-        islands.forEach((island, index) => {
-            this.hitIsland = this.isColliding(island);
-            // console.log(hit)
-        });
     }
 
 	updateCoinCount() {
