@@ -13,20 +13,25 @@ class Player {
     constructor(x, y) {
         this.x = x;                 //current x
         this.y = y;                 //current y
-        this.speed = parseInt(localStorage.getItem('speed')) || 2;  //speed of the boat in pixels (how many pixels it moves in one tic)
+        this.speed = parseInt(localStorage.getItem('speed')) || 3;  //speed of the boat in pixels (how many pixels it moves in one tic)
         //this.sizeH = 40;          //height of the test rectangle
         //this.sizeW = 20;          //width of the test rectangle
         this.size = 45;
         this.turningSpeed = 0.075;  //how fast the boat will turn (radians per sec?)
         this.timer = 0;
         this.angle = 0;             //angle of the boat in radians
-		    this.currency = parseInt(localStorage.getItem('playerCurrency')) || 100; // Retrieve from localStorage or default to 100
+		this.currency = parseInt(localStorage.getItem('playerCurrency')) || 100; // Retrieve from localStorage or default to 100
         this.hitEnemy = false;
         this.hitIsland = false;
         this.playerImage;
-		    this.health = 10;
+
+  
+		   this.health = parseInt(localStorage.getItem('playerHealth')) || 10;
 		    this.lastCollisionTime = 0; //Tracks the time of last collision
-        
+      this.cannonDamage = parseInt(localStorage.getItem('cannons')) || 1;
+        this.inked = false;
+      
+
     }
 
     //runs all test for the Player Class
@@ -407,11 +412,11 @@ class Player {
 
             if (hit && (currentTime - this.lastCollisionTime) > collisionCooldown) {
                 this.takeDamage(1); // Decrease player health by 1
-                // console.log(`Player health: ${this.health}`);
+                console.log(`Player health: ${this.health}`);
                 this.lastCollisionTime = currentTime; // Update the last collision time
-                if (this.health <= 0) {
-                    window.location.href = 'gameover.html'; // Navigate to gameover.html
-                }
+                // if (this.health <= 0) {
+                //     window.location.href = 'gameover.html'; // Navigate to gameover.html
+                // }
             }
         });
 
@@ -481,9 +486,9 @@ class Player {
         if (hit) {
             //this.color = "blue";
             this.hitIsland = true;
-            if(typeof document !== 'undefined') {   //allows tests to ignore this line
-            window.location.href = 'upgrade.html'; // Navigate to upgrades.html
-            }
+            // if(typeof document !== 'undefined') {   //allows tests to ignore this line
+            // window.location.href = 'islandIndex.html'; // Navigate to upgrades.html
+            // }
         }
     }
 
@@ -533,8 +538,8 @@ class Player {
 	}
 
 	gainCurrency(amount) {
-		player.currency += amount;
-		player.updateCoinCount();
+		this.currency += amount;
+		this.updateCoinCount();
 	}
 
 	updateHealthBar() {
@@ -549,7 +554,30 @@ class Player {
     takeDamage(amount) {
         this.health -= amount;
         if (this.health < 0) this.health = 0;
+		localStorage.setItem('playerHealth', this.health);
         this.updateHealthBar();
+    }
+
+    checkCollisionProjectiles(projectiles) {
+        projectiles.forEach((projectile, index) => {
+            //distance formuala between enemy and projectile midpoints
+            let distance = Math.sqrt((projectile.x - this.x) * (projectile.x - this.x)
+                + (projectile.y - this.y) * (projectile.y - this.y));
+
+            if (distance < projectile.size / 2 + this.size / 2) {
+                this.takeDamage(projectile.damage, player);
+				console.log("Enemy hit! Health: " + this.health);
+                projectiles.splice(index, 1);
+				
+                
+            }
+        });
+    }
+
+    checkPlayerDeath() {
+        if (this.health <= 0) {
+            window.location.href = 'gameover.html'; // Navigate to gameover.html
+        }
     }
 }
 
@@ -602,5 +630,5 @@ if(typeof document !== 'undefined') {
     });
 }
 
-module.exports = Player;
+//module.exports = Player;
 

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upgrade Island</title>
+    <style>
+
+        .button-container{
+                
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                z-index: 10;
+                
+            }
+        .button-container button {
+                background-color: hotpink;
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                display: inline-block;
+                font-size: 16px;
+        }
+        canvas{
+            display:block;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background-image: url('assets/sea.png');
+        }
+
+        /* #button{
+            position: absolute;
+            left: 70%;
+            width: 1200;
+            height: 700;
+        }
+        .button-container{
+            position: relative;
+            
+        } */
+    </style>
+
+    <script src="libraries/p5.min.js"></script>
+    <script src="libraries/p5.sound.min.js"></script>
+    <script src="libraries/p5.collide2D.js"></script>
+    <script src="playerPirate.js"></script>
+    <script src="islandObjects.js"></script>
+
+</head>
+<body>
+    <script src="sketchIsland.js"></script>
+</body>
+</html>

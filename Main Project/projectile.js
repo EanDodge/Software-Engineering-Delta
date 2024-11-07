@@ -17,11 +17,8 @@ class Projectile {
     }
 
     outOfRange() {
-        //check if move is out of bounds accounting for size
-        if (this.x > mapXSize - this.size / 2 || this.x < 0 + this.size / 2
-            || this.y > mapYSize - this.size / 2 || this.y < 0 + this.size / 2)
-            return true;
-        return false;
+		return this.x > width - this.size / 2 || this.x < 0 + this.size / 2 ||
+               this.y > height - this.size / 2 || this.y < 0 + this.size / 2;
     }
 
     moveProjectile() {
@@ -30,3 +27,5 @@ class Projectile {
         this.x += this.speed * cos(-this.angle) * this.sign + this.extraXMove;
     }
 }
+
+module.exports =  Projectile;

@@ -1,18 +1,23 @@
-const mapXSize = 2156;
-const mapYSize = 2000;
+const mapXSize = 500;
+const mapYSize = 1000;
 
-let player = new Player(mapXSize/2, mapYSize/2);
+let player = new Player(mapXSize/2, mapYSize - 100);
+
+let highestLevelBeat = parseInt(localStorage.getItem("highestLevelBeat")) || 0;
+//change once get bosses in
+let selectedLevel = highestLevelBeat + 1;
 
 let enemies = [];
 
 let gameObjects = [];
 
+let goal;
+
 let projectiles = [];
 
 let frameCount = 0;
 
-let enemySpawnNumber = parseInt(localStorage.getItem("enemySpawnNumber")) || 0;
-let enemyHealth = parseInt(localStorage.getItem("enemyHealth")) || 1;
+let enemyHealth = 3;
 
 // frame counts for each use case because if not reset 
 // % can return true because frame count isnt back to 0
@@ -23,6 +28,8 @@ let projectileFrameCount = 0;
  let islandImage;
  let backgroundImage;
  let enemyImage; 
+ let stormImage;
+ let minionImage;
 
 
  function preload() {
@@ -30,6 +37,9 @@ let projectileFrameCount = 0;
 	 islandImage = loadImage('./assets/islandDock.png');
 	 //backgroundImage = loadImage('./assets/sea.png');
 	 enemyImage = loadImage('./assets/shiplvl2Top.png');
+	 stormImage = loadImage('./assets/stormWater.png')
+	 minionImage = loadImage('./assets/kraken.png');
+
  }
  
 function setup() {
@@ -37,9 +47,13 @@ function setup() {
 	//makes canvas size dependent on display size (- values because full display size was to big)
 	createCanvas(displayWidth / 1.5, displayHeight / 1.5, WEBGL);
 
-	clearStorageButton = createButton("Clear Storage");
-	clearStorageButton.position(0, 0);
+	let clearStorageButton = createButton("Clear Storage");
+	clearStorageButton.position(0, 20);
 	clearStorageButton.mousePressed(() => { localStorage.clear(); location.reload(); });
+
+	let incrementLevelButton = createButton("Level 20");
+	incrementLevelButton.position(0, 40);
+	incrementLevelButton.mousePressed(() => { localStorage.setItem("highestLevelBeat", '20'); location.reload(); });
 	
 	console.log("Display h x w = " + displayHeight + ", " + displayWidth);
 
@@ -50,16 +64,10 @@ function setup() {
 	//sets the standard frame rate to 45fps
 	frameRate(45);
 
-	//random object to show screen move
-	let island = new GameObject(100, 100);
-	//island.collision = true;
-	gameObjects.push(island);
+	goal = new GameObject(mapXSize / 2, 100);
 
-	//random object to show screen move
-	island = new GameObject(250, 100);
-	//island.collision = true;
+	let island = new GameObject(mapXSize, mapYSize);
 	gameObjects.push(island);
-
 }
 
 function draw() {
@@ -68,50 +76,24 @@ function draw() {
 
 	//border lines
 	stroke(255, 255, 255);
-	line(0, mapXSize, 0, 0);
-	line(mapXSize, mapXSize, 0, mapYSize);
-	line(mapXSize, 0, mapYSize, mapYSize);
-	line(0, 0, mapYSize, 0);
+	line(0, mapYSize, 0, 0);
+	line(mapXSize, mapYSize, 0, mapYSize);
+	line(mapXSize, 0, mapXSize, mapYSize);
+	line(0, 0, mapXSize, 0);
 	stroke(0, 0, 0);
 
-	//enemy generation
-	// enemyFrameCount = 200 - (enemySpawnNumber/2)^1.5
-	// y = 200 - (x/2)^1.5 if want to graph
-	let enemySpawnTimer = 200 - Math.ceil(Math.pow(enemySpawnNumber, 2));
+	//enemy generation based on level, can adjust for later
+	let enemySpawnTimer = 250 - selectedLevel * 10;
 	if (enemyFrameCount % enemySpawnTimer === 0) {
-		let generateXFirst = Math.random() > 0.5;
-		let rand1;
-		let rand2;
-		if (generateXFirst) {
-			rand1 = Math.random() * mapXSize;
-			rand2 = Math.random() > 0.5 ? mapYSize + 20 : -20;
-		}
-		else {
-			rand2 = Math.random() * mapYSize;
-			rand1 = Math.random() > 0.5 ? mapXSize + 20 : -20;
-		}
-		let enemy = new Enemy(rand1, rand2, enemyHealth, enemyImage);
+		let enemy = new Enemy(Math.random() * mapXSize, player.y - 350, enemyImage);
 		enemies.push(enemy);
-
-		// parabolic generation
-		// cap of spawn every 100 frames (can be generated into less)
-		if (enemySpawnTimer > 100) {
-			enemySpawnNumber++;
-		} else {
-			enemyHealth++;
-			enemySpawnNumber = 0;
-		}
-
-		localStorage.setItem("enemySpawnNumber", enemySpawnNumber);
-		localStorage.setItem("enemyHealth", enemyHealth);
-
 		enemyFrameCount = 0;
 	}
 
 	enemies.forEach((enemy, index) => {
 		enemy.drawEnemy();
 		enemy.moveEnemy(player);
-		enemy.checkCollisionProjectiles(projectiles);
+		enemy.checkCollisionProjectiles(projectiles, player);
 		if (enemy.health <= 0) {
 			enemies.splice(index, 1);
 			player.gainCurrency(enemy.currencyValue);
@@ -127,9 +109,12 @@ function draw() {
 	player.checkCollisionEnemies(enemies);
 
 	player.checkCollisionIslands(gameObjects);
-	if (player.hitIslant) {
-		window.location.href = 'upgrade.html'; // Navigate to upgrades.html
+	if (player.hitIsland) {
+		window.location.href = 'islandIndex.html'; // Navigate to upgrade island
 	}
+
+	goal.drawObject(stormImage);
+	goal.checkGoalCollision(player, selectedLevel);
 
 
 	if (projectileFrameCount % 30 === 0) {
@@ -160,7 +145,7 @@ function draw() {
 	//moves cam to centered on player, z=800 default
 	//MUST BE 801 FOR 2d LINES TO RENDER ABOVE IMAGES
 	cam.setPosition(player.x, player.y, 801);
-
+	player.checkPlayerDeath();
 	frameCount++;
 	projectileFrameCount++;
 	enemyFrameCount++;
@@ -170,4 +155,5 @@ function draw() {
 function mousePressed() {
 	console.log("mouse: " + mouseX + ", " + mouseY);
 	console.log("player: " + player.x + ", " + player.y);
+	console.log(highestLevelBeat, selectedLevel);
 }

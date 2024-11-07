@@ -10,26 +10,41 @@ class Enemy {
         this.collision = true;
         this.angle = 0;  // Angle the enemy is traveling
         this.health = health;
-        this.currencyValue = 5;  // Currency value of the enemy
-        this.enemyImage = enemyImage;
+		this.currencyValue = 5;							// Currency value of the enemy
+        this.playerimage = enemyImage;
+		this.string;
     }
 
     drawEnemy() {
         fill(255, 0, 0);
-        imageMode(CENTER);  // Sets the image to be drawn at the enemy's center
-
-        // Push and pop to isolate transformations
-        push();
-        translate(this.x, this.y);  // Move the origin to the enemy's position
-        rotate(this.angle + PI / 2);  // Rotate by the angle of movement + 90 degrees (PI / 2 radians)
-
-        tint('green');
-        image(this.enemyImage, 0, 0, this.size, this.size);  // Draw image at the new origin (0, 0 after translation)
-        pop();  // Restore original transformation state
-
-        //imageMode(CORNER);  // Return draw mode to default
+        imageMode(CENTER);  //sets the image to be drawn ontop of the enemy x, y
+        //tint('green');
+        image(enemyImage, this.x, this.y, this.size, this.size);
+        imageMode(CORNER);  //returns draw mode to default
         tint('none');
-        console.log("Enemy health: " + this.health);
+		    console.log("Enemy health: " + this.health);
+
+		// fill(255, 0, 0); // Set the fill color to red
+        // ellipseMode(CENTER); // Set the ellipse mode to center
+        // ellipse(this.x, this.y, this.size, this.size); // Draw a red circle
+        // console.log("Enemy health: " + this.health);
+
+    }
+
+    drawMinion() {
+        fill(255, 0, 0);
+        imageMode(CENTER);  //sets the image to be drawn ontop of the enemy x, y
+        //tint('green');
+        image(minionImage, this.x, this.y, this.size, this.size);
+        imageMode(CORNER);  //returns draw mode to default
+        tint('none');
+		    console.log("Enemy health: " + this.health);
+
+		// fill(255, 0, 0); // Set the fill color to red
+        // ellipseMode(CENTER); // Set the ellipse mode to center
+        // ellipse(this.x, this.y, this.size, this.size); // Draw a red circle
+        // console.log("Enemy health: " + this.health);
+
     }
 
     moveEnemy(player) {
@@ -49,7 +64,7 @@ class Enemy {
         this.y += moveY;
     }
 
-    checkCollisionProjectiles(projectiles) {
+    checkCollisionProjectiles(projectiles, player) {
         projectiles.forEach((projectile, index) => {
             // Calculate the distance between the enemy and the projectile using the distance formula
             let distance = Math.sqrt((projectile.x - this.x) * (projectile.x - this.x) +
@@ -57,9 +72,10 @@ class Enemy {
 
             // Check if there is a collision
             if (distance < projectile.size / 2 + this.size / 2) {
-                this.health--;
-                console.log("Enemy hit! Health: " + this.health);
-                projectiles.splice(index, 1);  // Remove the projectile from the array
+                this.health -= player.cannonDamage;
+				console.log("Enemy hit! Health: " + this.health);
+                projectiles.splice(index, 1);
+				
             }
         });
     }
