@@ -22,7 +22,7 @@ class Player {
         this.angle = 0;             //angle of the boat in radians
 		this.currency = parseInt(localStorage.getItem('playerCurrency')) || 100; // Retrieve from localStorage or default to 100
         this.hitEnemy = false;
-        this.hitIsland = false;
+        // this.hitIsland = false;
         // this.playerImage;
 		this.health = parseInt(localStorage.getItem('playerHealth')) || 10;
 		this.lastCollisionTime = 0; //Tracks the time of last collision
@@ -54,12 +54,16 @@ class Player {
         pop();      
     }
 
-    movePlayer() {
+    movePlayer(bumpBack = false) {
         //used to see if this upcoming move is out of bounds
         let futureX;
         let futureY;
+
+        if(bumpBack) {
+            yMove *= -1;
+        }
         
-        if ((yMove + vel) < 1 && (yMove + vel) > -1) {// change these numbers for speed
+        if ((yMove + vel) < 1 && (yMove + vel) > -1) {
             yMove += vel;
         }
         else {
@@ -123,10 +127,13 @@ class Player {
     }
 
     checkCollisionIslands(islands) {
+        let colliding = false;
         islands.forEach((island, index) => {
-            this.hitIsland = this.isColliding(island);
-            // console.log(hit)
+            if(this.isColliding(island)) {
+                colliding = true;
+            }
         });
+        return colliding;
     }
 
     isCollidingEnemy(enemy) {

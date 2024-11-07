@@ -7,16 +7,14 @@ let highestLevelBeat = parseInt(localStorage.getItem("highestLevelBeat")) || 0;
 //change once get bosses in
 let selectedLevel = highestLevelBeat + 1;
 
+//game classes containers array
 let enemies = [];
-
 let dockIslands = [];
-
+let obstacleIslands = [];
 let goal;
-
 let projectiles = [];
 
 let frameCount = 0;
-
 let enemyHealth = 3;
 
 // frame counts for each use case because if not reset 
@@ -25,9 +23,9 @@ let enemyFrameCount = 0;
 let projectileFrameCount = 0;
 
 //let playerImage; made playerimage part of the player object
-let islandImage;
-let rockIslandImage;
-let backgroundImage;
+let dockIslandImage;
+let grassIslandImage;
+// let backgroundImage;
 let enemyImage; 
 let stormImage;
 let minionImage;
@@ -35,7 +33,7 @@ let minionImage;
 
 function preload() {
     player.playerImage = loadImage('./assets/shiplvl1Top.png');
-	islandImage = loadImage('./assets/islandDock.png');
+	dockIslandImage = loadImage('./assets/islandDock.png');
 	grassIslandImage = loadImage('./assets/island.png')
 	//backgroundImage = loadImage('./assets/sea.png');
 	enemyImage = loadImage('./assets/shiplvl2TopCopy.png');
@@ -65,10 +63,13 @@ function setup() {
 	//sets the standard frame rate to 45fps
 	frameRate(45);
 
-	goal = new GameObject(mapXSize / 2, 100);
-
-	let island = new GameObject(mapXSize -200, mapYSize-300);
-	dockIslands.push(island);
+	//setting up gameObjects
+	goal = new GameObject(mapXSize / 2, 100, 100, 100);
+	//dock islands
+	dockIslands.push(new GameObject(mapXSize -200, mapYSize-300, 100, 50));
+	//obstacle islands
+	obstacleIslands.push(new GameObject(300, 300, 200, 50));
+	
 }
 
 function draw() {
@@ -106,13 +107,20 @@ function draw() {
 	
 
 	player.drawPlayer();
-	player.movePlayer();
-	player.checkCollisionEnemies(enemies);
+	//if player hits obstacleIsland player is bumped opposite direction
+	if(player.checkCollisionIslands(obstacleIslands)) {
+		player.movePlayer(true);
+	}
+	else {player.movePlayer()}
 
-	player.checkCollisionIslands(dockIslands);
-	if (player.hitIsland) {
+	//if player hits dockIsland player goes to upgrade screen
+	if(player.checkCollisionIslands(dockIslands)) {
 		window.location.href = './islandIndex.html'; // Navigate to upgrade island
 	}
+
+	player.checkCollisionEnemies(enemies);
+	
+	
 
 	goal.drawObject(stormImage);
 	goal.checkGoalCollision(player, selectedLevel);
@@ -139,8 +147,11 @@ function draw() {
 	});
 
 
-	dockIslands.forEach((gameObject) => {
-		gameObject.drawObject(islandImage);
+	dockIslands.forEach((dIsland) => {
+		dIsland.drawObject(dockIslandImage);
+	});
+	obstacleIslands.forEach((oIsland) => {
+		oIsland.drawObject(grassIslandImage);
 	});
 
 	//moves cam to centered on player, z=800 default
