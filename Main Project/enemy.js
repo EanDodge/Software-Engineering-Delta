@@ -9,6 +9,8 @@ class Enemy {
         this.y = y;
         this.speed = 2;
         this.size = 75;
+        this.sizeW = 50;
+        this.sizeH = 100;
         this.collision = true;
         this.health = health;
 		this.currencyValue = 5;							// Currency value of the enemy
@@ -23,7 +25,7 @@ class Enemy {
         image(enemyImage, this.x, this.y, this.size, this.size);
         imageMode(CORNER);  //returns draw mode to default
         tint('none');
-		    console.log("Enemy health: " + this.health);
+		    // console.log("Enemy health: " + this.health);
 
 		// fill(255, 0, 0); // Set the fill color to red
         // ellipseMode(CENTER); // Set the ellipse mode to center

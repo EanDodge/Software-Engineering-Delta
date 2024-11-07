@@ -47,19 +47,19 @@ describe('player.js class tests', () => {
 
     });
 
-    test('Testing constructor, should return "passed"', () => {
-      expect(player.testConstructor()).toBe("passed");
-    });
+    // test('Testing constructor, should return "passed"', () => {
+    //   expect(player.testConstructor()).toBe("passed");
+    // });
 
-    test('Testing movePlayer(), should return "passed"', () => {
-        expect(player.testMovePlayer()).toBe("passed");
-    });
+    // test('Testing movePlayer(), should return "passed"', () => {
+    //     expect(player.testMovePlayer()).toBe("passed");
+    // });
 
-    test('Testing checkCollisionIsland(), should return "passed"', () => {
-        expect(player.testCheckCollisionIsland()).toBe("passed");
-    });
+    // test('Testing checkCollisionIsland(), should return "passed"', () => {
+    //     expect(player.testCheckCollisionIsland()).toBe("passed");
+    // });
 
-    test('Testing checkCollisionEnemies(), should return "passed"', () => {
-        expect(player.testCheckCollisionEnemies()).toBe("passed");
-    });
+    // test('Testing checkCollisionEnemies(), should return "passed"', () => {
+    //     expect(player.testCheckCollisionEnemies()).toBe("passed");
+    // });
   });

@@ -66,7 +66,7 @@ function setup() {
 
 	goal = new GameObject(mapXSize / 2, 100);
 
-	let island = new GameObject(mapXSize, mapYSize);
+	let island = new GameObject(mapXSize -200, mapYSize-300);
 	gameObjects.push(island);
 }
 
