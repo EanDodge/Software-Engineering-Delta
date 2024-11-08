@@ -1,4 +1,4 @@
-let rows = 9; let cols = 9;
+let rows = 11; let cols = 11;
 let square_size = 50; //length and height of each square
 let square_states = 2; //number of color states each square can have
 let puzzles = []; //will store the puzzle starting states and solution states
@@ -19,7 +19,7 @@ let hintSquares = []; let cantBeHint = [];
 
 function preload() {
   console.log("Attempting to load puzzles");
-  puzzles = loadJSON('nurikabePuzzles.json', () => {
+  puzzles = loadJSON('nurikabePuzzlesHard.json', () => {
     console.log("Puzzles loaded successfully");
   }, () => {
     console.log("Failed to load puzzles");
@@ -114,27 +114,8 @@ function setup() {
 
   // format the puzzle start and puzzle solution like we need to use it: 
   window.cantClick = generateStartingColors(selectedPuzzle.puzzle); //cantClick = map(square index, value)
-  window.solution_colors = generateSolutionColors(selectedPuzzle.solpuz); //solution_colors = array (0 for water, 1 for land, size 81)
+  window.solution_colors = generateSolutionColors(selectedPuzzle.solpuz); //solution_colors = array (0 for water, 1 for land, size row * col)
 
-  // Here is how the puzzle start and puzzle solution state is stored after generateStartingColors and generateSolutionColors:
-  //   cantClick: new Map([
-  //     [36, 2], [63, 3], [19, 3], [29, 1], [66, 3], [14, 4], [51, 3], [61, 4], [17, 2], [44, 4]
-  //   ]);
-  //   //0 = water, 1 = island (laid out to look just like the puzzle)
-  //   solution_colors: [0, 0, 0, 0, 0, 0, 0, 0, 0, 
-  //                     0, 1, 1, 0, 1, 1, 0, 1, 1, 
-  //                     0, 1, 0, 0, 1, 0, 0, 0, 0, 
-  //                     0, 0, 1, 0, 1, 0, 1, 1, 1,
-  //                     1, 1, 0, 0, 0, 1, 0, 0, 1,
-  //                     0, 0, 0, 1, 0, 1, 1, 0, 0,
-  //                     0, 1, 0, 1, 0, 0, 0, 1, 0,
-  //                     1, 1, 0, 1, 0, 1, 1, 1, 0,
-  //                     0, 0, 0, 0, 0, 0, 0, 0, 0];
-
-  // coins = createDiv(`<p>Coin Count: </p><script>player.currency</script>`);
-  // coins.style('position', 'absolute');
-  // coins.style('left', '10');
-  // coins.style('top', '200');
 }
 
 function draw() {
