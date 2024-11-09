@@ -5,26 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nurikabe</title>
 
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="libraries/p5.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <script src="../libraries/p5.min.js"></script>
   </head>
 
   <body>
     <div class="coins" style="position: absolute; top: 260px; left: 10px; z-index: 1000;">
         Coins: <span id="coinCount">0</span>
     </div>
-    <script src="player.js"></script> <!-- Ensure player.js is included -->
-		<script src="sketch.js"></script> <!-- Ensure sketch.js is included -->
+    <script src="../player.js"></script> <!-- Ensure player.js is included -->
+		<script src="../sketch.js"></script> <!-- Ensure sketch.js is included -->
 		<script>	
 			// Call the function to initialize the coin count display
 			player.updateCoinCount();
 		</script>
 		<script src="nurikabe.js"></script>
-    <button onclick="window.location.href='index.html'" style="position: absolute; top: 10px; left: 10px; z-index: 1000;">Back to Game</button>
+    <button onclick="window.location.href='../index.html'" style="position: absolute; top: 10px; left: 10px; z-index: 1000;">Back to Game</button>
   </body>
   <style>
       body{
-      background-image: url('./assets/harbor.png');
+      background-image: url('../assets/harbor.png');
       background-size: cover;
       background-repeat: no-repeat; 
     }
