@@ -1,4 +1,4 @@
-let rows = 7; let cols = 7;
+let rows = 11; let cols = 11;
 let square_size = 50; //length and height of each square
 let square_states = 2; //number of color states each square can have
 let puzzles = []; //will store the puzzle starting states and solution states
@@ -19,7 +19,7 @@ let hintSquares = []; let cantBeHint = [];
 
 function preload() {
   console.log("Attempting to load puzzles");
-  puzzles = loadJSON('nurikabePuzzlesEasy.json', () => {
+  puzzles = loadJSON('nurikabePuzzlesHard.json', () => {
     console.log("Puzzles loaded successfully");
   }, () => {
     console.log("Failed to load puzzles");
@@ -212,8 +212,10 @@ function generateStartingColors(puzzle) {
   for (let i = 0; i < puzzle.length; ++i) {
     const char = puzzle[i];
     if (char !== '.' && char !== ' ') { // Only process numbers
-      const key = parseInt(char); // Convert character to integer
-      cantClickMap.set(i, key);
+      const key = parseInt(char, 16); // Convert character to integer using base 16
+      if (!isNaN(key)) { // Ensure char was a valid hex digit
+        cantClickMap.set(i, key);
+      }
     }
   }
   return cantClickMap;
