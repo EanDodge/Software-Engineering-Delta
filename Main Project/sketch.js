@@ -31,12 +31,8 @@ let projectileFrameCount = 0;
  let stormImage;
  let minionImage;
 
- //music stuff
+ //background music
  let backgroundMusic;
- let initialVolume = 0;  // Start volume at zero
- let targetVolume = 0.5; // Desired volume after fade-in
- let fadeDuration = 3000; // Duration of fade-in in milliseconds
-
 
  function preload() {
      player.playerImage = loadImage('./assets/shiplvl1Top.png');
@@ -75,16 +71,17 @@ function setup() {
 	let island = new GameObject(mapXSize, mapYSize);
 	gameObjects.push(island);
 
-	// Check localStorage if music was playing before reload
-    let musicWasPlaying = localStorage.getItem("musicPlaying") === "true";
+	loadMusic();
+}
 
-    if (backgroundMusic) {
-        backgroundMusic.setVolume(initialVolume); // Start music at zero volume
-        backgroundMusic.loop();  // Play music in a loop
-
-        // Fade in to target volume over fadeDuration
-        backgroundMusic.setVolume(targetVolume, fadeDuration / 1000); 
-    }
+function loadMusic() {
+	userStartAudio(); //music starts playing when user interacts with browser
+    backgroundMusic.setVolume(0);
+	backgroundMusic.play();
+    backgroundMusic.loop();
+    
+    // Fade in to target volume of 1 over 3 seconds
+    backgroundMusic.setVolume(1, 3, 0.25);
 }
 
 function draw() {
