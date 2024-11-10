@@ -1,7 +1,7 @@
 const mapXSize = 500;
-const mapYSize = 1000;
+const mapYSize = 500;
 
-let player = new Player(mapXSize/2, mapYSize - 100);
+let player = new Player(mapXSize / 2, mapYSize / 2);
 
 let highestLevelBeat = parseInt(localStorage.getItem("highestLevelBeat")) || 0;
 //change once get bosses in
@@ -19,6 +19,8 @@ let frameCount = 0;
 
 let enemyHealth = 3;
 
+let windAngle = Math.PI;
+
 // frame counts for each use case because if not reset 
 // % can return true because frame count isnt back to 0
 let enemyFrameCount = 0;
@@ -31,8 +33,6 @@ let projectileFrameCount = 0;
  let stormImage;
  let minionImage;
 
- //background music
- let backgroundMusic;
 
  function preload() {
      player.playerImage = loadImage('./assets/shiplvl1Top.png');
@@ -41,7 +41,7 @@ let projectileFrameCount = 0;
 	 enemyImage = loadImage('./assets/shiplvl2Top.png');
 	 stormImage = loadImage('./assets/stormWater.png')
 	 minionImage = loadImage('./assets/kraken.png');
-	 backgroundMusic = loadSound('./music/PirateLoop.wav');
+
  }
  
 function setup() {
@@ -51,7 +51,7 @@ function setup() {
 
 	let clearStorageButton = createButton("Clear Storage");
 	clearStorageButton.position(0, 20);
-	clearStorageButton.mousePressed(() => { localStorage.clear(); backgroundMusic.stop(); location.reload(); });
+	clearStorageButton.mousePressed(() => { localStorage.clear(); location.reload(); });
 
 	let incrementLevelButton = createButton("Level 20");
 	incrementLevelButton.position(0, 40);
@@ -66,22 +66,10 @@ function setup() {
 	//sets the standard frame rate to 45fps
 	frameRate(45);
 
-	goal = new GameObject(mapXSize / 2, 100);
+	//goal = new GameObject(mapXSize / 2, 100);
 
 	let island = new GameObject(mapXSize, mapYSize);
-	gameObjects.push(island);
-
-	loadMusic();
-}
-
-function loadMusic() {
-	userStartAudio(); //music starts playing when user interacts with browser
-    backgroundMusic.setVolume(0);
-	backgroundMusic.play();
-    backgroundMusic.loop();
-    
-    // Fade in to target volume of 1 over 3 seconds
-    backgroundMusic.setVolume(1, 3, 0.25);
+	//gameObjects.push(island);
 }
 
 function draw() {
@@ -96,11 +84,19 @@ function draw() {
 	line(0, 0, mapXSize, 0);
 	stroke(0, 0, 0);
 
+
+	push();
+	fill(255, 255, 255);
+	translate(player.x - 425, player.y - 250);
+	rotate(-windAngle);
+	triangle(-25, 25, 0, -25, 25, 25);
+	pop();
+
 	//enemy generation based on level, can adjust for later
 	let enemySpawnTimer = 250 - selectedLevel * 10;
 	if (enemyFrameCount % enemySpawnTimer === 0) {
 		let enemy = new Enemy(Math.random() * mapXSize, player.y - 350, enemyImage);
-		enemies.push(enemy);
+		//enemies.push(enemy);
 		enemyFrameCount = 0;
 	}
 
@@ -119,6 +115,7 @@ function draw() {
 	
 
 	player.drawPlayer();
+	player.drawRudderAndSails();
 	player.movePlayer();
 	player.checkCollisionEnemies(enemies);
 
@@ -127,8 +124,8 @@ function draw() {
 		window.location.href = 'islandIndex.html'; // Navigate to upgrade island
 	}
 
-	goal.drawObject(stormImage);
-	goal.checkGoalCollision(player, selectedLevel);
+	//goal.drawObject(stormImage);
+	//goal.checkGoalCollision(player, selectedLevel);
 
 
 	if (projectileFrameCount % 30 === 0) {
