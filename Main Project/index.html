@@ -24,12 +24,15 @@
 		<div id="health-bar"></div>
 	</div>
 	<div class = "coins">Dabloons: <span id = "coinCount"></span></div>
+  <div id="sailAngleDisplay">Sail Angle: 0</div>
+  <div id="angleDisplay">Angle: 0</div>
   <script src="sketch.js"></script>
   <script>
 	// Initial update to display the starting currency
 	document.addEventListener('DOMContentLoaded', function() {
 		player.updateHealthBar();
 		player.updateCoinCount();
+    player.updateAnglesDisplay();
 		
 });
   </script>
@@ -37,6 +40,16 @@
 <style>
   body{
   .coins{
+    color: white;
+    font-family: Georgia, serif;
+    font-size: 1.5em;
+  }
+  .sailAngleDisplay{
+    color: white;
+    font-family: Georgia, serif;
+    font-size: 1.5em;
+  }
+  .angleDisplay{
     color: white;
     font-family: Georgia, serif;
     font-size: 1.5em;

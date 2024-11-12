@@ -32,7 +32,7 @@ class Player {
       this.cannonDamage = parseInt(localStorage.getItem('cannons')) || 1;
         this.inked = false;
         this.rudderAngle = 0;
-        this.sailAngle = 0;
+        this.sailAngle =  Math.PI ;
       
 
     }
@@ -134,8 +134,24 @@ class Player {
             this.angle = this.angle + Math.PI * 2;
         }
 
+      
+
         this.rudderAngle = Math.min(Math.max(this.rudderAngle + this.turningSpeed * turn / 2, -Math.PI / 4), Math.PI / 4);
-        this.sailAngle = Math.min(Math.max(this.sailAngle + this.turningSpeed * sailTurn, this.angle + Math.PI / 2), this.angle + Math.PI * 3 / 2);
+        //this.sailAngle = Math.min(Math.max(this.sailAngle + this.turningSpeed * sailTurn, this.angle + Math.PI / 2), this.angle + Math.PI * 3 / 2);
+        // this is what sets the sail angle. It does not allow the sail to go past the front of the boat
+        // Normalize the sailAngle to be within [0, 2 * Math.PI)
+        this.sailAngle = (this.sailAngle + Math.PI * 2) % (Math.PI * 2);
+        let newSailAngle = this.sailAngle + this.turningSpeed * sailTurn;
+        newSailAngle = (newSailAngle + Math.PI * 2) % (Math.PI * 2);
+
+        if (this.validSailAnglePortside() && this.validSailAngleStarboard()) {
+            this.sailAngle = newSailAngle;
+            
+        } else if (!this.validSailAnglePortside()) {
+            this.sailAngle += 0.01;
+        } else if(!this.validSailAngleStarboard()) {
+            this.sailAngle -= 0.01;
+        }
         let a = this.sailAngle;
         let b = this.angle;
         let c = (a - b) - Math.PI / 2;
@@ -143,26 +159,26 @@ class Player {
 
         let windCurrent = 1;
         if (this.sailAngle <= Math.PI) {
-            console.log("1");
+            //console.log("1");
             windCurrent = (Math.PI - this.sailAngle) / (Math.PI / 2);
         } else if (this.sailAngle <= Math.PI * 3 / 2) {
-            console.log("2");
+            //console.log("2");
             windCurrent = (this.sailAngle - Math.PI) / (Math.PI / 2);
         } else if (this.sailAngle <= Math.PI * 2) {
-            console.log("3");
+            //console.log("3");
             windCurrent = (Math.PI * 2 - this.sailAngle) / (Math.PI / 2);
         } else if (this.sailAngle <= Math.PI * 5 / 2) {
-            console.log("4");
+            //console.log("4");
             windCurrent = (this.sailAngle - Math.PI * 2) / (Math.PI / 2);
         } else if (this.sailAngle <= Math.PI * 3) {
-            console.log("5");
+            //console.log("5");
             windCurrent = (Math.PI * 3 - this.sailAngle) / (Math.PI / 2);
         } else if (this.sailAngle <= Math.PI * 7 / 2) {
-            console.log("6");
+           // console.log("6");
             windCurrent = (this.sailAngle - Math.PI * 3) / (Math.PI / 2);
         }
         
-        console.log(windCurrent);
+        //console.log(windCurrent);
 
 
         let magnitude = windCurrent * Math.sin(theta);
@@ -170,14 +186,14 @@ class Player {
         let y = magnitude * Math.cos(b);
 
 
-        ///*
+        /*
         console.log("a: " + a);
         console.log("b: " + b);
         console.log("c: " + c);
         console.log("theta: " + theta);
         console.log("magnitude: " + magnitude);
         console.log("x: " + x);
-        console.log("y: " + y);//*/
+        console.log("y: " + y);*/
 
 
 
@@ -215,6 +231,8 @@ class Player {
             this.x = futureX;
         if (futureY <= mapYSize - this.size / 2 && futureY >= 0 + this.size / 2)
             this.y = futureY;
+
+        this.updateAnglesDisplay();
     }
 
     getMovementOfPlayer() {
@@ -683,6 +701,40 @@ class Player {
             window.location.href = 'gameover.html'; // Navigate to gameover.html
         }
     }
+
+    updateAnglesDisplay() {
+        document.getElementById('sailAngleDisplay').innerText = `Sail Angle: ${this.sailAngle.toFixed(2)}`;
+        document.getElementById('angleDisplay').innerText = `Angle: ${this.angle.toFixed(2)}`;
+    }
+
+    validSailAngle() {
+        //return ((this.sailAngle <= (this.angle - Math.PI * 3/2) % Math.Pi * 2 && this.sailAngle >= ((this.angle - Math.PI / 2) % Math.Pi * 2)));
+        let frontOfBoatAngleLeft = (this.angle - Math.PI * 3/2);
+        console.log(`boat angle left: ${frontOfBoatAngleLeft}`);
+        let frontOfBoatAngleRight = (this.angle - Math.PI / 2);
+        console.log(`boat angle right: ${frontOfBoatAngleRight}`);
+        if (this.sailAngle > frontOfBoatAngleLeft && this.sailAngle < frontOfBoatAngleRight) {
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
+
+    validSailAnglePortside() {
+        let portsideAngle = (this.angle - Math.PI * 3/2);
+        portsideAngle = (portsideAngle + Math.PI * 2) % (Math.PI * 2);
+        console.log(`portside angle: ${portsideAngle}`);
+        return this.sailAngle > portsideAngle;
+        }
+
+    validSailAngleStarboard() {
+        let starboardAngle = (this.angle - Math.PI / 2);
+        starboardAngle = (starboardAngle + Math.PI * 2) % (Math.PI * 2);
+        console.log(`starboard angle: ${starboardAngle}`);
+        return this.sailAngle < starboardAngle;
+    }
+
 }
 
 function keyPressed() {
@@ -693,6 +745,7 @@ function keyPressed() {
     }
     if (key == 'a') {
         turn += 1;
+        sailTurn += 1;
 		
     }
     if (key == 's') {
@@ -702,6 +755,7 @@ function keyPressed() {
     }
     if (key == 'd') {
         turn -= 1;
+        sailTurn -= 1;
     }
     if (key == 'r'){
         anchor = true;
@@ -716,6 +770,7 @@ function keyReleased() {
     }
     if (key == 'a') {
         turn -= 1;
+        sailTurn -= 1;
     }
     if (key == 's') {
 		sailTurn += 1;
@@ -723,6 +778,7 @@ function keyReleased() {
     }
     if (key == 'd') {
         turn += 1;
+        sailTurn += 1;
     }
 }
 
