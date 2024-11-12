@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nurikabe</title>
+
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <script src="../libraries/p5.min.js"></script>
+  </head>
+
+  <body>
+    <div class="coins" style="position: absolute; top: 260px; left: 10px; z-index: 1000;">
+        Coins: <span id="coinCount">0</span>
+    </div>
+    <script src="../player.js"></script> <!-- Ensure player.js is included -->
+		<script src="../sketch.js"></script> <!-- Ensure sketch.js is included -->
+		<script>	
+			// Call the function to initialize the coin count display
+			player.updateCoinCount();
+		</script>
+		<script src="nurikabe.js"></script>
+    <button onclick="window.location.href='../index.html'" style="position: absolute; top: 10px; left: 10px; z-index: 1000;">Back to Game</button>
+  </body>
+  <style>
+      body{
+      background-image: url('../assets/harbor.png');
+      background-size: cover;
+      background-repeat: no-repeat; 
+    }
+    button { 
+      background-color: slategray;
+      color: black;
+      text-align: center;
+      font-size: 16px;
+      font-family: monospace;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-block;
+      border: 2px solid lightgray;
+      border-radius: 10px; /*curved corners*/
+      padding: 10px;
+      transition-duration: 0.2s;
+    }
+    button:hover {
+      color: rgb(112, 199, 233);
+      background-color: rgb(130, 148, 168);
+      border: 2px solid gray;
+    }
+
+    h2{font-family: monospace;}
+    ul{font-family: monospace;}
+  </style>
+</html>
