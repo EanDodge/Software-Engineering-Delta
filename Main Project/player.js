@@ -25,11 +25,9 @@ class Player {
         this.hitEnemy = false;
         this.hitIsland = false;
         this.playerImage;
-
-  
-		   this.health = parseInt(localStorage.getItem('playerHealth')) || 10;
-		    this.lastCollisionTime = 0; //Tracks the time of last collision
-      this.cannonDamage = parseInt(localStorage.getItem('cannons')) || 1;
+		this.health = parseInt(localStorage.getItem('playerHealth')) || 10;
+		this.lastCollisionTime = 0; //Tracks the time of last collision
+        this.cannonDamage = parseInt(localStorage.getItem('cannons')) || 1;
         this.inked = false;
         this.rudderAngle = 0;
         this.sailAngle =  Math.PI ;
@@ -158,24 +156,41 @@ class Player {
         let theta = (Math.PI / 2 - c);
 
         let windCurrent = 1;
-        if (this.sailAngle <= Math.PI) {
-            //console.log("1");
-            windCurrent = (Math.PI - this.sailAngle) / (Math.PI / 2);
-        } else if (this.sailAngle <= Math.PI * 3 / 2) {
-            //console.log("2");
-            windCurrent = (this.sailAngle - Math.PI) / (Math.PI / 2);
-        } else if (this.sailAngle <= Math.PI * 2) {
-            //console.log("3");
-            windCurrent = (Math.PI * 2 - this.sailAngle) / (Math.PI / 2);
-        } else if (this.sailAngle <= Math.PI * 5 / 2) {
-            //console.log("4");
-            windCurrent = (this.sailAngle - Math.PI * 2) / (Math.PI / 2);
-        } else if (this.sailAngle <= Math.PI * 3) {
-            //console.log("5");
-            windCurrent = (Math.PI * 3 - this.sailAngle) / (Math.PI / 2);
-        } else if (this.sailAngle <= Math.PI * 7 / 2) {
-           // console.log("6");
-            windCurrent = (this.sailAngle - Math.PI * 3) / (Math.PI / 2);
+        // if (this.sailAngle <= Math.PI) {
+        //     //console.log("1");
+        //     windCurrent = (Math.PI - this.sailAngle) / (Math.PI / 2);
+        // } else if (this.sailAngle <= Math.PI * 3 / 2) {
+        //     //console.log("2");
+        //     windCurrent = (this.sailAngle - Math.PI) / (Math.PI / 2);
+        // } else if (this.sailAngle <= Math.PI * 2) {
+        //     //console.log("3");
+        //     windCurrent = (Math.PI * 2 - this.sailAngle) / (Math.PI / 2);
+        // } else if (this.sailAngle <= Math.PI * 5 / 2) {
+        //     //console.log("4");
+        //     windCurrent = (this.sailAngle - Math.PI * 2) / (Math.PI / 2);
+        // } else if (this.sailAngle <= Math.PI * 3) {
+        //     //console.log("5");
+        //     windCurrent = (Math.PI * 3 - this.sailAngle) / (Math.PI / 2);
+        // } else if (this.sailAngle <= Math.PI * 7 / 2) {
+        //    // console.log("6");
+        //     windCurrent = (this.sailAngle - Math.PI * 3) / (Math.PI / 2);
+        // }
+
+        let relativeWindAngle = Math.abs(this.sailAngle - this.angle) % (Math.PI * 2);
+
+        // Determine the windCurrent based on the point of sail
+        if (relativeWindAngle <= Math.PI / 4 || relativeWindAngle >= Math.PI * 7 / 4) {
+            // Close Haul (within 45 degrees of the wind direction)
+            windCurrent = 0.5; // Slowest speed
+        } else if (relativeWindAngle >= Math.PI * 3 / 4 && relativeWindAngle <= Math.PI * 5 / 4) {
+            // Run (within 45 degrees of directly downwind)
+            windCurrent = 0.8; // Second fastest speed
+        } else if (relativeWindAngle >= Math.PI / 4 && relativeWindAngle <= Math.PI * 3 / 4) {
+            // Beam Reach (perpendicular to the wind)
+            windCurrent = 1.0; // Fastest speed
+        } else if (relativeWindAngle >= Math.PI * 5 / 4 && relativeWindAngle <= Math.PI * 7 / 4) {
+            // Beam Reach (perpendicular to the wind)
+            windCurrent = 1.0; // Fastest speed
         }
         
         //console.log(windCurrent);
