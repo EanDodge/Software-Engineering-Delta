@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sudoku</title>
+
+    <link rel="stylesheet" type="text/css" href="../style.css">
+
+    <script src="../libraries/p5.min.js"></script>
+    <!--<script src="libraries/p5.sound.min.js"></script>-->
+  </head>
+
+  <body>
+    <!--Next Few Lines Define Coin Rewarding [coin count is hidden]-->
+    <div class="coins" style="display: none;">
+      Coins: <span id="coinCount">0</span>
+    </div>
+    
+    <div id="circleContainer">
+      <div id="err1"class="circle"></div>
+      <div id="err2"class="circle"></div>
+      <div id="err3"class="circle"></div>
+      <div id="err4"class="circle"></div>
+      <div id="err5"class="circle"></div>
+    </div>
+    <button id="initButton" style="position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;" onclick="startupToFalse()">Start</button>
+    <button id="helpButton" style="position: absolute; top: 63%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;" onclick="helpToFalse()">Go</button>
+    <div id="buttonContainer" style="display: flex; justify-content: space-evenly; position: absolute; top: 68%; left: 50%; transform: translateX(-50%); z-index: 1000; gap: 80px;">
+      <button id="backToIndexButton" onclick="helpToFalse()">Exit</button>      
+      <button id="completeButton" onclick="autoComplete()">Finish</button>
+      <button id="hintButton" onclick="giveHint()">Hint</button>
+    </div>
+    <button id="finishButton" style="position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;" onclick="window.location.href='../index.html'">Collect Treasure</button>
+    <script src="sudokuPick.js"></script>
+    <script src="sudoku.js"></script>
+  </body>
+  <style>
+    body{
+      background-image: url('../assets/harbor2.png');
+      background-size: cover;
+      background-repeat: no-repeat; 
+    }
+    button { 
+      color: gray; 
+      text-align: center;
+      font-size: 16px;
+      font-family: monospace;
+      border: none;
+      padding: 10px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    button:hover {
+      background-color: lightskyblue;
+      transition: background-color 0.3s ease;
+    }
+    #circleContainer {
+      position: absolute;
+      top: 30%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+    .circle {
+      width: 50px;
+      height: 50px;
+      background-color: white;
+      border-radius: 50%;
+      border: 1.5px solid black;
+      margin: 0 25px;
+      box-shadow: 0px 4px 6px rgba(0, 2, 5, 0.2);
+    }
+  </style>
+</html>
