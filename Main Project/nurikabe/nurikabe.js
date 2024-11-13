@@ -24,6 +24,7 @@ function preload() {
   }, () => {
     console.log("Failed to load puzzles");
   });
+  backgroundMusic = loadSound('../music/PuzzleBop.wav');
 }
 
 function setup() {
@@ -135,6 +136,15 @@ function setup() {
   // coins.style('position', 'absolute');
   // coins.style('left', '10');
   // coins.style('top', '200');
+
+  loadMusic();
+}
+
+function loadMusic() {
+	userStartAudio(); //music starts playing when user interacts with browser
+  backgroundMusic.setVolume(0.5);
+	backgroundMusic.play();
+  backgroundMusic.loop();
 }
 
 function draw() {
