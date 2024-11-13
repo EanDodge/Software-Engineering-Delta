@@ -41,7 +41,7 @@ let projectileFrameCount = 0;
 	 enemyImage = loadImage('./assets/shiplvl2Top.png');
 	 stormImage = loadImage('./assets/stormWater.png')
 	 minionImage = loadImage('./assets/kraken.png');
-
+	 backgroundMusic = loadSound('./music/PirateLoop.wav');
  }
  
 function setup() {
@@ -70,6 +70,17 @@ function setup() {
 
 	let island = new GameObject(mapXSize, mapYSize);
 	//gameObjects.push(island);
+	loadMusic();
+}
+
+function loadMusic() {
+	userStartAudio(); //music starts playing when user interacts with browser
+    backgroundMusic.setVolume(0);
+	backgroundMusic.play();
+    backgroundMusic.loop();
+
+    // Fade in to target volume of 1 over 3 seconds
+    backgroundMusic.setVolume(1, 3, 0.25);
 }
 
 function draw() {
