@@ -21,6 +21,13 @@ let indexForSudoku = giveSudokuIndex();
 let sudoku = sudoku_samples[indexForSudoku];
 let sudoku_solution = sudoku_answers[indexForSudoku];
 
+// Uploads font
+let font, back;
+function preload() {
+  font = loadFont('pirateFont.ttf');
+  back = loadImage('wood.jpg');
+}
+
 function setup() {
     //create a canvas in the center of the screen
     canvas = createCanvas(cols * square_size, rows * square_size);
@@ -61,7 +68,7 @@ function setup() {
     rectMode(CENTER);
 
     background(220); //gray background
-    textFont('Georgia');
+    textFont(font);
 
   }
 
@@ -87,12 +94,12 @@ function setup() {
     textFont('sans-serif');
     //loop through all square position coordinates and color states
     for (i = 0; i < rows * cols; ++i) {
-      if (colorState[i] == 0) fill(255); //0 in colorState = white
+      if (colorState[i] == 0) fill(300); //0 in colorState = white
       if (colorState[i] == 1) fill(40, 100, 600); //1 in colorState = lightblue
       if (colorState[i] == 2) fill(200); //2 in colorState = offWhite
       if (colorState[i] == 3) fill(0, 50, 200); //3 in colorState = darkblue
-      if (colorState[i] == 4) fill(255, 150, 100); //4 in colorState = darkgrey
-      if (colorState[i] == 5) fill(200, 70, 50); //4 in colorState = darkergrey
+      if (colorState[i] == 4) fill(30, 200, 150); //4 in colorState = tealgreen
+      if (colorState[i] == 5) fill(0, 130, 80); //4 in colorState = darktealgreen
       strokeWeight(1);
       rect(xpos[i], ypos[i], sideLength, sideLength); //create square
 
@@ -140,8 +147,8 @@ function setup() {
 
   // Shows intro display graphic
   function initGame() {
-    background(220);
-    fill('black');
+    background(back);
+    fill('cream');
     textSize(50);
     textAlign(CENTER, CENTER);
     text("Sudoku", width/2, height/2);
@@ -171,31 +178,39 @@ function setup() {
 
   // Shows help display graphic
   function helpGame() {
-    background(220);
-    fill('black');
+    background(back);
+    fill('cream');
     textAlign(CENTER, CENTER);
     textSize(50);
     text("Rules", width/2, height/2-150);
-    textSize(30);
+    textSize(15);
     fill(40, 100, 600);
-    text("Blue", width/2-156, height/2-90);
-    fill('black');
-    text("Cell indicates selected.", width/2+37, height/2-90);
+    text("Blue", width/2-150, height/2-70);
+    fill('cream');
+    text("cell indicates selected", width/2+37, height/2-70);
     fill('white');
     backspaceText = "BACKSPACE";
     rectMode(CENTER);
-    rect(width/2-90, height/2-40, textWidth(backspaceText), 30);
+    rect(width/2-90, height/2-20, textWidth(backspaceText), 30);
     fill('black');
-    text(backspaceText, width/2-90, height/2-40);
-    text("to clear cell.", width/2+100, height/2-40);
-    fill('rgb(200, 40, 60)');
-    text("Red", width/2-145, height/2+10);
-    fill('black');
-    text("Text indicates error.", width/2+25, height/2+10);
-    text("Given " + errorNum + " Errors:", width/2-45, height/2+60);
+    textFont('sans-serif');
+    textSize(25);
+    text(backspaceText, width/2-90, height/2-20);
+    textFont(font);
+    textSize(15);
+    fill('cream');
+    text("to clear cell", width/2+100, height/2-20);
+    fill(200, 40, 60);
+    text("Red", width/2-140, height/2+35);
+    fill('cream');
+    text("text indicates error", width/2+25, height/2+35);
+    text("given       errors", width/2-45, height/2+90);
+    textFont('sans-serif');
+    textSize(30);
+    text(errorNum, width/2-52, height/2+90);
     fill('white');
-    ellipse(width/2+100, height/2+60, 50, 50);
-    fill('black');
+    ellipse(width/2+110, height/2+90, 50, 50);
+    fill('cream');
     noLoop();
     document.getElementById('helpButton').style.display = 'block';
   }
@@ -293,7 +308,7 @@ function setup() {
   // Sets text to red if key entered is wrong
   function check_key_entered(i) {
     if (numberState[i] != +sudoku_solution[i]) {
-      fill('rgb(200, 40, 60)');
+      fill(200, 40, 60);
     }
   }
 
@@ -346,11 +361,12 @@ function setup() {
 
   // Displays Won Sudoku screen
   function wonSudoku() {
-    background(220);
-    fill('black');
+    textFont(font);
+    background(back);
+    fill('cream');
     textSize(50);
     textAlign(CENTER, CENTER);
-    text("Complete.", width/2, height/2);
+    text("Complete", width/2, height/2);
     noLoop();
     document.getElementById('err1').style.display = 'none';
     document.getElementById('err2').style.display = 'none';
@@ -368,11 +384,12 @@ function setup() {
 
   // Displays Lost Sudoku screen
   function lostSudoku() {
-    background(220);
-    fill('black');
+    textFont(font);
+    background(back);
+    fill('cream');
     textSize(50);
     textAlign(CENTER, CENTER);
-    text("Lost.", width/2, height/2);
+    text("Lost", width/2, height/2);
     noLoop();
     document.getElementById('err1').style.display = 'none';
     document.getElementById('err2').style.display = 'none';
