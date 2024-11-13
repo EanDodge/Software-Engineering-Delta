@@ -24,6 +24,7 @@ function preload() {
   }, () => {
     console.log("Failed to load puzzles");
   });
+  backgroundMusic = loadSound('../music/PuzzleBop.wav');
 }
 
 function setup() {
@@ -116,6 +117,14 @@ function setup() {
   window.cantClick = generateStartingColors(selectedPuzzle.puzzle); //cantClick = map(square index, value)
   window.solution_colors = generateSolutionColors(selectedPuzzle.solpuz); //solution_colors = array (0 for water, 1 for land, size row * col)
 
+  loadMusic();
+}
+
+function loadMusic() {
+	userStartAudio(); //music starts playing when user interacts with browser
+  backgroundMusic.setVolume(0.5);
+	backgroundMusic.play();
+  backgroundMusic.loop();
 }
 
 function draw() {
