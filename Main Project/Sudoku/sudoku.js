@@ -26,6 +26,7 @@ let font, back;
 function preload() {
   font = loadFont('pirateFont.ttf');
   back = loadImage('wood.jpg');
+  backgroundMusic = loadSound('../music/PuzzleBop.wav');
 }
 
 function setup() {
@@ -70,6 +71,15 @@ function setup() {
     background(220); //gray background
     textFont(font);
 
+    loadMusic();
+
+  }
+
+  function loadMusic() {
+    userStartAudio(); //music starts playing when user interacts with browser
+    backgroundMusic.setVolume(0.5);
+    backgroundMusic.play();
+    backgroundMusic.loop();
   }
 
   //Repositions Canvas upon windowResize
