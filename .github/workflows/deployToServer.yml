@@ -19,14 +19,9 @@ jobs:
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
         with:
-          key: ${{ secrets.id_rsa }}
+          key: ${{ secrets.ID_RSA }}
           name: id_rsa
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
-
-      - name: Get the repo code
-        uses: actions/checkout@v2
-        with: 
-          repository: EanDodge/Software-Engineering-Delta
 
       - name: Ping the server
         run: |
