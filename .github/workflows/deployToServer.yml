@@ -2,7 +2,7 @@ name: Deploy to Cassini Server
  
 on:
   push:
-    branches: [ 'main' ]
+    branches: [ 'sudoku' ]
   workflow_dispatch:
 
 env:
