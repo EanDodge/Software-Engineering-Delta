@@ -26,5 +26,3 @@ jobs:
       - name: Ping the server
         run: |
           $RUN 'ls -la'
-          echo "hello" >hello.txt
-          $COPY hello.txt $TARGET:/tmp
