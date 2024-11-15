@@ -31,3 +31,6 @@ jobs:
           $RUN 'ls -la'
           echo "hello" >hello.txt
           $COPY hello.txt $TARGET:/tmp
+
+      - name: Ping the server2
+        run: ssh -i /home/runner/.ssh/id_rsa pirate@cassini.cs.kent.edu 'ls -la'
