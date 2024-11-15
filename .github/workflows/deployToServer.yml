@@ -22,15 +22,9 @@ jobs:
           key: ${{ secrets.ID_RSA }}
           name: id_rsa
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
-      
-      - name: Set SSH key permissions
-        run: chmod 600 /home/runner/.ssh/id_rsa
 
       - name: Ping the server
         run: |
           $RUN 'ls -la'
           echo "hello" >hello.txt
           $COPY hello.txt $TARGET:/tmp
-
-      - name: Ping the server2
-        run: ssh -i /home/runner/.ssh/id_rsa pirate@cassini.cs.kent.edu 'ls -la'
