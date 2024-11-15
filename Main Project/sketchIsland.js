@@ -5,7 +5,7 @@ let player = new Pirate(355,383);
 
 function preload()  {
     islandImg = loadImage('assets/upgradeislandAlt.png');
-    player.img = loadImage('assets/pirate.png');
+    player.img = loadImage('assets/pirate.gif');
     seaImg = loadImage('assets/sea.png');
 }
 
