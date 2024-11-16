@@ -312,6 +312,7 @@ function draw() {
 	player.movePlayer();
 	player.checkCollisionEnemies(minions);
 	player.checkCollisionProjectiles(inkProjectiles);
+	player.drawRudderAndSails();
 
 	boss.drawBoss();
 	boss.checkCollisionProjectiles(projectiles);
