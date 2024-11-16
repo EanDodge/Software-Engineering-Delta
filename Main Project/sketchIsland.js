@@ -11,20 +11,20 @@ function preload()  {
 
 function setup() {
     createCanvas(displayWidth, displayHeight, WEBGL);
-    cam = createCamera(mapXSize/2, mapYSize/2, 801);
-    cam.setPosition(250, 250, 801); //sets the camera to look at the center of the map
+    cam = createCamera(mapXSize/2, mapYSize/2, 700);
+    cam.setPosition(250, 250, 700); //sets the camera to look at the center of the map
 }
 
 function draw() {
     imageMode(CENTER);
-    image(seaImg, 0, 0);
+    image(seaImg,250 , 250);
     image(islandImg, 230, 250); //draws island image
 
     //draws island collision boxes
 
     player.draw();
     player.move();
-    cam.setPosition(player.x, player.y, 801);
+    cam.setPosition(player.x, player.y, 700);
 }
 
 function mousePressed() {
