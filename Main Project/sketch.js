@@ -21,6 +21,8 @@ let enemyHealth = 3;
 
 let windAngle = Math.PI;
 
+let cameraDistance = 801
+
 // frame counts for each use case because if not reset 
 // % can return true because frame count isnt back to 0
 let enemyFrameCount = 0;
@@ -166,7 +168,7 @@ function draw() {
 
 	//moves cam to centered on player, z=800 default
 	//MUST BE 801 FOR 2d LINES TO RENDER ABOVE IMAGES
-	cam.setPosition(player.x, player.y, 801);
+	cam.setPosition(player.x, player.y, cameraDistance);
 	player.checkPlayerDeath();
 	frameCount++;
 	projectileFrameCount++;
