@@ -14,8 +14,7 @@ class Pirate {
         
         push();
         translate(this.x, this.y);
-        if(this.direction ==='right'){
-            scale(-1,1);
+        if(this.direction === 'right'){
         }
 
         imageMode(CENTER);
@@ -32,14 +31,14 @@ class Pirate {
 
         if (keyIsDown(87)) { yMove = -1; }  //W
         if (keyIsDown(83)) { yMove = 1; }   //s
-        if (keyIsDown(65)) { 
-            xMove = -1;
-            this.setDirection("left");
-         }  //a
-        if (keyIsDown(68)) { 
-            xMove = 1;
-            this.setDirection("right");
-         }   //d
+        if (keyIsDown(65)) {
+             xMove = -1;
+             this.setDirection("left");
+             }  //a
+        if (keyIsDown(68)) {
+             xMove = 1;
+             this.setDirection("right");
+             }   //d
 
         if (xMove != 0 && yMove != 0) {
             futureX = this.x + xMove * this.speed * .7071;
