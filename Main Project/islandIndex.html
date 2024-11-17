@@ -22,10 +22,42 @@
                 text-align: center;
                 display: inline-block;
                 font-size: 16px;
+            }
+    
+        .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);  /* Semi-transparent black */
+        display: none;  /* Hidden initially */
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;  /* Ensure it's on top of other content */
         }
+
+
+        .overlay-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+
+
         canvas{
             display:block;
         }
+
+
         body, html {
             margin: 0;
             padding: 0;
@@ -58,6 +90,16 @@
 
 </head>
 <body>
+<button id="showBarracksOverlayButton">Barracks Upgrades</button>
+<button id="showPierOverlayButton">Pier Upgrades</button>
+<button id="showCampfireOverlayButton">Level Select</button>
+
+<div id="overlay" class="overlay">
+    <div class="overlay-content">
+        <p>This is an overlay content.</p>
+        <button id="closeOverlayBtn">Close Overlay</button>
+    </div>
+</div>
     <script src="sketchIsland.js"></script>
 </body>
 </html>
