@@ -4,10 +4,10 @@
 
 
 class GameObject {
-    constructor(x, y) {
+    constructor(x, y, size) {
         this.x = x;
         this.y = y;
-        this.size = 100;
+        this.size = size;
         this.collision = true;
     }
 
@@ -18,7 +18,7 @@ class GameObject {
         imageMode(CORNER);      //returns the image draw mode to default
     }
 
-    
+
     checkGoalCollision(player, currentLevel) {
         let distance = Math.sqrt((player.x - this.x) * (player.x - this.x)
             + (player.y - this.y) * (player.y - this.y));
@@ -29,7 +29,7 @@ class GameObject {
                 localStorage.setItem("highestLevelBeat", currentLevel.toString());
             }
             //do this last!!!
-            window.location.href = 'upgrade.html';
+            window.location.href = 'bossFight.html';
         }
     }
 }

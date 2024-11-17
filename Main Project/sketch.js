@@ -1,13 +1,15 @@
-const mapXSize = 500;
-const mapYSize = 500;
-
-let player = new Player(mapXSize / 2, mapYSize / 2);
-
 let highestLevelBeat = parseInt(localStorage.getItem("highestLevelBeat")) || 0;
 //change once get bosses in
 let selectedLevel = highestLevelBeat + 1;
 
+const mapXSize = 750;
+const mapYSize = 2000;
+
+let player = new Player(mapXSize / 2, 100);
+
 let enemies = [];
+
+let bombs = [];
 
 let gameObjects = [];
 
@@ -32,6 +34,7 @@ let projectileFrameCount = 0;
  let enemyImage; 
  let stormImage;
  let minionImage;
+ let bombImage;
 
 
  function preload() {
@@ -42,6 +45,7 @@ let projectileFrameCount = 0;
 	 stormImage = loadImage('./assets/stormWater.png')
 	 minionImage = loadImage('./assets/kraken.png');
 	 backgroundMusic = loadSound('./music/PirateLoop.wav');
+	 bombImage = loadImage('./assets/greg.png');
  }
  
 function setup() {
@@ -66,9 +70,24 @@ function setup() {
 	//sets the standard frame rate to 45fps
 	frameRate(45);
 
-	//goal = new GameObject(mapXSize / 2, 100);
+	goal = new GameObject(mapXSize / 2, mapYSize - 100, 100);
 
-	let island = new GameObject(mapXSize, mapYSize);
+	let leftOrRight = true;
+	for (let i = 300; i < mapYSize * 4 / 5; i += 300) {
+		for (let j = 12.5; j < mapXSize * 3 / 4; j += 25) {
+			let bomb;
+			if (leftOrRight) {
+				bomb = new GameObject(j, i, 25);
+			} else {
+				bomb = new GameObject(mapXSize - j, i, 25);
+			}
+			bombs.push(bomb);
+		}
+		leftOrRight = !leftOrRight;
+	}
+
+
+	let island = new GameObject(mapXSize, mapYSize, 100);
 	//gameObjects.push(island);
 	loadMusic();
 }
@@ -104,10 +123,10 @@ function draw() {
 	pop();
 
 	//enemy generation based on level, can adjust for later
-	let enemySpawnTimer = 250 - selectedLevel * 10;
+	let enemySpawnTimer = 250;
 	if (enemyFrameCount % enemySpawnTimer === 0) {
-		let enemy = new Enemy(Math.random() * mapXSize, player.y - 350, enemyImage);
-		//enemies.push(enemy);
+		let enemy = new Enemy(Math.random() * mapXSize, player.y + 350, enemyImage);
+		enemies.push(enemy);
 		enemyFrameCount = 0;
 	}
 
@@ -129,14 +148,15 @@ function draw() {
 	player.drawRudderAndSails();
 	player.movePlayer();
 	player.checkCollisionEnemies(enemies);
+	player.checkCollisionBomb(bombs);
 
 	player.checkCollisionIslands(gameObjects);
 	if (player.hitIsland) {
 		window.location.href = 'islandIndex.html'; // Navigate to upgrade island
 	}
 
-	//goal.drawObject(stormImage);
-	//goal.checkGoalCollision(player, selectedLevel);
+	goal.drawObject(stormImage);
+	goal.checkGoalCollision(player, selectedLevel);
 
 
 	if (projectileFrameCount % 30 === 0) {
@@ -157,6 +177,10 @@ function draw() {
 		if (projectile.outOfRange())
 			projectiles.splice(index, 1);
 
+	});
+
+	bombs.forEach((bomb) => {
+		bomb.drawObject(bombImage);
 	});
 
 
