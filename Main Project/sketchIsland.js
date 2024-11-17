@@ -11,8 +11,7 @@ function preload()  {
 
 function setup() {
     createCanvas(displayWidth, displayHeight, WEBGL);
-    cam = createCamera(mapXSize/2, mapYSize/2, 700);
-    cam.setPosition(250, 250, 700); //sets the camera to look at the center of the map
+    cam = createCamera();
 }
 
 function draw() {
