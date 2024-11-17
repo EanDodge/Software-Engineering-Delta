@@ -5,7 +5,7 @@ class Enemy {
     constructor(x, y, health, enemyImage) {
         this.x = x;
         this.y = y;
-        this.speed = 2;
+        this.speed = 0.5;
         this.size = 75;
         this.collision = true;
         this.angle = 0;  // Angle the enemy is traveling
