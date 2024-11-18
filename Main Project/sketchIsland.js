@@ -7,12 +7,21 @@ function preload()  {
     islandImg = loadImage('assets/upgradeislandAlt.png');
     player.img = loadImage('assets/pirate.gif');
     seaImg = loadImage('assets/sea.png');
+    backgroundMusic = loadSound('music/HomeIslandVibe.wav');
 }
 
 function setup() {
     createCanvas(displayWidth, displayHeight, WEBGL);
     cam = createCamera(mapXSize/2, mapYSize/2, 700);
     cam.setPosition(250, 250, 700); //sets the camera to look at the center of the map
+	loadMusic();
+}
+
+function loadMusic() {
+	userStartAudio(); //music starts playing when user interacts with browser
+    backgroundMusic.setVolume(0.5);
+	backgroundMusic.play();
+    backgroundMusic.loop();
 }
 
 function draw() {
