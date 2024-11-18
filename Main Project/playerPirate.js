@@ -15,7 +15,6 @@ class Pirate {
         push();
         translate(this.x, this.y);
         if(this.direction === 'right'){
-            scale(-1,1);
         }
 
         imageMode(CENTER);
