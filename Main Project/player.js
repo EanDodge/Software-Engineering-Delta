@@ -819,7 +819,7 @@ function keyReleased() {
 //typeof is requred for the player test to run through nodejs and not have to set up browser testing shit
 if (typeof document !== 'undefined') {
     document.addEventListener('DOMContentLoaded', function () {
-        player.updateCoinCount();
+        Player.updateCoinCount();
     });
 }
 

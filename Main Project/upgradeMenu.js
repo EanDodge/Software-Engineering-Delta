@@ -1,5 +1,3 @@
-let coins = 100; // Initial coin count
-
 class Upgrade {
     constructor(name, cost, tierNames) {
         this.name = name;

@@ -66,6 +66,7 @@
     <script src="libraries/p5.sound.min.js"></script>
     <script src="libraries/p5.collide2D.js"></script>
     <script src="playerPirate.js"></script>
+    <script src="player.js"></script>
     <script src="islandObjects.js"></script>
     <script src="upgradeMenu.js"></script>
     
@@ -91,13 +92,13 @@
 
             <div>
                 <h3>Cannon Damage</h3>
-                <p id="cannonsLevel">Tier: 1 - a</p>
+                <p id="cannonsLevel">Tier: 1</p>
                 <button onclick="cannonsUpgrade.upgrade()">Upgrade Cannon Damage</button>
             </div>
 
             <div>
                 <h3>Ammo Capacity</h3>
-                <p id="ammoLevel">Tier: 1 - a</p>
+                <p id="ammoLevel">Tier: 1</p>
                 <button onclick="ammoCapacityUpgrade.upgrade()">Upgrade Cannon Damage</button>
             </div>
         </div>
@@ -113,17 +114,5 @@
     
 </body>
 <script src="sketchIsland.js"></script>
-<script src="player.js"></script>
-<script src="upgradeMenu.js"></script>
-
-<script>
-    //set upgrade values to what they currently are
-    let tier = parseInt(localStorage.getItem('speed')) || 1;
-    document.getElementById('speedLevel').innerText = 'Tier: ' + tier + ' - ' + tierNames['speed'][tier - 1];
-</script>   
-<script>	
-    document.addEventListener('DOMContentLoaded', () => {
-    initializeUpgrades();
-    player.updateCoinCount();
-});
+</html>
 
