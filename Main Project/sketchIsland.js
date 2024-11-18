@@ -4,7 +4,7 @@ const mapXSize = 500;
 const mapYSize = 500;
 
 //create pirate player
-let player = new Pirate(355, 383);
+let pirate = new Pirate(355, 383);
 
 // grab references to overlay elements
 const fireOverlay = document.getElementById('fireOverlay');
@@ -19,7 +19,7 @@ const showPierOverlayBtn = document.getElementById('showPierOverlayButton');
 
 function preload() {
     islandImg = loadImage('assets/upgradeislandAlt.png');
-    player.img = loadImage('assets/pirate.gif');
+    pirate.img = loadImage('assets/pirate.gif');
     seaImg = loadImage('assets/sea.png');
 }
 
@@ -45,6 +45,9 @@ function setup() {
 // Show Overlay Function
 function showOverlay(overlay) {
     overlay.style.display = 'flex';  // Display the overlay (use 'flex' to center content)
+    console.log(player);
+    console.log(typeof player.updateCoinCount);
+    player.updateCoinCount();
 }
 
 // Close Overlay Function
@@ -60,9 +63,9 @@ function draw() {
     image(seaImg, 250, 250);
     image(islandImg, 230, 250); //draws island image
 
-    player.draw();
-    player.move();
-    cam.setPosition(player.x, player.y, 700);
+    pirate.draw();
+    pirate.move();
+    cam.setPosition(pirate.x, pirate.y, 700);
 }
 
 function mousePressed() {

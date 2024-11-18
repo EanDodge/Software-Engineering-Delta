@@ -65,8 +65,9 @@
     <script src="libraries/p5.min.js"></script>
     <script src="libraries/p5.sound.min.js"></script>
     <script src="libraries/p5.collide2D.js"></script>
-    <script src="playerPirate.js"></script>
+    
     <script src="player.js"></script>
+    <script src="playerPirate.js"></script>
     <script src="islandObjects.js"></script>
     <script src="upgradeMenu.js"></script>
     
@@ -87,8 +88,11 @@
 
     <div id="barracksOverlay" class="overlay">
         <div class="overlay-content">
-            <p>Barracks Upgrades</p>
+            <div class="coins">Coins: <span id="coinCount">0</span></div>
+            <p><b>Barracks Upgrades</b></p>
+            
             <button class="closeOverlayBtn">Close</button>
+            
 
             <div>
                 <h3>Cannon Damage</h3>

@@ -659,7 +659,7 @@ class Player {
     updateCoinCount() {
         document.getElementById('coinCount').innerText = this.currency;
         localStorage.setItem('playerCurrency', this.currency); // Store in localStorage
-        // console.log(player.currency);
+         console.log(player.currency);
     }
 
     buyUpgrade(cost) {
@@ -819,7 +819,7 @@ function keyReleased() {
 //typeof is requred for the player test to run through nodejs and not have to set up browser testing shit
 if (typeof document !== 'undefined') {
     document.addEventListener('DOMContentLoaded', function () {
-        Player.updateCoinCount();
+        player.updateCoinCount();
     });
 }
 
