@@ -68,6 +68,17 @@ class CannonsUpgrade extends Upgrade {
 	}
 }
 
+class AmmoCapacityUpgrade extends Upgrade {
+    constructor() {
+        super('AmmoCapacity', [4, 5, 6, 7, 8, 9], ["a", "b", "c", "d", "e", "f"]);
+    }
+
+    applyUpgradeEffect(tier) {
+        // Specific effect for ammo capacity upgrade
+        console.log('Ammo capacity upgraded to tier:', tier);
+    }
+}
+
 class SpeedUpgrade extends Upgrade {
     constructor() {
         super('speed', [3, 4, 5, 6, 7, 8], ["a", "b", "c", "d", "e", "f"]);
@@ -79,16 +90,7 @@ class SpeedUpgrade extends Upgrade {
     }
 }
 
-class AmmoCapacityUpgrade extends Upgrade {
-    constructor() {
-        super('AmmoCapacity', [4, 5, 6, 7, 8, 9], ["a", "b", "c", "d", "e", "f"]);
-    }
 
-    applyUpgradeEffect(tier) {
-        // Specific effect for ammo capacity upgrade
-        console.log('Ammo capacity upgraded to tier:', tier);
-    }
-}
 
 class HintsUpgrade extends Upgrade {
     constructor() {
