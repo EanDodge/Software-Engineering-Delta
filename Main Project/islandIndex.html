@@ -66,11 +66,6 @@
     <script src="libraries/p5.sound.min.js"></script>
     <script src="libraries/p5.collide2D.js"></script>
     
-    <script src="player.js"></script>
-    <script src="playerPirate.js"></script>
-    <script src="islandObjects.js"></script>
-    <script src="upgradeMenu.js"></script>
-    
 </head>
 <body>
     <div class="button-container">
@@ -82,6 +77,7 @@
     <div id="fireOverlay" class="overlay">
         <div class="overlay-content">
             <p>Campfire Upgrades</p>
+            <button onclick="window.location.href='index.html'">Level 1</button>
             <button class="closeOverlayBtn">Close</button>
         </div>
     </div>
@@ -89,6 +85,7 @@
     <div id="barracksOverlay" class="overlay">
         <div class="overlay-content">
             <div class="coins">Coins: <span id="coinCount">0</span></div>
+            <script>pirate.updateCoinCount();</script>
             <p><b>Barracks Upgrades</b></p>
             
             <button class="closeOverlayBtn">Close</button>
@@ -103,7 +100,7 @@
             <div>
                 <h3>Ammo Capacity</h3>
                 <p id="ammoLevel">Tier: 1</p>
-                <button onclick="ammoCapacityUpgrade.upgrade()">Upgrade Cannon Damage</button>
+                <button onclick="ammoCapacityUpgrade.upgrade()">Upgrade Capacity</button>
             </div>
         </div>
     </div>
@@ -114,9 +111,14 @@
             <button class="closeOverlayBtn">Close</button>
         </div>
     </div>
+<!--     <script src="player.js"></script>
+ -->    <!-- <script src="sketch.js"></script> -->
+    <script src="playerPirate.js"></script>
+    <script src="islandObjects.js"></script>
+    <script src="upgradeMenu.js"></script>
+    <script src="sketchIsland.js"></script>
 
-    
 </body>
-<script src="sketchIsland.js"></script>
+
 </html>
 

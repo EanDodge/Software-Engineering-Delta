@@ -8,6 +8,7 @@ class Pirate {
         this.img;
         this.speed = 5;
         this.direction = 'left';
+        this.currency = parseInt(localStorage.getItem('playerCurrency')) || 100; // Retrieve from localStorage or default to 100
     }
 
     draw() {
@@ -64,6 +65,24 @@ class Pirate {
         //returns bool, true if colliding with passed game islandObject
                                 //(rx, ry, rw, rh, cx, cy, diameter)
         return collideRectCircle(islandObj.x, islandObj.y, islandObj.sizeW, islandObj.sizeH, this.x, this.y)
+    }
+
+    updateCoinCount() {
+        document.getElementById('coinCount').innerText = this.currency;
+        localStorage.setItem('playerCurrency', this.currency); // Store in localStorage
+         console.log(pirate.currency);
+    }
+
+    buyUpgrade(cost) {
+        if (pirate.currency >= cost) {
+            pirate.currency -= cost;
+            pirate.updateCoinCount();
+            return true;
+        }
+        else {
+            alert('Not enough coins!');
+            return false;
+        }
     }
 
 }

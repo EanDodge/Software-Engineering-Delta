@@ -45,9 +45,9 @@ function setup() {
 // Show Overlay Function
 function showOverlay(overlay) {
     overlay.style.display = 'flex';  // Display the overlay (use 'flex' to center content)
-    console.log(player);
-    console.log(typeof player.updateCoinCount);
-    player.updateCoinCount();
+    console.log(pirate);
+    console.log(typeof pirate.updateCoinCount());
+    pirate.updateCoinCount();
 }
 
 // Close Overlay Function
