@@ -26,7 +26,7 @@ jobs:
       - name: Get the repo code
         uses: actions/checkout@v2
         with: 
-          repository: EanDodge/Software-Engineering-Delta/Main Project
+          repository: EanDodge/Software-Engineering-Delta
 
       - name: Ping the server
         run: |
@@ -34,5 +34,5 @@ jobs:
 
       - name: Copy code to server
         run: |
-          $COPY tutorial.html $TARGET:/pirate/web
+          $COPY ~/Main Project/tutorial.html $TARGET:/pirate/web
           $RUN 'ls -la /root/web'
