@@ -4,7 +4,7 @@ class Pirate {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.size = 50;
+        this.size = 45;
         this.img;
         this.speed = 5;
         this.direction = 'left';
@@ -21,8 +21,10 @@ class Pirate {
 
         imageMode(CENTER);
         image(this.img, 0, 0, this.size, this.size);
+
         pop();
-        
+        // //debuging hitbox
+        // circle(this.x, this.y, this.size);
     }
 
     move() {
@@ -64,7 +66,7 @@ class Pirate {
     isColliding(islandObj) {
         //returns bool, true if colliding with passed game islandObject
                                 //(rx, ry, rw, rh, cx, cy, diameter)
-        return collideRectCircle(islandObj.x, islandObj.y, islandObj.sizeW, islandObj.sizeH, this.x, this.y)
+        return collideRectCircle(islandObj.x, islandObj.y, islandObj.sizeW, islandObj.sizeH, this.x, this.y, this.size)
     }
 
     updateCoinCount() {
