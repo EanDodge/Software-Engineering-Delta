@@ -68,7 +68,7 @@ class CannonsUpgrade extends Upgrade {
 
 class AmmoCapacityUpgrade extends Upgrade {
     constructor() {
-        super('AmmoCapacity', [4, 5, 6, 7, 8, 9], ["a", "b", "c", "d", "e", "f"]);
+        super('ammo', [4, 5, 6, 7, 8, 9], ["a", "b", "c", "d", "e", "f"]);
     }
 
     applyUpgradeEffect(tier) {
