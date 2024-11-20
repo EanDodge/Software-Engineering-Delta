@@ -23,6 +23,16 @@ jobs:
           name: id_rsa
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
+      - name: Get the repo code
+        uses: actions/checkout@v2
+        with: 
+          repository: EanDodge/Software-Engineering-Delta/Main Project
+
       - name: Ping the server
         run: |
           $RUN 'ls -la'
+
+      - name: Copy code to server
+        run: |
+          $COPY tutorial.html $TARGET:/pirate/web
+          $RUN 'ls -la /root/web'
