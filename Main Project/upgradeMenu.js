@@ -85,6 +85,7 @@ class SpeedUpgrade extends Upgrade {
     applyUpgradeEffect(tier) {
         // Specific effect for speed upgrade
         console.log('Speed upgraded to tier:', tier);
+         localStorage.setItem('speed', tier)
     }
 }
 
@@ -130,3 +131,8 @@ function completeLevel() {
     coins += 999999;
     document.getElementById('coinCount').innerText = coins;
 }
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeUpgrades();
+});

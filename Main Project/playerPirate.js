@@ -70,9 +70,11 @@ class Pirate {
     }
 
     updateCoinCount() {
-        document.getElementById('coinCount').innerText = this.currency;
+        document.getElementById('coinCountBarracks').innerText = this.currency;
+        document.getElementById('coinCountPier').innerText = this.currency;
+
         localStorage.setItem('playerCurrency', this.currency); // Store in localStorage
-         console.log(pirate.currency);
+         console.log("Coin count updated to: ",this.currency);
     }
 
     buyUpgrade(cost) {
