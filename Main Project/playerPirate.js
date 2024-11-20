@@ -7,13 +7,19 @@ class Pirate {
         this.size = 50;
         this.img;
         this.speed = 5;
-        // this.direction = 'left';
+        this.direction = 'left';
     }
 
     draw() {
         
+        push();
+        translate(this.x, this.y);
+        if(this.direction === 'right'){
+        }
+
         imageMode(CENTER);
-        image(this.img, this.x, this.y, this.size, this.size);
+        image(this.img, 0, 0, this.size, this.size);
+        pop();
         
     }
 
@@ -25,8 +31,14 @@ class Pirate {
 
         if (keyIsDown(87)) { yMove = -1; }  //W
         if (keyIsDown(83)) { yMove = 1; }   //s
-        if (keyIsDown(65)) { xMove = -1; }  //a
-        if (keyIsDown(68)) { xMove = 1; }   //d
+        if (keyIsDown(65)) {
+             xMove = -1;
+             this.setDirection("left");
+             }  //a
+        if (keyIsDown(68)) {
+             xMove = 1;
+             this.setDirection("right");
+             }   //d
 
         if (xMove != 0 && yMove != 0) {
             futureX = this.x + xMove * this.speed * .7071;
