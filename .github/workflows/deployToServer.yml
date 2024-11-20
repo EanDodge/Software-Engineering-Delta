@@ -10,7 +10,7 @@ env:
   USER: pirate
   TARGET: pirate@cassini.cs.kent.edu
   RUN: ssh -o LogLevel=ERROR -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no pirate@cassini.cs.kent.edu
-  SSH_OPTIONS: scp -o LogLevel=ERROR -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+  COPY: scp -o LogLevel=ERROR -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
 
 jobs:
   deploy_to_server:
