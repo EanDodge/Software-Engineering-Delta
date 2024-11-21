@@ -31,6 +31,7 @@ function preload() {
     islandImg = loadImage('assets/upgradeislandAlt.png');
     pirate.img = loadImage('assets/pirate.gif');
     seaImg = loadImage('assets/sea.png');
+    backgroundMusic = loadSound('music/HomeIslandVibe.wav');
 }
 
 //called once program starts
@@ -87,6 +88,14 @@ async function determineOverlay(collider) {
             return false;
         }
     }
+	loadMusic();
+}
+
+function loadMusic() {
+	userStartAudio(); //music starts playing when user interacts with browser
+    backgroundMusic.setVolume(0.5);
+	backgroundMusic.play();
+    backgroundMusic.loop();
 }
 
 function draw() {
