@@ -34,5 +34,5 @@ jobs:
 
       - name: Copy code to server
         run: |
-          $COPY "./Main Project/tutorial.html" $TARGET:~/web
+          $COPY -r "./Main Project/" $TARGET:~/web
           $RUN 'ls -la ~/web'
