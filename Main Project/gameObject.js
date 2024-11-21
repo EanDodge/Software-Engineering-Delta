@@ -34,4 +34,4 @@ class GameObject {
     }
 }
 
-module.exports = GameObject;
+//module.exports = GameObject;

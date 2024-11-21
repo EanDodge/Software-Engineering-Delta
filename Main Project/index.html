@@ -1,63 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Game</title>
-
-  <link rel="stylesheet" type="text/css" href="style.css">
-
-  <script src="libraries/p5.min.js"></script>
-  <script src="libraries/p5.sound.min.js"></script>
-  <script src="libraries/p5.collide2D.js"></script>
-  <script src="gamepad.js"></script>
-  <script src="player.js"></script>
-  <script src="gameObject.js"></script>
-  <script src="enemy.js"></script>
-  <script src="projectile.js"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweet Pirate of Mine</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('./assets/title.png'); 
+            background-size: cover;
+            background-position: center;
+            font-family: Georgia, serif;
+        }
+        .main-container {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        button {
+            display: block;
+            width: 200px;
+            padding: 15px;
+            margin: 10px auto;
+            background-color: #060503;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: Georgia, serif;
+        }
+        button:hover {
+            background-color: #2c1f04;
+        }
+    </style>
 </head>
-
 <body>
-	<div id="health-bar-container">
-		<div id="health-bar"></div>
-	</div>
-	<div class = "coins">Dabloons: <span id = "coinCount"></span></div>
-  <div id="sailAngleDisplay">Sail Angle: 0</div>
-  <div id="angleDisplay">Angle: 0</div>
-  <script src="sketch.js"></script>
-  <script>
-	// Initial update to display the starting currency
-	document.addEventListener('DOMContentLoaded', function() {
-		player.updateHealthBar();
-		player.updateCoinCount();
-    player.updateAnglesDisplay();
-		
-});
-  </script>
-</body>
-<style>
-  body{
-  .coins{
-    color: white;
-    font-family: Georgia, serif;
-    font-size: 1.5em;
-  }
-  .sailAngleDisplay{
-    color: white;
-    font-family: Georgia, serif;
-    font-size: 1.5em;
-  }
-  .angleDisplay{
-    color: white;
-    font-family: Georgia, serif;
-    font-size: 1.5em;
-  }
-  background-image: url('./assets/sea.png');
-  background-size: cover;
-  background-repeat: no-repeat; 
-}
-</style>
 
+    <div class="main-container">
+        <h1>Sweet Pirate of Mine</h1>
+        <button onclick="location.href='tutorial.html'">Tutorial</button>
+        <button onclick="location.href='index.html'">Start Game</button>
+        <button onclick="location.href='leaderboard.html'">Leaderboard</button>
+    </div>
+
+</body>
 </html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Game</title>
+
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+  <!--Necessary for p5.sound to work in http server-->
+  <script src="https://unpkg.com/@free-side/audioworklet-polyfill/dist/audioworklet-polyfill.js" type="text/javascript"></script>
+
+  <script src="libraries/p5.min.js"></script>
+  <script src="libraries/p5.sound.min.js"></script>
+  <script src="libraries/p5.collide2D.js"></script>
+  <script src="gamepad.js"></script>
+  <script src="player.js"></script>
+  <script src="gameObject.js"></script>
+  <script src="enemy.js"></script>
+  <script src="projectile.js"></script>
+
+</head>
+
+<body>
+	<div id="health-bar-container">
+		<div id="health-bar"></div>
+	</div>
+	<div class = "coins">Dabloons: <span id = "coinCount"></span></div>
+  <div id="sailAngleDisplay">Sail Angle: 0</div>
+  <div id="angleDisplay">Angle: 0</div>
+  <script src="sketch.js"></script>
+  <script>
+	// Initial update to display the starting currency
+	document.addEventListener('DOMContentLoaded', function() {
+		player.updateHealthBar();
+		player.updateCoinCount();
+    player.updateAnglesDisplay();
+		
+});
+  </script>
+</body>
+<style>
+  body{
+  .coins{
+    color: white;
+    font-family: Georgia, serif;
+    font-size: 1.5em;
+  }
+  .sailAngleDisplay{
+    color: white;
+    font-family: Georgia, serif;
+    font-size: 1.5em;
+  }
+  .angleDisplay{
+    color: white;
+    font-family: Georgia, serif;
+    font-size: 1.5em;
+  }
+  background-image: url('./assets/sea.png');
+  background-size: cover;
+  background-repeat: no-repeat; 
+}
+</style>
+
+</html>
