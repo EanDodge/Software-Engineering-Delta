@@ -385,7 +385,7 @@ async function winnerText() {
 
   player.gainCurrency(coins_earned); //give player their currency
   player.updateCoinCount();
-  window.location.href = "../index.html"; //send user back to their ship
+  window.location.href = "../islandIndex.html"; //send user back to upgrade island
 }
 
 //to fade out element

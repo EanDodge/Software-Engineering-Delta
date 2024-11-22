@@ -6,6 +6,9 @@
     <title>Nurikabe</title>
 
     <link rel="stylesheet" type="text/css" href="../style.css">
+
+    <!--Necessary for p5.sound to work in http server-->
+    <script src="https://unpkg.com/@free-side/audioworklet-polyfill/dist/audioworklet-polyfill.js" type="text/javascript"></script>
     <script src="../libraries/p5.min.js"></script>
     <script src="../libraries/p5.sound.min.js"></script>
   </head>
@@ -21,7 +24,7 @@
 			player.updateCoinCount();
 		</script>
 		<script src="nurikabeEasy.js"></script>
-    <button onclick="window.location.href='../index.html'" style="position: absolute; top: 10px; left: 10px; z-index: 1000;">Back to Game</button>
+    <button onclick="window.location.href='../islandIndex.html'" style="position: absolute; top: 10px; left: 10px; z-index: 1000;">Back to Game</button>
   </body>
   <style>
       body{
