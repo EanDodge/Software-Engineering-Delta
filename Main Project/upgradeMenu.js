@@ -1,5 +1,3 @@
-let coins = 100; // Initial coin count
-
 class Upgrade {
     constructor(name, cost, tierNames) {
         this.name = name;
@@ -12,10 +10,10 @@ class Upgrade {
         if (this.value < 6) { // Maximum tier is 6
             let cost = this.cost[this.value - 1];
             console.log(cost);
-            if (player.buyUpgrade(cost)) {
+            if (pirate.buyUpgrade(cost)) {
                 this.value++;
                 localStorage.setItem(this.name, this.value);
-                player.updateCoinCount();
+                pirate.updateCoinCount();
                 let tier = this.value;
                 document.getElementById(this.name + 'Level').innerText = 'Tier: ' + tier + ' - ' + this.tierNames[tier - 1];
                 this.applyUpgradeEffect(tier);
@@ -52,7 +50,7 @@ class CannonsUpgrade extends Upgrade {
         // Specific effect for cannons upgrade
 		console.log('Cannons upgraded to tier:', tier);
         this.increaseProjectileDamage(tier);
-		console.log('Cannon damage:', player.cannonDamage);
+		console.log('Cannon damage:', tier);
     }
 
 	increaseProjectileDamage(tier) {
@@ -62,10 +60,21 @@ class CannonsUpgrade extends Upgrade {
 		const newDamage = baseDamage + (tier - 1) * damageIncreasePerTier;
 		
 		// Update the projectile damage
-		player.cannonDamage = newDamage;
-		localStorage.setItem('cannonDamage', newDamage); // Save to localStorage
+		//player.cannonDamage = newDamage;
+		localStorage.setItem('cannons', newDamage); // Save to localStorage
 		console.log('New projectile damage:', newDamage);
 	}
+}
+
+class AmmoCapacityUpgrade extends Upgrade {
+    constructor() {
+        super('ammo', [4, 5, 6, 7, 8, 9], ["a", "b", "c", "d", "e", "f"]);
+    }
+
+    applyUpgradeEffect(tier) {
+        // Specific effect for ammo capacity upgrade
+        console.log('Ammo capacity upgraded to tier:', tier);
+    }
 }
 
 class SpeedUpgrade extends Upgrade {
@@ -76,19 +85,11 @@ class SpeedUpgrade extends Upgrade {
     applyUpgradeEffect(tier) {
         // Specific effect for speed upgrade
         console.log('Speed upgraded to tier:', tier);
+         localStorage.setItem('speed', tier)
     }
 }
 
-class AmmoCapacityUpgrade extends Upgrade {
-    constructor() {
-        super('AmmoCapacity', [4, 5, 6, 7, 8, 9], ["a", "b", "c", "d", "e", "f"]);
-    }
 
-    applyUpgradeEffect(tier) {
-        // Specific effect for ammo capacity upgrade
-        console.log('Ammo capacity upgraded to tier:', tier);
-    }
-}
 
 class HintsUpgrade extends Upgrade {
     constructor() {
@@ -130,3 +131,8 @@ function completeLevel() {
     coins += 999999;
     document.getElementById('coinCount').innerText = coins;
 }
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeUpgrades();
+});

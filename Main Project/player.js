@@ -659,7 +659,7 @@ class Player {
     updateCoinCount() {
         document.getElementById('coinCount').innerText = this.currency;
         localStorage.setItem('playerCurrency', this.currency); // Store in localStorage
-        // console.log(player.currency);
+         console.log(player.currency);
     }
 
     buyUpgrade(cost) {

@@ -1,13 +1,14 @@
-
+// import Player from './player.js';
 
 class Pirate {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.size = 50;
+        this.size = 45;
         this.img;
         this.speed = 5;
         this.direction = 'left';
+        this.currency = parseInt(localStorage.getItem('playerCurrency')) || 100; // Retrieve from localStorage or default to 100
     }
 
     draw() {
@@ -15,12 +16,15 @@ class Pirate {
         push();
         translate(this.x, this.y);
         if(this.direction === 'right'){
+            scale(-1,1);
         }
 
         imageMode(CENTER);
         image(this.img, 0, 0, this.size, this.size);
+
         pop();
-        
+        // //debuging hitbox
+        // circle(this.x, this.y, this.size);
     }
 
     move() {
@@ -62,11 +66,29 @@ class Pirate {
     isColliding(islandObj) {
         //returns bool, true if colliding with passed game islandObject
                                 //(rx, ry, rw, rh, cx, cy, diameter)
-        return collideRectCircle(islandObj.x, islandObj.y, islandObj.sizeW, islandObj.sizeH, this.x, this.y)
+        return collideRectCircle(islandObj.x, islandObj.y, islandObj.sizeW, islandObj.sizeH, this.x, this.y, this.size)
+    }
+
+    updateCoinCount() {
+        document.getElementById('coinCountBarracks').innerText = this.currency;
+        document.getElementById('coinCountPier').innerText = this.currency;
+
+        localStorage.setItem('playerCurrency', this.currency); // Store in localStorage
+         console.log("Coin count updated to: ",this.currency);
+    }
+
+    buyUpgrade(cost) {
+        if (pirate.currency >= cost) {
+            pirate.currency -= cost;
+            pirate.updateCoinCount();
+            return true;
+        }
+        else {
+            alert('Not enough coins!');
+            return false;
+        }
     }
 
 }
 
-
-//make pirate class available globally
-// window.Pirate = Pirate;
+window.Pirate = Pirate;
