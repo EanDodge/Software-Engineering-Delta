@@ -76,9 +76,10 @@ function setup() {
   rulesPopup.style('background-color', '#fff');
   rulesPopup.style('border', '1px solid #000');
   rulesPopup.style('position', 'absolute');
-  rulesPopup.style('left', '77%'); //put rules popup to the right of the puzzle
+  rulesPopup.style('left', '50%');
   rulesPopup.style('top', '50%');
   rulesPopup.style('transform', 'translate(-50%, -50%)');
+  rulesPopup.style('margin-left', '450px'); //put rules popup to the right of the puzzle
   rulesPopup.style('display', 'none'); // Hide the pop-up initially
 
   // Create a button to show rules pop-up
