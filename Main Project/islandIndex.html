@@ -6,58 +6,136 @@
     <title>Upgrade Island</title>
     <style>
 
-        .button-container{
-                
-                position: absolute;
-                top: 10px;
-                left: 10px;
-                z-index: 10;
-                
-            }
-        .button-container button {
-                background-color: hotpink;
-                border: none;
-                color: white;
-                padding: 15px 32px;
-                text-align: center;
-                display: inline-block;
-                font-size: 16px;
-        }
-        canvas{
-            display:block;
-        }
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
             width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             overflow: hidden;
-            background-image: url('assets/sea.png');
+            position: relative;
         }
 
-        /* #button{
-            position: absolute;
-            left: 70%;
-            width: 1200;
-            height: 700;
+        .button-container {
+            position: fixed; /* Use fixed positioning */
+            top: 10px;
+            left: 10px;
+            z-index: 10;
         }
-        .button-container{
-            position: relative;
-            
-        } */
+
+        .button-container button {
+            background-color: grey;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            margin: 5px; /* Add margin to space out the buttons */
+            cursor: pointer;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);  /* Semi-transparent black */
+            display: none;  /* Hidden initially */
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;  /* Ensure it's on top of other content */
+        }
+
+        .overlay-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
     </style>
+
+    <!--Necessary for p5.sound to work in http server-->
+    <script src="https://unpkg.com/@free-side/audioworklet-polyfill/dist/audioworklet-polyfill.js" type="text/javascript"></script>
 
     <script src="libraries/p5.min.js"></script>
     <script src="libraries/p5.sound.min.js"></script>
     <script src="libraries/p5.collide2D.js"></script>
     <script src="playerPirate.js"></script>
-    <script src="islandObjects.js"></script>
-
+    
 </head>
 <body>
+
+    <div id="fireOverlay" class="overlay">
+        <div class="overlay-content">
+            <p>Level Select</p>
+            <button onclick="window.location.href='level1.html'">Level 1</button>
+            <button class="closeOverlayBtn">Close</button>
+        </div>
+    </div>
+
+    <div id="barracksOverlay" class="overlay">
+        <div class="overlay-content">
+            <div class="coins">Coins: <span id="coinCountBarracks">0</span></div>
+            <script>pirate.updateCoinCount();</script>
+            <p><b>Barracks Upgrades</b></p>
+            
+            <button class="closeOverlayBtn">Close</button>
+            
+
+            <div>
+                <h3>Cannon Damage</h3>
+                <p id="cannonsLevel">Tier: 1</p>
+                <button onclick="cannonsUpgrade.upgrade()">Upgrade Cannon Damage</button>
+            </div>
+
+            <div>
+                <h3>Ammo Capacity</h3>
+                <p id="ammoLevel">Tier: 1</p>
+                <button onclick="ammoCapacityUpgrade.upgrade()">Upgrade Capacity</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="pierOverlay" class="overlay">
+        <div class="overlay-content">
+            <div class="coins">Coins: <span id="coinCountPier">0</span></div>
+            <script>pirate.updateCoinCount();</script>
+            <p><b>Pier Upgrades</b></p>
+            
+            <button class="closeOverlayBtn">Close</button>
+
+            <div>
+                <h3>Ship Speed</h3>
+                <p id="speedLevel">Tier: 1</p>
+                <button onclick="speedUpgrade.upgrade()">Upgrade Speed</button>
+            </div>
+
+            <div>
+                <h3>Ship Armor</h3>
+                <p id="armorLevel">Tier: 1</p>
+                <button onclick="armorUpgrade.upgrade()">Upgrade Armor</button>
+            </div>
+
+
+        </div>
+    </div>
+<!--     <script src="player.js"></script>
+ -->    <!-- <script src="sketch.js"></script> -->
+    
+    <script src="islandObjects.js"></script>
+    <script src="upgradeMenu.js"></script>
     <script src="sketchIsland.js"></script>
+
 </body>
+
 </html>
+

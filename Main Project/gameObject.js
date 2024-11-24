@@ -18,7 +18,7 @@ class GameObject {
         // rect(this.x, this.y, this.sizeW, this.sizeH);
     }
 
-    
+
     checkGoalCollision(player, currentLevel) {
         let distance = Math.sqrt((player.x - this.x) * (player.x - this.x)
             + (player.y - this.y) * (player.y - this.y));
@@ -29,9 +29,9 @@ class GameObject {
                 localStorage.setItem("highestLevelBeat", currentLevel.toString());
             }
             //do this last!!!
-            window.location.href = 'upgrade.html';
+            window.location.href = 'bossFight.html';
         }
     }
 }
 
-module.exports = GameObject;
+//module.exports = GameObject;
