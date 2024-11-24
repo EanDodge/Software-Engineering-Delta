@@ -1,6 +1,6 @@
-const Player = require('../gameClasses/player');
-const GameObject = require('../gameClasses/gameObject');
-const Enemy = require('../gameClasses/enemy');
+const Player = require('../player');
+const GameObject = require('../gameObject');
+const Enemy = require('../enemy');
 const puppeteer = require('puppeteer');
 
 describe('player.js class tests', () => {

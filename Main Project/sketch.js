@@ -113,9 +113,15 @@ function draw() {
 	}
 	else {player.movePlayer()}
 
+<<<<<<< HEAD:Main Project/sketches/sketch.js
 	//if player hits dockIsland player goes to upgrade screen
 	if(player.checkCollisionIslands(dockIslands)) {
 		window.location.href = './islandIndex.html'; // Navigate to upgrade island
+=======
+	player.checkCollisionIslands(gameObjects);
+	if (player.hitIsland) {
+		window.location.href = 'islandIndex.html'; // Navigate to upgrade island
+>>>>>>> parent of e7465ec (Reorganizing the files):Main Project/sketch.js
 	}
 
 	player.checkCollisionEnemies(enemies);

@@ -1,6 +1,6 @@
-const  Boss  = require('../gameClasses/boss');
-const  Player  = require('../gameClasses/player');
-const  Projectile  = require('../gameClasses/projectile');
+const  Boss  = require('../boss');
+const  Player  = require('../player');
+const  Projectile  = require('../projectile');
 
 // Mock localStorage
 global.localStorage = {
