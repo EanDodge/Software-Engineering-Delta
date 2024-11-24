@@ -2,23 +2,23 @@ let highestLevelBeat = parseInt(localStorage.getItem("highestLevelBeat")) || 0;
 //change once get bosses in
 let selectedLevel = highestLevelBeat + 1;
 
+
+//game classes containers array
+let enemies = [];
+let dockIslands = [];
+let obstacleIslands = [];
+let bombs = [];
+
 const mapXSize = 750;
 const mapYSize = 2000;
 
 let player = new Player(mapXSize / 2, 100);
 
-let enemies = [];
-
-let bombs = [];
-
-let gameObjects = [];
 
 let goal;
-
 let projectiles = [];
 
 let frameCount = 0;
-
 let enemyHealth = 3;
 
 let windAngle = Math.PI;
@@ -29,6 +29,7 @@ let cameraDistance = 801
 // % can return true because frame count isnt back to 0
 let enemyFrameCount = 0;
 let projectileFrameCount = 0;
+
 
  //let playerImage; made playerimage part of the player object
  let islandImage;
@@ -49,6 +50,7 @@ let projectileFrameCount = 0;
 	 backgroundMusic = loadSound('./music/PirateLoop.wav');
 	 bombImage = loadImage('./assets/greg.png');
  }
+
  
 function setup() {
 	//createCanvas(mapXSize, mapYSize, WEBGL);
@@ -71,6 +73,7 @@ function setup() {
 
 	//sets the standard frame rate to 45fps
 	frameRate(45);
+
 
 	goal = new GameObject(mapXSize / 2, mapYSize - 100, 100);
 
@@ -147,15 +150,27 @@ function draw() {
 	
 
 	player.drawPlayer();
+
+	//if player hits obstacleIsland player is bumped opposite direction
+	if(player.checkCollisionIslands(obstacleIslands)) {
+		player.movePlayer(true);
+	}
+	else {player.movePlayer()}
+
 	player.drawRudderAndSails();
-	player.movePlayer();
 	player.checkCollisionEnemies(enemies);
 	player.checkCollisionBomb(bombs);
 
-	player.checkCollisionIslands(gameObjects);
-	if (player.hitIsland) {
-		window.location.href = 'islandIndex.html'; // Navigate to upgrade island
+
+	//if player hits dockIsland player goes to upgrade screen
+	if(player.checkCollisionIslands(dockIslands)) {
+		window.location.href = './islandIndex.html'; // Navigate to upgrade island
+
 	}
+
+	player.checkCollisionEnemies(enemies);
+	
+	
 
 	goal.drawObject(stormImage);
 	goal.checkGoalCollision(player, selectedLevel);
@@ -186,8 +201,11 @@ function draw() {
 	});
 
 
-	gameObjects.forEach((gameObject) => {
-		gameObject.drawObject(islandImage);
+	dockIslands.forEach((dIsland) => {
+		dIsland.drawObject(dockIslandImage);
+	});
+	obstacleIslands.forEach((oIsland) => {
+		oIsland.drawObject(grassIslandImage);
 	});
 
 	//moves cam to centered on player, z=800 default

@@ -1,0 +1,38 @@
+name: Deploy to Cassini Server
+ 
+on:
+  push:
+    branches: [ 'main' ]
+  workflow_dispatch:
+
+env:
+  HOST: cassini.cs.kent.edu
+  USER: pirate
+  TARGET: pirate@cassini.cs.kent.edu
+  RUN: ssh -o LogLevel=ERROR -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no pirate@cassini.cs.kent.edu
+  COPY: scp -o LogLevel=ERROR -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+
+jobs:
+  deploy_to_server:
+    runs-on: ubuntu-latest
+    steps:          
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.ID_RSA }}
+          name: id_rsa
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+
+      - name: Get the repo code
+        uses: actions/checkout@v2
+        with: 
+          repository: EanDodge/Software-Engineering-Delta
+
+      - name: Ping the server
+        run: |
+          $RUN 'ls -la'
+
+      - name: Copy code to server
+        run: |
+          $COPY -r "./Main Project/" $TARGET:~/web
+          $RUN 'ls -la ~/web'
