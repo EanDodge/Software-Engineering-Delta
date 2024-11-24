@@ -130,7 +130,7 @@ function draw() {
 	//enemy generation based on level, can adjust for later
 	let enemySpawnTimer = 250;
 	if (enemyFrameCount % enemySpawnTimer === 0) {
-		let enemy = new Enemy(Math.random() * mapXSize, player.y + 350, enemyImage);
+		let enemy = new Enemy(Math.random() * mapXSize, player.y + 350, enemyHealth, enemyImage);
 		enemies.push(enemy);
 		enemyFrameCount = 0;
 	}
