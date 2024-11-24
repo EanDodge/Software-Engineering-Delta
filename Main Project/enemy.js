@@ -5,30 +5,25 @@ class Enemy {
     constructor(x, y, health, enemyImage) {
         this.x = x;
         this.y = y;
-        this.speed = 0.5;
-        this.size = 75;
+        this.speed = 2;
+        this.size = 50;     //used for hitbox
+        this.sizeW = 40;
+        this.sizeH = 80;
         this.collision = true;
         this.angle = 0;  // Angle the enemy is traveling
         this.health = health;
 		this.currencyValue = 5;							// Currency value of the enemy
-        this.playerimage = enemyImage;
+        this.enemyImage = enemyImage;
 		this.string;
     }
 
     drawEnemy() {
         fill(255, 0, 0);
         imageMode(CENTER);  //sets the image to be drawn ontop of the enemy x, y
-        //tint('green');
-        image(enemyImage, this.x, this.y, this.size, this.size);
+        // circle(this.x, this.y, this.size);
+        image(enemyImage, this.x, this.y, this.sizeW, this.sizeH);
         imageMode(CORNER);  //returns draw mode to default
         tint('none');
-		    console.log("Enemy health: " + this.health);
-
-		// fill(255, 0, 0); // Set the fill color to red
-        // ellipseMode(CENTER); // Set the ellipse mode to center
-        // ellipse(this.x, this.y, this.size, this.size); // Draw a red circle
-        // console.log("Enemy health: " + this.health);
-
     }
 
     drawMinion() {
