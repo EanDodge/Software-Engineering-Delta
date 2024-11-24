@@ -94,9 +94,11 @@ class Player {
         // rect(0, 0, this.sizeW, this.sizeH);
         rotate(this.angle);
         pop();      
+
+
     }
 
-    movePlayer(bumpBack = false) {
+    // movePlayer(bumpBack = false) {
     drawRudderAndSails() {
         push();
         fill(255, 128, 13);
@@ -120,12 +122,7 @@ class Player {
         let futureX;
         let futureY;
 
-        if(bumpBack) {
-            yMove *= -1;
-        }
-        
-        if ((yMove + vel) < 1 && (yMove + vel) > -1) {
-
+        if ((yMove + vel) < 1 && (yMove + vel) > -1) {// change these numbers for speed
             yMove += vel;
         }
         else {
