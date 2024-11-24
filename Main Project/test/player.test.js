@@ -11,6 +11,7 @@ describe('player.js class tests', () => {
     beforeAll(async () => {
         browser = await puppeteer.launch();
         page = await browser.newPage();
+        await page.goto('file://' + __dirname + '/../index.html');
     });
 
     afterAll(async () => {
@@ -43,13 +44,15 @@ describe('player.js class tests', () => {
     });
     
     beforeEach(() => {
-        player = new Player();
-
+        // player = new Player();
     });
 
-    // test('Testing constructor, should return "passed"', () => {
+    test('Testing constructor, player should exist', () => {
     //   expect(player.testConstructor()).toBe("passed");
-    // });
+        let player = new Player(100, 100);
+        player.x.toBe(100);
+        player.y.toBe(50);
+    });
 
     // test('Testing movePlayer(), should return "passed"', () => {
     //     expect(player.testMovePlayer()).toBe("passed");
