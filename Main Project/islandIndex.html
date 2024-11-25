@@ -54,6 +54,30 @@
             text-align: center;
         }
 
+        .overlay-content p{
+            font-size: 1.5rem;
+            margin: 10px 0;
+        }
+
+        .button-group{
+            margin-bottom: 20px;
+        }
+
+        button {
+            display: block; /* Make buttons stack vertically */
+            width: 100%; /* Ensure buttons take the full width */
+            margin: 10px 0; /* Add spacing between buttons */
+            padding: 10px; /* Adjust padding for better appearance */
+            font-size: 1rem; /* Adjust button font size */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Darker color on hover */
+        }
+
         canvas {
             display: block;
             position: absolute;
@@ -76,12 +100,19 @@
 
     <div id="fireOverlay" class="overlay">
         <div class="overlay-content">
+
+            <div class="button-group">
             <p>Level Select</p>
             <button onclick="window.location.href='level1.html'">Level 1</button>
-            <button onclick="window.location.href='sudoku.html'">Play Sudoku</button>
-            <button onclick="window.location.href='nurikabe.html'">Play Nurikabe</button>
-            <button onclick="window.location.href='tetris.html'">Play Tetris</button>
-            <!-- <button class="closeOverlayBtn">Close</button> -->
+            </div>
+            
+            <div class="button-group">
+                <p>Puzzle Select</p>
+                <button onclick="window.location.href='sudoku.html'">Play Sudoku</button>
+                <button onclick="window.location.href='nurikabe.html'">Play Nurikabe</button>
+                <button onclick="window.location.href='tetris.html'">Play Tetris</button>
+
+            </div>
         </div>
     </div>
 
