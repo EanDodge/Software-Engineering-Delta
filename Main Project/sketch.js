@@ -87,27 +87,27 @@ function setup() {
 	clearStorageButton.position(0, 20);
 	clearStorageButton.mousePressed(() => { localStorage.clear(); location.reload(); });
 
-	let incrementLevelButton1 = createButton("Level 1");
-	incrementLevelButton1.position(0, 40);
-	incrementLevelButton1.mousePressed(() => { localStorage.setItem("selectedLevel", '1'); location.reload(); });
+	// let incrementLevelButton1 = createButton("Level 1");
+	// incrementLevelButton1.position(0, 40);
+	// incrementLevelButton1.mousePressed(() => { localStorage.setItem("selectedLevel", '1'); location.reload(); });
 
-	let incrementLevelButton2 = createButton("Level 2");
-	incrementLevelButton2.position(0, 60);
-	incrementLevelButton2.mousePressed(() => { localStorage.setItem("selectedLevel", '2'); location.reload(); });
+	// let incrementLevelButton2 = createButton("Level 2");
+	// incrementLevelButton2.position(0, 60);
+	// incrementLevelButton2.mousePressed(() => { localStorage.setItem("selectedLevel", '2'); location.reload(); });
 
-	let incrementLevelButton3 = createButton("Level 3");
-	incrementLevelButton3.position(0, 80);
-	incrementLevelButton3.mousePressed(() => { localStorage.setItem("selectedLevel", '3'); location.reload(); });
+	// let incrementLevelButton3 = createButton("Level 3");
+	// incrementLevelButton3.position(0, 80);
+	// incrementLevelButton3.mousePressed(() => { localStorage.setItem("selectedLevel", '3'); location.reload(); });
 
-	let incrementLevelButton4 = createButton("Level 4");
-	incrementLevelButton4.position(0, 100);
-	incrementLevelButton4.mousePressed(() => { localStorage.setItem("selectedLevel", '4'); location.reload(); });
+	// let incrementLevelButton4 = createButton("Level 4");
+	// incrementLevelButton4.position(0, 100);
+	// incrementLevelButton4.mousePressed(() => { localStorage.setItem("selectedLevel", '4'); location.reload(); });
 
-	let incrementLevelButton5 = createButton("Level 5");
-	incrementLevelButton5.position(0, 120);
-	incrementLevelButton5.mousePressed(() => { localStorage.setItem("selectedLevel", '5'); location.reload(); });
+	// let incrementLevelButton5 = createButton("Level 5");
+	// incrementLevelButton5.position(0, 120);
+	// incrementLevelButton5.mousePressed(() => { localStorage.setItem("selectedLevel", '5'); location.reload(); });
 
-	console.log("Display h x w = " + displayHeight + ", " + displayWidth);
+	// console.log("Display h x w = " + displayHeight + ", " + displayWidth);
 
 
 	//camera to follow player

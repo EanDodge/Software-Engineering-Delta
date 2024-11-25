@@ -31,7 +31,14 @@
             display: inline-block;
             font-size: 16px;
             margin: 5px; /* Add margin to space out the buttons */
+            transition-duration: 0.4s;
             cursor: pointer;
+        }
+
+        .buttons:hover {
+            background-color: grey;
+            color:white;
+            transition-duration: 0.4s;
         }
 
         .overlay {
@@ -40,7 +47,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);  /* Semi-transparent black */
+            background-color: rgba(0, 0, 0, 0.7);  /*Semi-transparent black */
             display: none;  /* Hidden initially */
             justify-content: center;
             align-items: center;
@@ -52,6 +59,14 @@
             padding: 20px;
             border-radius: 8px;
             text-align: center;
+
+            
+            /* stuff for changing the background of the overlay */
+            /* background-image:url(./assets/mapBackground.png);
+            background-size:cover; 
+            background-repeat:no-repeat; 
+            background-position: center; */
+            
         }
 
         .overlay-content p{
@@ -103,7 +118,14 @@
 
             <div class="button-group">
             <p>Level Select</p>
-            <button onclick="window.location.href='level1.html'">Level 1</button>
+            <button class="buttons" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '1')">Level 1 </button>
+            <button class="buttons" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '2')">Level 2 </button>
+            <button class="buttons" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '3')">Level 3 </button>
+            <button class="buttons" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '4')">Level 4 </button>
+            <button class="buttons" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '5')">Level 5 </button>
+            <!-- <button class="closeOverlayBtn">Close</button> --> 
+            <!-- localStorage.setItem("selectedLevel", '1') -->
+
             </div>
             
             <div class="button-group">
@@ -121,18 +143,16 @@
             <div class="coins">Coins: <span id="coinCountBarracks">0</span></div>
             <script>pirate.updateCoinCount();</script>
             <p><b>Barracks Upgrades</b></p>
-            
-
             <div>
                 <h3>Cannon Damage</h3>
                 <p id="cannonsLevel">Tier: 1</p>
-                <button onclick="cannonsUpgrade.upgrade()">Upgrade Cannon Damage</button>
+                <button class="buttons" onclick="cannonsUpgrade.upgrade()">Upgrade Cannon Damage</button>
             </div>
 
             <div>
                 <h3>Ammo Capacity</h3>
                 <p id="ammoLevel">Tier: 1</p>
-                <button onclick="ammoCapacityUpgrade.upgrade()">Upgrade Capacity</button>
+                <button class="buttons" onclick="ammoCapacityUpgrade.upgrade()">Upgrade Capacity</button>
             </div>
         </div>
     </div>
@@ -146,13 +166,13 @@
             <div>
                 <h3>Ship Speed</h3>
                 <p id="speedLevel">Tier: 1</p>
-                <button onclick="speedUpgrade.upgrade()">Upgrade Speed</button>
+                <button class="buttons" onclick="speedUpgrade.upgrade()">Upgrade Speed</button>
             </div>
 
             <div>
                 <h3>Ship Armor</h3>
                 <p id="armorLevel">Tier: 1</p>
-                <button onclick="armorUpgrade.upgrade()">Upgrade Armor</button>
+                <button class="buttons" onclick="armorUpgrade.upgrade()">Upgrade Armor</button>
             </div>
 
 
