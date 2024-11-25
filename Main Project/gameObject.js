@@ -12,9 +12,16 @@ class GameObject {
         this.sizeH = H;
     }
 
+    //Why are we adding 40 to size???
     drawObject(islandImg) {
         imageMode(CORNER);      //returns the image draw mode to default
         image(islandImg, this.x, this.y - 40, this.sizeW, this.sizeH + 40);
+        // rect(this.x, this.y, this.sizeW, this.sizeH);
+    }
+
+    drawBomb(islandImg) {
+        imageMode(CORNER);      //returns the image draw mode to default
+        image(islandImg, this.x, this.y, this.sizeW, this.sizeH);
         // rect(this.x, this.y, this.sizeW, this.sizeH);
     }
 

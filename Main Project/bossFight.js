@@ -379,7 +379,7 @@ function draw() {
 	projectiles.forEach((projectile, index) => {
 		projectile.drawProjectile();
 		projectile.moveProjectile();
-		if (projectile.outOfRange())
+		if (projectile.outOfRange(mapXSize, mapYSize))
 			projectiles.splice(index, 1);
 
 	});

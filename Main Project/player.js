@@ -442,7 +442,7 @@ class Player {
             let distance = Math.sqrt((bomb.x - this.x) * (bomb.x - this.x)
                 + (bomb.y - this.y) * (bomb.y - this.y));
 
-            if (distance < bomb.size / 2 + this.size / 2) {
+            if (distance < bomb.sizeW / 2 + this.size / 2) {
                 this.takeDamage(2, player);
                 bombs.splice(index, 1);
 
