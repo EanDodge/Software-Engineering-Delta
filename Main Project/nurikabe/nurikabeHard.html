@@ -14,9 +14,18 @@
   </head>
 
   <body>
-    <div class="coins" style="position: absolute; top: 260px; left: 10px; z-index: 1000;">
-        Coins: <span id="coinCount">0</span>
+    <div id="hintDisplay" style="position: absolute; top: 260px; left: 10px; z-index: 1000;">
+      <p>Number of Hints: <span id="hintCount">0</span></p>
     </div>
+    <div id="coinCount"></div> <!--Needs to be element under ID "coinCount" for updateCurrency() and gainCurrency() to work-->
+
+    <script>
+      // Retrieve the number of hints from localStorage
+      const hints = parseInt(localStorage.getItem('hints')) || 0;
+
+      // Update the HTML to show the hints count
+      document.getElementById('hintCount').innerText = `${hints}`;
+    </script>
     <script src="../player.js"></script> <!-- Ensure player.js is included -->
 		<script src="../sketch.js"></script> <!-- Ensure sketch.js is included -->
 		<script>	
