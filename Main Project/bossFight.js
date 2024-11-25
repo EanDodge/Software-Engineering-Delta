@@ -190,6 +190,7 @@ let projectileFrameCount = 0;
  let inkEffectDuration = 0;
 
 
+
  function preload() {
      player.playerImage = loadImage('./assets/shiplvl1Top.png');
 	 islandImage = loadImage('./assets/islandDock.png');
@@ -198,8 +199,19 @@ let projectileFrameCount = 0;
 	 bossImage = loadImage('./assets/krakenDelozier.png');
 	 minionImage = loadImage('./assets/kraken.png');
 	 tentacleImage = loadImage('./assets/tentacle.png');	
+	 backgroundMusic = loadSound('./music/sweetchild.mp4');
+
  }
- 
+
+ function loadMusic() {
+	userStartAudio(); //music starts playing when user interacts with browser
+    backgroundMusic.setVolume(0);
+	backgroundMusic.play();
+    backgroundMusic.loop();
+
+    // Fade in to target volume of 1 over 3 seconds
+    backgroundMusic.setVolume(1, 3, 0.25);
+} 
 function setup() {
 	//createCanvas(mapXSize, mapYSize, WEBGL);
 	//makes canvas size dependent on display size (- values because full display size was to big)
@@ -253,6 +265,7 @@ function setup() {
 	island = new GameObject(250, 100);
 	//island.collision = true;
 	gameObjects.push(island);
+	loadMusic();
 
 }
 
@@ -366,7 +379,7 @@ function draw() {
 	projectiles.forEach((projectile, index) => {
 		projectile.drawProjectile();
 		projectile.moveProjectile();
-		if (projectile.outOfRange())
+		if (projectile.outOfRange(mapXSize, mapYSize))
 			projectiles.splice(index, 1);
 
 	});

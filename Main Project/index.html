@@ -49,6 +49,35 @@
 </head>
 <body>
 
+	<div id="health-bar-container">
+		<div id="health-bar"></div>
+	</div>
+	<div class = "coins">Dabloons: <span id = "coinCount"></span></div>
+  <script src="sketch.js"></script>
+  <script>
+	// Initial update to display the starting currency
+	document.addEventListener('DOMContentLoaded', function() {
+		player.updateHealthBar();
+		player.updateCoinCount();
+		
+});
+  </script>
+</body>
+
+<style>
+  body{
+    .coins{
+      color: white;
+      font-family: Georgia, serif;
+      font-size: 1.5em;
+    }
+    background-image: url('./assets/sea.png');
+    background-size: cover;
+    background-repeat: no-repeat; 
+  } 
+</style>
+
+
     <div class="main-container">
         <h1>Sweet Pirate of Mine</h1>
         <button onclick="location.href='tutorial.html'">Tutorial</button>

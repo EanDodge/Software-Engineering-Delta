@@ -55,6 +55,8 @@ function setup() {
     colliders.push(barracksCollider);
     let pierCollider = new islandObject(390, 330, 150, 80, pierOverlay);
     colliders.push(pierCollider);
+
+    loadMusic();
     
     // showOverlay(fireOverlay); //works
 }
@@ -88,7 +90,6 @@ async function determineOverlay(collider) {
             return false;
         }
     }
-	loadMusic();
 }
 
 function loadMusic() {

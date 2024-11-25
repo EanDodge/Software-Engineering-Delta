@@ -1,4 +1,4 @@
-//this class is used for the colliders for the upgrade island
+//this class is used for the colliders on the upgrade island
 
 class islandObject {
     constructor(x, y, w, h, over) {

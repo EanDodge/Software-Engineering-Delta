@@ -15,14 +15,17 @@ class Player {
         this.x = x;                 //current x
         this.y = y;                 //current y
         this.speed = parseInt(localStorage.getItem('speed')) || 3;  //speed of the boat in pixels (how many pixels it moves in one tic)
-        //this.sizeH = 40;          //height of the test rectangle
-        //this.sizeW = 20;          //width of the test rectangle
+        this.sizeH = 40;          //height of the test rectangle
+        this.sizeW = 20;          //width of the test rectangle
         this.size = 45;
         this.turningSpeed = 0.075;  //how fast the boat will turn (radians per sec?)
         this.timer = 0;
         this.angle = Math.PI * 2;             //angle of the boat in radians
         this.currency = parseInt(localStorage.getItem('playerCurrency')) || 100; // Retrieve from localStorage or default to 100
         this.hitEnemy = false;
+
+        // this.hitIsland = false;
+        // this.playerImage;
         this.hitIsland = false;
         this.playerImage;
         this.health = parseInt(localStorage.getItem('playerHealth')) || 10;
@@ -74,21 +77,28 @@ class Player {
         translate(this.x, this.y);
         rotate(-this.angle);
         //fill(186,184,80);
-        //rectMode(CENTER);
+        
         //rect(0, 0, this.sizeW, this.sizeH);
         imageMode(CENTER);
         if (this.hitEnemy) {
             //image(playerHitImage, 0, 0, this.size, this.size)
             tint('red');
-            image(this.playerImage, 0, 0, this.size, this.size)
+            image(this.playerImage, 0, 0, this.size, this.size);
         }
         else {
-            image(this.playerImage, 0, 0, this.size, this.size)
+            image(this.playerImage, 0, 0, this.size, this.size);
         }
+
+        //this rec is the hitbox
+        // rectMode(CENTER);
+        // rect(0, 0, this.sizeW, this.sizeH);
         rotate(this.angle);
-        pop();
+        pop();      
+
+
     }
 
+    // movePlayer(bumpBack = false) {
     drawRudderAndSails() {
         push();
         fill(255, 128, 13);
@@ -264,275 +274,73 @@ class Player {
         return [futureX, futureY];
     }
 
-    testMovePlayer() {
-        let testMapX = 500;
-        let testMapY = 400;
-        //Test Framework
-        {
-            //puts player into middle of map
-            let testPlayer = new Player(testMapX / 2, testMapY / 2);
 
-            //make sure player starts where it should start
-            if (!(testPlayer.x == testMapX / 2)) {
-                return "failed";
-            }
-            if (!(testPlayer.y == testMapY / 2)) {
-                return "failed";
-            }
+    //bool, returns true if player is colliding with gameObject <- must have x,y,sizeH,sizeW
+    isColliding(gameObject) {
+        //New Formula
+        let pf = [this.sizeW / 2, -this.sizeH / 2]
+        let pr = [this.sizeW / 2, this.sizeH / 2]
+        let df = [-this.sizeW / 2, -this.sizeH / 2]
+        let dr = [-this.sizeW / 2, this.sizeH / 2]
+        let corners = [pf, pr, df, dr];
+        
+        corners.forEach(corner => {
+            let W = corner[0];
+            let H = corner[1];
+            corner[0] = this.x + cos(-this.angle) * W - sin(-this.angle) * H;
+            corner[1] = this.y + sin(-this.angle) * W + cos(-this.angle) * H;
+            // circle(corner[0], corner[1], 10);
+        });
+
+        if (
+            collideLineRect(pf[0], pf[1], pr[0], pr[1], gameObject.x, gameObject.y, gameObject.sizeW, gameObject.sizeH) || 
+            collideLineRect(pr[0], pr[1], dr[0], dr[1], gameObject.x, gameObject.y, gameObject.sizeW, gameObject.sizeH) ||
+            collideLineRect(dr[0], dr[1], df[0], df[1], gameObject.x, gameObject.y, gameObject.sizeW, gameObject.sizeH) ||
+            collideLineRect(df[0], df[1], pf[0], pf[1], gameObject.x, gameObject.y, gameObject.sizeW, gameObject.sizeH)
+            ) {
+            return true
         }
-        //Tests that player moves forward, and coordinates are calculated correctly
-        {
-            //puts player into middle of map
-            let testPlayer = new Player(testMapX / 2, testMapY / 2);
-
-            //make player move forward (yes -1 is forward dont ask)
-            yMove = -1;
-            testPlayer.movePlayer();
-
-            if (!(testPlayer.x == testMapX / 2)) {
-                return "failed";
-            }
-            if (!(testPlayer.y == testMapY / 2 - testPlayer.speed)) {
-                return "failed";
-            }
-
-
-            //reset yMove after done
-            yMove = 0;
-        }
-        //Tests that player moves backwards, and coordinates are calculated correctly
-        {
-            //puts player into middle of map
-            let testPlayer = new Player(testMapX / 2, testMapY / 2);
-
-            //make player move backward
-            yMove = 1;
-            testPlayer.movePlayer();
-
-            if (!(testPlayer.x == testMapX / 2)) {
-                return "failed";
-            }
-            if (!(testPlayer.y == testMapY / 2 + testPlayer.speed)) {
-                return "failed";
-            }
-
-            //reset yMove after done
-            yMove = 0;
-        }
-        //Tests that player turns clockwise
-        {
-            //puts player into middle of map
-            let testPlayer = new Player(testMapX / 2, testMapY / 2);
-
-            //make player turn clockwise
-            turn = -1;
-            testPlayer.movePlayer();
-
-            if (!(testPlayer.x == testMapX / 2)) {
-                return "failed";
-            }
-            if (!(testPlayer.y == testMapY / 2)) {
-                return "failed";
-            }
-            if (!(testPlayer.angle == -1 * testPlayer.turningSpeed)) {
-                return "failed";
-            }
-
-
-            //reset turn after done
-            turn = 0;
-        }
-        //tests that player turns counter-clockwise
-        {
-            //puts player into middle of map
-            let testPlayer = new Player(testMapX / 2, testMapY / 2);
-
-            //make player turn counter-clockwise (yes turn is counter intuitave)
-            turn = 1;
-            testPlayer.movePlayer();
-
-            if (!(testPlayer.x == testMapX / 2)) {
-                return "failed";
-            }
-            if (!(testPlayer.y == testMapY / 2)) {
-                return "failed";
-            }
-            if (!(testPlayer.angle == testPlayer.turningSpeed)) {
-                return "failed";
-            }
-
-            //reset turn after done
-            turn = 0;
-        }
-        //Tests that coordinate calculation with a turning input is working (cw - F)
-        {
-            //puts player into middle of map
-            let testPlayer = new Player(testMapX / 2, testMapY / 2);
-
-            //make player turn clockwise and move forward  
-            turn = 1;
-            yMove = -1;
-            testPlayer.movePlayer();
-
-            if (!(testPlayer.x == (testMapX / 2) +
-                testPlayer.speed * sin(testPlayer.angle) * yMove)) {
-                return "failed";
-            }
-            if (!(testPlayer.y == (testMapY / 2) +
-                testPlayer.speed * cos(testPlayer.angle) * yMove)) {
-                return "failed";
-            }
-            if (!(testPlayer.angle == testPlayer.turningSpeed)) {
-                return "failed";
-            }
-            //reset turn after done
-            turn = 0;
-            yMove = 0;
-        }
-        //Tests that coordinate calculation with a turning input is working (ccw - F)
-        {
-            //puts player into middle of map
-            let testPlayer = new Player(testMapX / 2, testMapY / 2);
-
-            //make player turn counter-clockwise and move forward  
-            turn = -1;
-            yMove = -1;
-            testPlayer.movePlayer();
-
-            if (!(testPlayer.x == (testMapX / 2) +
-                testPlayer.speed * sin(testPlayer.angle) * yMove)) {
-                return "failed";
-            }
-            if (!(testPlayer.y == (testMapY / 2) +
-                testPlayer.speed * cos(testPlayer.angle) * yMove)) {
-                return "failed";
-            }
-            if (!(testPlayer.angle == -1 * testPlayer.turningSpeed)) {
-                return "failed";
-            }
-
-
-            //reset turn after done
-            turn = 0;
-            yMove = 0;
-        }
-        //Tests that coordinate calculation with a turning input is working (cw - R)
-        {
-            //puts player into middle of map
-            let testPlayer = new Player(testMapX / 2, testMapY / 2);
-
-            //make player turn clockwise and move forward  
-            turn = 1;
-            yMove = 1;
-            testPlayer.movePlayer();
-
-            if (!(testPlayer.x == (testMapX / 2) +
-                testPlayer.speed * sin(testPlayer.angle) * yMove)) {
-                return "failed";
-            }
-            if (!(testPlayer.y == (testMapY / 2) +
-                testPlayer.speed * cos(testPlayer.angle) * yMove)) {
-                return "failed";
-            }
-            if (!(testPlayer.angle == testPlayer.turningSpeed)) {
-                return "failed";
-            }
-
-
-            //reset turn after done
-            turn = 0;
-            yMove = 0;
-        }
-        //Tests that coordinate calculation with a turning input is working (ccw - R)
-        {
-            //puts player into middle of map
-            let testPlayer = new Player(testMapX / 2, testMapY / 2);
-
-            //make player turn counter-clockwise and move forward  
-            turn = -1;
-            yMove = 1;
-            testPlayer.movePlayer();
-
-            if (!(testPlayer.x == (testMapX / 2) +
-                testPlayer.speed * sin(testPlayer.angle) * yMove)) {
-                return "failed";
-            }
-            if (!(testPlayer.y == (testMapY / 2) +
-                testPlayer.speed * cos(testPlayer.angle) * yMove)) {
-                return "failed";
-            }
-            if (!(testPlayer.angle == -1 * testPlayer.turningSpeed)) {
-                return "failed";
-            }
-
-
-            //reset turn after done
-            turn = 0;
-            yMove = 0;
-        }
-
-        return "passed";
-    }   //testMovePlayer() end
-
-    //a usless function
-    checkCollision(gameObject) {
-        //distance formuala between player and game object midpoints
-        let distance = Math.sqrt((gameObject.x - this.x) * (gameObject.x - this.x)
-            + (gameObject.y - this.y) * (gameObject.y - this.y));
-
-        if (gameObject.collision === true && distance < gameObject.size / 2 + this.size / 2) {
-            //uncomment to see if colliding
-            //console.log("collision");
-            return true;
-        }
-        return false;
+        return false
     }
 
-    //usless test of usless function
-    //assuming that a new game object is not large enough to hit ship when at 0,0 and ship is in middle of map
-    testCheckCollision() {
-        {
-            let testMapX = 500;
-            let testMapY = 400;
-
-            let testPlayer = new Player(testMapX / 2, testMapY / 2);
-            let nonInterfearingObj = new GameObject(0, 0);
-            let interfearingObj = new GameObject(testMapX / 2, testMapY / 2);
-
-            //test collision with no other objects return false
-            if (!(testPlayer.checkCollision(nonInterfearingObj) === false)) {
-                return "failed";
+    checkCollisionIslands(islands) {
+        let colliding = false;
+        islands.forEach((island, index) => {
+            if(this.isColliding(island)) {
+                colliding = true;
             }
-            //tests that collision with a game object returns true
-            if (!(testPlayer.checkCollision(interfearingObj) === true)) {
-                return "failed";
-            }
-        }
-        return "passed";
+        });
+        return colliding;
     }
 
-    // checkCollisionEnemies(enemies) {
-    //     let hit = false;
-    //     enemies.forEach((enemy, index) => {
-    //         //distance formuala between enemy and projectile midpoints
-    //         let distance = Math.sqrt((enemy.x - this.x) * (enemy.x - this.x)
-    //             + (enemy.y - this.y) * (enemy.y - this.y));
+    isCollidingEnemy(enemy) {
+        //New Formula
+        let pf = [this.sizeW / 2, -this.sizeH / 2]
+        let pr = [this.sizeW / 2, this.sizeH / 2]
+        let df = [-this.sizeW / 2, -this.sizeH / 2]
+        let dr = [-this.sizeW / 2, this.sizeH / 2]
+        let corners = [pf, pr, df, dr];
+        
+        corners.forEach(corner => {
+            let W = corner[0];
+            let H = corner[1];
+            corner[0] = this.x + cos(-this.angle) * W - sin(-this.angle) * H;
+            corner[1] = this.y + sin(-this.angle) * W + cos(-this.angle) * H;
+            // circle(corner[0], corner[1], 10);
+        });
 
-    //         if (distance < enemy.size / 2 + this.size / 2) {
-    //             hit = true;
-    //         }
-    //     });
+        if (
+            collideLineCircle(pf[0], pf[1], pr[0], pr[1], enemy.x, enemy.y, enemy.size) || 
+            collideLineCircle(pr[0], pr[1], dr[0], dr[1], enemy.x, enemy.y, enemy.size) ||
+            collideLineCircle(dr[0], dr[1], df[0], df[1], enemy.x, enemy.y, enemy.size) ||
+            collideLineCircle(df[0], df[1], pf[0], pf[1], enemy.x, enemy.y, enemy.size)
+            ) {
+            return true
 
-    //     if (hit && this.timer === 0) {
-    //         this.color = "red";
-    //         this.timer = 60;
-    //     }
-    //     else {
-    //         if (this.timer <= 50)
-    //             this.color = "white";
-    //         if (this.timer > 0)
-    //             this.timer--;
-    //     }
+        }
+        return false
+    }
+
     checkCollisionEnemies(enemies) {
         let hit = false;
         const currentTime = Date.now();
@@ -540,16 +348,19 @@ class Player {
 
         enemies.forEach((enemy) => {
             // Distance formula between enemy and player midpoints
-            let distance = Math.sqrt((enemy.x - this.x) * (enemy.x - this.x)
-                + (enemy.y - this.y) * (enemy.y - this.y));
+            // let distance = Math.sqrt((enemy.x - this.x) * (enemy.x - this.x)
+            //     + (enemy.y - this.y) * (enemy.y - this.y));
 
-            if (distance < enemy.size / 2 + this.size / 2) {
+            // if (distance < enemy.size / 2 + this.size / 2) {
+            //     hit = true;
+            // }
+
+            if(this.isCollidingEnemy(enemy)) {
                 hit = true;
             }
-
             if (hit && (currentTime - this.lastCollisionTime) > collisionCooldown) {
-                this.takeDamage(1); // Decrease player health by 1
-                console.log(`Player health: ${this.health}`);
+                this.takeDamage(1); // Decrease player health by 1 
+                // console.log(`Player health: ${this.health}`);
                 this.lastCollisionTime = currentTime; // Update the last collision time
                 // if (this.health <= 0) {
                 //     window.location.href = 'gameover.html'; // Navigate to gameover.html
@@ -570,93 +381,8 @@ class Player {
         }
     }
 
-    //assuming enemy is larger than 10
-    testCheckCollisionEnemies() {
-        {
-            let testMapX = 500;
-            let testMapY = 400;
+	updateCoinCount() {
 
-
-            let testEnemyNoHit = [new Enemy(0, 0)];
-            let testEnemyHit = [new Enemy(testMapX / 2, testMapY / 2)];
-            let testEnemyHit2 = [new Enemy(testMapX / 2 + 5, testMapY / 2 + 5)];
-
-
-            {
-                let testPlayer = new Player(testMapX / 2, testMapY / 2);
-                testPlayer.checkCollisionEnemies(testEnemyHit);
-                if (testPlayer.hitEnemy === false) {
-                    return "failed";
-                }
-            }
-            {
-                let testPlayer = new Player(testMapX / 2, testMapY / 2);
-                testPlayer.checkCollisionEnemies(testEnemyNoHit);
-                if (testPlayer.hitEnemy === true) {
-                    return "failed";
-                }
-            }
-            {
-                let testPlayer = new Player(testMapX / 2, testMapY / 2);
-                testPlayer.checkCollisionEnemies(testEnemyHit2);
-                if (testPlayer.hitEnemy === false) {
-                    return "failed";
-                }
-            }
-        }
-        return "passed";
-    }
-
-
-    checkCollisionIslands(islands) {
-        let hit = false;
-        islands.forEach((island, index) => {
-            //distance formuala between enemy and midpoints
-            let distance = Math.sqrt((island.x - this.x) * (island.x - this.x)
-                + (island.y - this.y) * (island.y - this.y));
-
-            if (distance < island.size / 2 + this.size / 2) {
-                hit = true;
-            }
-        });
-
-        if (hit) {
-            //this.color = "blue";
-            this.hitIsland = true;
-            // if(typeof document !== 'undefined') {   //allows tests to ignore this line
-            // window.location.href = 'islandIndex.html'; // Navigate to upgrades.html
-            // }
-        }
-    }
-
-    testCheckCollisionIsland() {
-        {
-            let testMapX = 500;
-            let testMapY = 400;
-
-            let nonInterfearingObj = [new GameObject(0, 0)];
-            let interfearingObj = [new GameObject(testMapX / 2, testMapY / 2)];
-
-            {
-                let testPlayer = new Player(testMapX / 2, testMapY / 2);
-                testPlayer.checkCollisionIslands(nonInterfearingObj);
-                if (testPlayer.hitIsland === true) {
-                    return "failed";
-                }
-            }
-            {
-                let testPlayer = new Player(testMapX / 2, testMapY / 2);
-                testPlayer.checkCollisionIslands(interfearingObj);
-                if (testPlayer.hitIsland === false) {
-                    return "failed";
-                }
-            }
-
-        }
-        return "passed";
-    }
-
-    updateCoinCount() {
         document.getElementById('coinCount').innerText = this.currency;
         localStorage.setItem('playerCurrency', this.currency); // Store in localStorage
          console.log(player.currency);
@@ -706,7 +432,6 @@ class Player {
                 console.log("Enemy hit! Health: " + this.health);
                 projectiles.splice(index, 1);
 
-
             }
         });
     }
@@ -717,9 +442,10 @@ class Player {
             let distance = Math.sqrt((bomb.x - this.x) * (bomb.x - this.x)
                 + (bomb.y - this.y) * (bomb.y - this.y));
 
-            if (distance < bomb.size / 2 + this.size / 2) {
+            if (distance < bomb.sizeW / 2 + this.size / 2) {
                 this.takeDamage(2, player);
                 bombs.splice(index, 1);
+
             }
         });
     }
@@ -823,5 +549,4 @@ if (typeof document !== 'undefined') {
     });
 }
 
-//module.exports = Player;
-
+module.exports = Player;

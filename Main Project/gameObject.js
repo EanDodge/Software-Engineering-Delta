@@ -1,21 +1,28 @@
 /// GameObject
-/// used for the game objects
-
-
+/// used for the game objects like the upgrade island and the non upgrade islands
 
 class GameObject {
-    constructor(x, y, size) {
+    constructor(x, y, W = 100, H = 50) {
         this.x = x;
         this.y = y;
-        this.size = size;
-        this.collision = true;
+        this.size = 100;    //dont use
+        // this.collision = true;  //what does this do?
+        // this.islandImage = islandImg;
+        this.sizeW = W;
+        this.sizeH = H;
     }
 
-    drawObject(islandImage) {
-        fill(0, 255, 0);
-        imageMode(CENTER);      //Sets the image to be drawn in the middle on the x, y
-        image(islandImage, this.x, this.y, this.size, this.size);
+    //Why are we adding 40 to size???
+    drawObject(islandImg) {
         imageMode(CORNER);      //returns the image draw mode to default
+        image(islandImg, this.x, this.y - 40, this.sizeW, this.sizeH + 40);
+        // rect(this.x, this.y, this.sizeW, this.sizeH);
+    }
+
+    drawBomb(islandImg) {
+        imageMode(CORNER);      //returns the image draw mode to default
+        image(islandImg, this.x, this.y, this.sizeW, this.sizeH);
+        // rect(this.x, this.y, this.sizeW, this.sizeH);
     }
 
 
