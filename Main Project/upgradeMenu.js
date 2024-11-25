@@ -89,16 +89,33 @@ class SpeedUpgrade extends Upgrade {
     }
 }
 
-
-
 class HintsUpgrade extends Upgrade {
     constructor() {
-        super('Hints', [5, 6, 7, 8, 9, 10], ["a", "b", "c", "d", "e", "f"]);
+        super('hints', [], []); // No tier costs or names needed
+        this.coinCost = 10; // Cost per hint
+        this.hints = parseInt(localStorage.getItem('hints')) || 0; // Initialize hint count
     }
 
-    applyUpgradeEffect(tier) {
-        // Specific effect for hints upgrade
-        console.log('Hints upgraded to tier:', tier);
+    upgrade() {
+        const coins = pirate.currency; // Assuming pirate manages coins
+        if (coins >= this.coinCost) {
+            pirate.buyUpgrade(this.coinCost); // Deduct the coin cost
+            this.hints++;
+            localStorage.setItem('hints', this.hints); // Save updated hint count
+            this.updateHintDisplay();
+            pirate.updateCoinCount(); // Update displayed coins
+        } else {
+            alert('Not enough coins!');
+        }
+    }
+
+    updateHintDisplay() {
+        document.getElementById(this.name + 'Level').innerText = `Current Amount of Hints: ${this.hints}`;
+    }
+
+    applyUpgradeEffect() {
+        // Update display after a purchase
+        this.updateHintDisplay();
     }
 }
 
@@ -135,4 +152,5 @@ function completeLevel() {
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeUpgrades();
+    hintsUpgrade.updateHintDisplay(); // Initialize hints display separately
 });
