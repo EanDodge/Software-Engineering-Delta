@@ -29,7 +29,7 @@ const showPierOverlayBtn = document.getElementById('showPierOverlayButton');
 
 function preload() {
     islandImg = loadImage('assets/upgradeislandAlt.png');
-    pirate.img = loadImage('assets/pirate.gif');
+    pirate.img = loadImage('assets/pirateWShadow.gif');
     seaImg = loadImage('assets/sea.png');
     backgroundMusic = loadSound('music/HomeIslandVibe.wav');
 }
