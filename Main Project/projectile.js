@@ -28,4 +28,4 @@ class Projectile {
     }
 }
 
-module.exports =  Projectile;
+//module.exports =  Projectile;
