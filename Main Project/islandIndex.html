@@ -128,6 +128,30 @@
 
         </div>
     </div>
+
+    <div id="puzzleOverlay" class="overlay">
+        <div class="overlay-content">
+            <div class="coins">Coins: <span id="coinCountPuzzle">0</span></div>
+            <script>pirate.updateCoinCount();</script>
+            <p><b>Puzzle Upgrades</b></p>
+            
+            <button class="closeOverlayBtn">Close</button>
+
+            <div>
+                <h3>Hints</h3>
+                <p id="hints">Tier: 1</p>
+                <button onclick="speedUpgrade.upgrade()">Upgrade Speed</button>
+            </div>
+
+            <div>
+                <h3>Sudoku Errors Given</h3>
+                <p id="errorLevel">Tier: 1</p>
+                <button onclick="errorUpgrade.upgrade()">Upgrade Errors</button>
+            </div>
+
+
+        </div>
+    </div>
 <!--     <script src="player.js"></script>
  -->    <!-- <script src="sketch.js"></script> -->
     

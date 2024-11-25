@@ -20,12 +20,14 @@ let notClosed = true;
 const fireOverlay = document.getElementById('fireOverlay');
 const barracksOverlay = document.getElementById('barracksOverlay');
 const pierOverlay = document.getElementById('pierOverlay');
+const puzzleOverlay = document.getElementById('puzzleOverlay');
 const closeButtons = document.querySelectorAll('.closeOverlayBtn');
 
 // Grab references to the buttons that actually trigger the overlays
 const showFireOverlayBtn = document.getElementById('showCampfireOverlayButton');
 const showBarracksOverlayBtn = document.getElementById('showBarracksOverlayButton');
 const showPierOverlayBtn = document.getElementById('showPierOverlayButton');
+const showPuzzleOverlayBtn = document.getElementById('showPuzzleOverlayButton');
 
 function preload() {
     islandImg = loadImage('assets/upgradeislandAlt.png');
@@ -55,6 +57,8 @@ function setup() {
     colliders.push(barracksCollider);
     let pierCollider = new islandObject(390, 330, 150, 80, pierOverlay);
     colliders.push(pierCollider);
+    let puzzleCollider = new islandObject(370, 150, 70, 90, puzzleOverlay);
+    colliders.push(puzzleCollider);
 
     loadMusic();
     

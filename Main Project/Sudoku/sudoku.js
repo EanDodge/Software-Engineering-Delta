@@ -3,12 +3,14 @@ let square_size = 45; //length and height of each square
 let interval = 30;
 
 // Num of errors allowed
-let errorNum = 5;
+let errorNum = parseInt(localStorage.getItem('errorNum')) || 3;
+console.log('error:', errorNum);
+
 let errorCount = 0;
 
 // Here for global, needed for testing
 let incompletedGame = true;
-// Initializes to begin screen
+// Initializes to begin screen2
 let startupDisplay = true;
 // Moving to help display
 let helpDisplay = true;

@@ -72,6 +72,7 @@ class Pirate {
     updateCoinCount() {
         document.getElementById('coinCountBarracks').innerText = this.currency;
         document.getElementById('coinCountPier').innerText = this.currency;
+        document.getElementById('coinCountPuzzle').innerHTML = this.currency;
 
         localStorage.setItem('playerCurrency', this.currency); // Store in localStorage
          console.log("Coin count updated to: ",this.currency);
