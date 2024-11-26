@@ -268,6 +268,27 @@ async function hint() {
     return; // Exit the function if the popup is already displayed
   }
 
+  // Retrieve the number of hints from localStorage
+  let hints = parseInt(localStorage.getItem('hints')) || 0;
+
+  //Checks if the user has hints to use 
+  if (hints > 0) {
+    console.log(`User has ${hints} hint(s).`);
+    --hints; //decrease the number of hints by 1
+      // Save the updated hint value back to localStorage
+      localStorage.setItem('hints', hints);
+      // Update displayed hint count
+      const hintCountDisplay = document.getElementById('hintCount');
+      if (hintCountDisplay) {
+          hintCountDisplay.textContent = hints;
+      }
+  }
+  else {
+    console.log("User has no hints!");
+      alert('You have no hints to use!');
+      return;
+  }
+
   let availableHintIndices = [];
   for (let i = 0; i < rows * cols - rows; ++i) {
     if (i % rows !== rows - 1) availableHintIndices.push(i);
