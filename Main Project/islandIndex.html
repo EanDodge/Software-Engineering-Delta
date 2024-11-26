@@ -136,7 +136,7 @@
             <p><b>Puzzle Select</b></p>
             <div class="button-group">
                 <button onclick="window.location.href='Sudoku/sudoku.html'">Play Sudoku</button>
-                <button onclick="window.location.href='nurikabe/nurikabe.html'">Play Nurikabe</button>
+                <button onclick="openNurikabeOverlay()">Play Nurikabe</button>
                 <button onclick="window.location.href='tetris.html'">Play Tetris</button>
 
             </div>
@@ -152,12 +152,6 @@
                 <h3>Cannon Damage</h3>
                 <p id="cannonsLevel">Tier: 1</p>
                 <button class="buttons" onclick="cannonsUpgrade.upgrade()">Upgrade Cannon Damage</button>
-            </div>
-
-            <div>
-                <h3>Ammo Capacity</h3>
-                <p id="ammoLevel">Tier: 1</p>
-                <button class="buttons" onclick="ammoCapacityUpgrade.upgrade()">Upgrade Capacity</button>
             </div>
 
             <div>
@@ -189,6 +183,48 @@
 
         </div>
     </div>
+
+    <div id="nurikabeOverlay" class="overlay">
+        <div class="overlay-content">
+            <p><b>Select Difficulty for Nurikabe</b></p>
+            <div class="button-group">
+                <button onclick="startNurikabe('easy')">Easy</button>
+                <button onclick="startNurikabe('medium')">Medium</button>
+                <button onclick="startNurikabe('hard')">Hard</button>
+            </div>
+            <button onclick="closeNurikabeOverlay()">Close</button>
+        </div>
+    </div>
+    
+    <script>
+        // Function to open the Nurikabe difficulty selection overlay
+        function openNurikabeOverlay() {
+            document.getElementById('nurikabeOverlay').style.display = 'flex';
+        }
+    
+        // Function to close the Nurikabe difficulty selection overlay
+        function closeNurikabeOverlay() {
+            document.getElementById('nurikabeOverlay').style.display = 'none';
+        }
+    
+        // Function to start Nurikabe with the selected difficulty
+        function startNurikabe(difficulty) {
+            let pageUrl = '';
+            if (difficulty === 'easy') {
+                pageUrl = 'nurikabe/nurikabeEasy.html';
+            } else if (difficulty === 'medium') {
+                pageUrl = 'nurikabe/nurikabe.html';
+            } else if (difficulty === 'hard') {
+                pageUrl = 'nurikabe/nurikabeHard.html';
+            }
+    
+            // Redirect to the selected difficulty page
+            if (pageUrl) {
+                window.location.href = pageUrl;
+            }
+        }
+    </script>
+
 <!--     <script src="player.js"></script>
  -->    <!-- <script src="sketch.js"></script> -->
     
