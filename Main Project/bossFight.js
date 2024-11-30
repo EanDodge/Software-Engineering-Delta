@@ -1,156 +1,3 @@
-
-//  import Enemy from './enemy.js';
-//  import Boss from './boss.js';
-//  import Player from './player.js';
-
-// const boss = new Boss(300, 300, 200, 'bossImage');
-// let minions = [];
-// let inkProjectiles = [];
-// let tentacles = [];
-
-// const mapXSize = 500;
-// const mapYSize = 500;
-
-// let player = new Player(mapXSize/2, mapYSize/2);
-
-// let enemies = [];
-
-// let gameObjects = [];
-
-// let projectiles = [];
-
-// let frameCount = 0;
-
-// let projectileFrameCount = 0;
-
-//  //let playerImage; made playerimage part of the player object
-
-//  let backgroundImage;
-//  let bossImage; 
-
-
-//  function preload() {
-//      player.playerImage = loadImage('./assets/shiplvl1Top.png');
-
-// 	 //backgroundImage = loadImage('./assets/sea.png');
-// 	 enemyImage = loadImage('./assets/krakenDelozier.png');
-//  }
- 
-// function setup() {
-// 	//createCanvas(mapXSize, mapYSize, WEBGL);
-// 	//makes canvas size dependent on display size (- values because full display size was to big)
-// 	createCanvas(displayWidth / 1.5, displayHeight / 1.5, WEBGL);
-
-// 	clearStorageButton = createButton("Clear Storage");
-// 	clearStorageButton.position(0, 0);
-// 	clearStorageButton.mousePressed(() => { localStorage.clear(); location.reload(); });
-	
-// 	console.log("Display h x w = " + displayHeight + ", " + displayWidth);
-
-	
-// 	//camera to follow player
-// 	cam = createCamera();
-
-// 	//sets the standard frame rate to 45fps
-// 	frameRate(45);
-
-
-
-// }
-
-// function draw() {
-// 	background(0, 0, 0, 0);
-// 	//image(backgroundImage, mapXSize / 2 - mapXSize, mapYSize / 2 - mapYSize, mapXSize * 2, mapYSize * 2);
-
-// 	//border lines
-// 	stroke(255, 255, 255);
-// 	line(0, mapXSize, 0, 0);
-// 	line(mapXSize, mapXSize, 0, mapYSize);
-// 	line(mapXSize, 0, mapYSize, mapYSize);
-// 	line(0, 0, mapYSize, 0);
-// 	stroke(0, 0, 0);
-
-	
-// 	controllerInput();
-
-	
-
-// 	player.drawPlayer();
-// 	player.movePlayer();
-// 	player.checkCollisionEnemies(enemies);
-
-
-// 	if (projectileFrameCount % 30 === 0) {
-// 		extraMove = player.getMovementOfPlayer();
-// 		extraXMove = extraMove[0];
-//         extraYMove = extraMove[1];
-// 		let tmpProjectile1 = new Projectile(player.x, player.y, player.angle, -1, extraXMove, extraYMove);
-// 		projectiles.push(tmpProjectile1);
-// 		let tmpProjectile2 = new Projectile(player.x, player.y, player.angle, 1, extraXMove, extraYMove);
-// 		projectiles.push(tmpProjectile2);
-
-// 		projectileFrameCount = 0;
-// 	}
-
-// 	projectiles.forEach((projectile, index) => {
-// 		projectile.drawProjectile();
-// 		projectile.moveProjectile();
-// 		if (projectile.outOfRange())
-// 			projectiles.splice(index, 1);
-
-// 	});
-
-// 	boss.drawBoss();
-
-//     // Handle boss attacks
-//     const attack = boss.attack(player, 'minionImage');
-//     if (attack) {
-//         if (Array.isArray(attack)) {
-//             minions = minions.concat(attack);
-//         } else if (attack.move) {
-//             inkProjectiles.push(attack);
-//         } else if (attack.draw) {
-//             tentacles.push(attack);
-//         }
-//     }
-
-//     // Draw and move minions
-//     minions.forEach(minion => {
-//         minion.drawEnemy();
-//         minion.moveEnemy(player);
-//     });
-
-//     // Draw and move ink projectiles
-//     inkProjectiles.forEach(ink => {
-//         ink.move();
-//         ink.draw();
-//     });
-
-//     // Draw tentacles
-//     tentacles.forEach(tentacle => {
-//         tentacle.draw();
-//         tentacle.hitPlayer();
-//     });
-
-
-	
-
-// 	//moves cam to centered on player, z=800 default
-// 	//MUST BE 801 FOR 2d LINES TO RENDER ABOVE IMAGES
-// 	cam.setPosition(player.x, player.y, 801);
-
-// 	frameCount++;
-// 	projectileFrameCount++;
-
-// }
-
-// //debuging function currently
-// function mousePressed() {
-// 	console.log("mouse: " + mouseX + ", " + mouseY);
-// 	console.log("player: " + player.x + ", " + player.y);
-// }
-
- 
 const mapXSize = 1000;
 const mapYSize = 1000;
 
@@ -164,12 +11,13 @@ let projectiles = [];
 
 let frameCount = 0;
 
-
 let minions = [];
 let inkProjectiles = [];
 let tentacles = [];
 let boss;
 
+const selectedLevel = parseInt(localStorage.getItem("selectedLevel")) || 1;
+const highestLevelBeat = parseInt(localStorage.getItem("highestLevelBeat")) || 0;
 
 
 let enemySpawnNumber = parseInt(localStorage.getItem("enemySpawnNumber")) || 0;
@@ -179,6 +27,7 @@ let enemyHealth = parseInt(localStorage.getItem("enemyHealth")) || 1;
 // % can return true because frame count isnt back to 0
 let enemyFrameCount = 0;
 let projectileFrameCount = 0;
+let projectileOffset = 0;
 
  //let playerImage; made playerimage part of the player object
  let islandImage;
@@ -364,7 +213,7 @@ function draw() {
 		});
 
 
-	if (projectileFrameCount % 30 === 0) {
+	if (projectileFrameCount % 30 === 0 && !delozierMode) {
 		extraMove = player.getMovementOfPlayer();
 		extraXMove = extraMove[0];
         extraYMove = extraMove[1];
@@ -374,6 +223,14 @@ function draw() {
 		projectiles.push(tmpProjectile2);
 
 		projectileFrameCount = 0;
+	}
+
+	if (delozierMode) {
+		for (let i = 0; i < Math.PI * 2; i += Math.PI / 10) {
+			let tmpProjectile = new Projectile(player.x, player.y, i + projectileOffset, 1, 0, 0);
+			projectiles.push(tmpProjectile);
+		}
+		projectileOffset += Math.PI / 25;
 	}
 
 	projectiles.forEach((projectile, index) => {
@@ -406,6 +263,10 @@ function draw() {
 		player.gainCurrency(boss.currencyValue);
 		console.log("Player received " + boss.currencyValue + " currency. Total: " + player.currency);
 		boss.awardReceived = true;
+		if (selectedLevel == highestLevelBeat + 1) {
+			localStorage.setItem('highestLevelBeat', toString(highestLevelBeat + 1))
+		}
+		
 	}
 	//moves cam to centered on player, z=800 default
 	//MUST BE 801 FOR 2d LINES TO RENDER ABOVE IMAGES

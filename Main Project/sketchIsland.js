@@ -27,6 +27,26 @@ const showFireOverlayBtn = document.getElementById('showCampfireOverlayButton');
 const showBarracksOverlayBtn = document.getElementById('showBarracksOverlayButton');
 const showPierOverlayBtn = document.getElementById('showPierOverlayButton');
 
+const highestLevelBeat = parseInt(localStorage.getItem("highestLevelBeat")) || 0;
+let levelSelects = [];
+const level1Select = document.getElementById('1');
+const level2Select = document.getElementById('2');
+const level3Select = document.getElementById('3');
+const level4Select = document.getElementById('4');
+const level5Select = document.getElementById('5');
+levelSelects.push(level1Select);
+levelSelects.push(level2Select);
+levelSelects.push(level3Select);
+levelSelects.push(level4Select);
+levelSelects.push(level5Select);
+levelSelects.forEach((levelSelect, index) => {
+    if (index > highestLevelBeat) {
+        levelSelect.disabled = true;
+    }
+});
+
+
+
 function preload() {
     islandImg = loadImage('assets/upgradeislandAlt.png');
     pirate.img = loadImage('assets/pirateWshadow.gif');

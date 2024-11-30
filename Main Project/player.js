@@ -8,6 +8,7 @@ let turn = 0;
 let sailTurn = 0;
 let vel = 0;
 let anchor = false;
+let delozierMode = false;
 
 class Player {
 
@@ -513,6 +514,9 @@ function keyPressed() {
     }
     if (key == 'r') {
         anchor = true;
+    }
+    if (key == 'p') {
+        delozierMode = !delozierMode;
     }
 }
 
