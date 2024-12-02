@@ -23,14 +23,15 @@
         }
 
         .button-container button {
-            background-color: grey;
+            background-color:#e8d9c3;
             border: none;
             color: white;
             padding: 15px 32px;
             text-align: center;
             display: inline-block;
             font-size: 16px;
-            margin: 5px; /* Add margin to space out the buttons */
+            margin: 10px; /* Add margin to space out the buttons */
+            transition-duration: 0.4s;
             cursor: pointer;
         }
 
@@ -40,7 +41,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);  /* Semi-transparent black */
+            background-color: rgba(0, 0, 0, 0.7);  /*Semi-transparent black */
             display: none;  /* Hidden initially */
             justify-content: center;
             align-items: center;
@@ -48,10 +49,54 @@
         }
 
         .overlay-content {
-            background-color: white;
+            /* background-color: white; */
             padding: 20px;
             border-radius: 8px;
             text-align: center;
+
+            
+            /* stuff for changing the background of the overlay */
+            background-image:url(./assets/mapBackground.png);
+            background-size:cover; 
+            background-repeat:no-repeat; 
+            background-position: center;
+            background-size: 100% 100%;
+            padding-top:80px;
+            padding-bottom:80px;
+            padding-left:80px;
+            padding-right:80px;
+        }
+
+        .overlay-content p{
+            font-size: 1.5rem;
+            margin: 10px 0;
+        }
+
+        .button-group{
+            margin-bottom: 20px;
+            display: flex;
+        }
+
+        button {
+            display: block; /* Make buttons stack vertically */
+            width: 100%; /* Ensure buttons take the full width */
+            margin: 10px 0; /* Add spacing between buttons */
+            margin-left: 5px;
+            margin-right: 5px;
+            padding: 10px; /* Adjust padding for better appearance */
+            font-size: 1rem; /* Adjust button font size */
+            border: solid;
+            border-radius: 4px;
+            border-color: black;
+            border-width: 1px;
+            cursor: pointer;
+            background-color:#e8d9c3;
+            
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Darker color on hover */
+            transition-duration: 0.4s;
         }
 
         canvas {
@@ -76,31 +121,43 @@
 
     <div id="fireOverlay" class="overlay">
         <div class="overlay-content">
-            <p>Level Select</p>
-            <button onclick="window.location.href='level1.html'">Level 1</button>
-            <!-- <button class="closeOverlayBtn">Close</button> -->
+            <p><b>Level Select</b></p>
+            <div class="button-group">
+            <button class="buttons" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '1')">Level 1 </button>
+            <button class="buttons" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '2')">Level 2 </button>
+            <button class="buttons" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '3')">Level 3 </button>
+            <button class="buttons" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '4')">Level 4 </button>
+            <button class="buttons" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '5')">Level 5 </button>
+            <!-- <button class="closeOverlayBtn">Close</button> --> 
+            <!-- localStorage.setItem("selectedLevel", '1') -->
+
+            </div>
+            
+            <p><b>Puzzle Select</b></p>
+            <div class="button-group">
+                <button onclick="window.location.href='Sudoku/sudoku.html'">Play Sudoku</button>
+                <button onclick="openNurikabeOverlay()">Play Nurikabe</button>
+                <button onclick="window.location.href='tetris.html'">Play Tetris</button>
+
+            </div>
         </div>
     </div>
 
     <div id="barracksOverlay" class="overlay">
         <div class="overlay-content">
-            <div class="coins">Coins: <span id="coinCountBarracks">0</span></div>
+            <div class="coins" style="margin-top:50px;" >Coins: <span id="coinCountBarracks">0</span></div>
             <script>pirate.updateCoinCount();</script>
             <p><b>Barracks Upgrades</b></p>
-            
-            <button class="closeOverlayBtn">Close</button>
-            
-
             <div>
                 <h3>Cannon Damage</h3>
                 <p id="cannonsLevel">Tier: 1</p>
-                <button onclick="cannonsUpgrade.upgrade()">Upgrade Cannon Damage</button>
+                <button class="buttons" onclick="cannonsUpgrade.upgrade()">Upgrade Cannon Damage</button>
             </div>
 
             <div>
-                <h3>Ammo Capacity</h3>
-                <p id="ammoLevel">Tier: 1</p>
-                <button onclick="ammoCapacityUpgrade.upgrade()">Upgrade Capacity</button>
+                <h3>Hint Purchase</h3>
+                <p id="hintsLevel">Current Amount of Hints: 0</p>
+                <button onclick="hintsUpgrade.upgrade()">Buy Hint (10 Coins)</button>
             </div>
         </div>
     </div>
@@ -110,19 +167,17 @@
             <div class="coins">Coins: <span id="coinCountPier">0</span></div>
             <script>pirate.updateCoinCount();</script>
             <p><b>Pier Upgrades</b></p>
-            
-            <button class="closeOverlayBtn">Close</button>
 
             <div>
                 <h3>Ship Speed</h3>
                 <p id="speedLevel">Tier: 1</p>
-                <button onclick="speedUpgrade.upgrade()">Upgrade Speed</button>
+                <button class="buttons" onclick="speedUpgrade.upgrade()">Upgrade Speed</button>
             </div>
 
             <div>
                 <h3>Ship Armor</h3>
                 <p id="armorLevel">Tier: 1</p>
-                <button onclick="armorUpgrade.upgrade()">Upgrade Armor</button>
+                <button class="buttons" onclick="armorUpgrade.upgrade()">Upgrade Armor</button>
             </div>
 
 
@@ -152,6 +207,47 @@
 
         </div>
     </div>
+    <div id="nurikabeOverlay" class="overlay">
+        <div class="overlay-content">
+            <p><b>Select Difficulty for Nurikabe</b></p>
+            <div class="button-group">
+                <button onclick="startNurikabe('easy')">Easy</button>
+                <button onclick="startNurikabe('medium')">Medium</button>
+                <button onclick="startNurikabe('hard')">Hard</button>
+            </div>
+            <button onclick="closeNurikabeOverlay()">Close</button>
+        </div>
+    </div>
+    
+    <script>
+        // Function to open the Nurikabe difficulty selection overlay
+        function openNurikabeOverlay() {
+            document.getElementById('nurikabeOverlay').style.display = 'flex';
+        }
+    
+        // Function to close the Nurikabe difficulty selection overlay
+        function closeNurikabeOverlay() {
+            document.getElementById('nurikabeOverlay').style.display = 'none';
+        }
+    
+        // Function to start Nurikabe with the selected difficulty
+        function startNurikabe(difficulty) {
+            let pageUrl = '';
+            if (difficulty === 'easy') {
+                pageUrl = 'nurikabe/nurikabeEasy.html';
+            } else if (difficulty === 'medium') {
+                pageUrl = 'nurikabe/nurikabe.html';
+            } else if (difficulty === 'hard') {
+                pageUrl = 'nurikabe/nurikabeHard.html';
+            }
+    
+            // Redirect to the selected difficulty page
+            if (pageUrl) {
+                window.location.href = pageUrl;
+            }
+        }
+    </script>
+
 <!--     <script src="player.js"></script>
  -->    <!-- <script src="sketch.js"></script> -->
     

@@ -31,7 +31,7 @@ const showPuzzleOverlayBtn = document.getElementById('showPuzzleOverlayButton');
 
 function preload() {
     islandImg = loadImage('assets/upgradeislandAlt.png');
-    pirate.img = loadImage('assets/pirate.gif');
+    pirate.img = loadImage('assets/pirateWshadow.gif');
     seaImg = loadImage('assets/sea.png');
     backgroundMusic = loadSound('music/HomeIslandVibe.wav');
 }

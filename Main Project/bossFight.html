@@ -11,6 +11,7 @@
 
 	<script src="libraries/p5.min.js"></script>
 	<script src="libraries/p5.sound.min.js"></script>
+	<script src="libraries/p5.collide2D.js"></script>
 	<script src="gamepad.js"></script>
     <script  src="enemy.js"></script>
     <script  src="player.js"></script>
@@ -31,12 +32,22 @@
 		You have defeated The Graken. The skies have cleared and you may now sail to MSB island.
 	</div>
 	<div class = "coins">Dabloons: <span id = "coinCount"></span></div>
+
+	<!-- Game Over Modal -->
+	<div id="gameOverModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border: 2px solid black; z-index: 1000;">
+		<h2>You have died</h2>
+		<button onclick="goToMainScreen()">Go to Main Screen</button>
+	</div>	
 	
 	<script>
 		// Initial update to display the starting currency
 		document.addEventListener('DOMContentLoaded', function() {
 			player.updateCoinCount();
 		});
+
+		function goToMainScreen() {
+		window.location.href = 'islandIndex.html'; // Redirect to the main screen
+		}
 	  </script>
 </body>
 <style>

@@ -101,12 +101,12 @@ function setup() {
   restartButton.mousePressed(restart);
 
   // Create a button to restart the puzzle
-  let solveButton = createButton('Solve');
-  solveButton.position(10, 160);
-  solveButton.mousePressed(solve);
+  // let solveButton = createButton('Solve');
+  // solveButton.position(10, 160);
+  // solveButton.mousePressed(solve);
 
   let hintButton = createButton('Hint');
-  hintButton.position(10, 210);
+  hintButton.position(10, 160);
   hintButton.mousePressed(hint);
 
   //Choose random puzzle
@@ -255,18 +255,39 @@ function restart() {
 }
 
 //Set current color state to the solution colors to solve the puzzle
-function solve() {
-  colorState = solution_colors;
-  //freeze canvas after one more loop of draw()
-  redraw();
-  noLoop();
-}
+// function solve() {
+//   colorState = solution_colors;
+//   //freeze canvas after one more loop of draw()
+//   redraw();
+//   noLoop();
+// }
 
 //gives the player a hint
 async function hint() {
   // Check if the no more hints popup already exists
   if (document.getElementById("noHint")) {
     return; // Exit the function if the popup is already displayed
+  }
+
+  // Retrieve the number of hints from localStorage
+  let hints = parseInt(localStorage.getItem('hints')) || 0;
+
+  //Checks if the user has hints to use 
+  if (hints > 0) {
+    console.log(`User has ${hints} hint(s).`);
+    --hints; //decrease the number of hints by 1
+      // Save the updated hint value back to localStorage
+      localStorage.setItem('hints', hints);
+      // Update displayed hint count
+      const hintCountDisplay = document.getElementById('hintCount');
+      if (hintCountDisplay) {
+          hintCountDisplay.textContent = hints;
+      }
+  }
+  else {
+    console.log("User has no hints!");
+      alert('You have no hints to use!');
+      return;
   }
 
   let availableHintIndices = [];

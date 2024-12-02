@@ -16,9 +16,9 @@ class Projectile {
         ellipse(this.x, this.y, this.size, this.size);
     }
 
-    outOfRange() {
-		return this.x > width - this.size / 2 || this.x < 0 + this.size / 2 ||
-               this.y > height - this.size / 2 || this.y < 0 + this.size / 2;
+    outOfRange(mapX, mapY) {
+		return this.x > mapX - this.size / 2 || this.x < 0 + this.size / 2 ||
+               this.y > mapY - this.size / 2 || this.y < 0 + this.size / 2;
     }
 
     moveProjectile() {

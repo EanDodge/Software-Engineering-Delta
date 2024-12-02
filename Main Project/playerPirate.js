@@ -84,7 +84,7 @@ class Pirate {
             pirate.updateCoinCount();
             return true;
         }
-        else {
+        else {s
             alert('Not enough coins!');
             return false;
         }

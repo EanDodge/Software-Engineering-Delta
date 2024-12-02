@@ -29,6 +29,13 @@
 	<div class = "coins">Dabloons: <span id = "coinCount"></span></div>
   <div id="sailAngleDisplay">Sail Angle: 0</div>
   <div id="angleDisplay">Angle: 0</div>
+
+   <!-- Game Over Modal -->
+   <div id="gameOverModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border: 2px solid black; z-index: 1000;">
+    <h2>You have died</h2>
+    <button onclick="goToMainScreen()">Go to Main Screen</button>
+  </div>
+
   <script src="sketch.js"></script>
   <script>
 	// Initial update to display the starting currency
@@ -38,6 +45,9 @@
     player.updateAnglesDisplay();
 		
 });
+	function goToMainScreen() {
+		window.location.href = 'islandIndex.html'; // Redirect to the main screen
+		}
   </script>
 </body>
 <style>
