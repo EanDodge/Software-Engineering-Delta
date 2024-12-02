@@ -28,7 +28,7 @@ class Player {
         // this.playerImage;
         this.hitIsland = false;
         this.playerImage;
-        this.health = parseInt(localStorage.getItem('playerHealth')) || 1;
+        this.health = parseInt(localStorage.getItem('playerHealth')) || 10;
         this.lastCollisionTime = 0; //Tracks the time of last collision
         this.cannonDamage = parseInt(localStorage.getItem('cannons')) || 1;
         this.inked = false;

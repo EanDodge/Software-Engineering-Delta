@@ -417,6 +417,8 @@ function draw() {
 	projectileFrameCount++;
 	enemyFrameCount++;
 
+	console.log("Player currency: " + player.currency);
+
 	
 }
 // Function to check collision between ink projectile and player
