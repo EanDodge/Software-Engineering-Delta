@@ -26,15 +26,16 @@ class Player {
         this.hitEnemy = false;
 
         // this.hitIsland = false;
-        // this.playerImage;
         this.hitIsland = false;
         this.playerImage;
+        this.sailImage;
         this.health = parseInt(localStorage.getItem('playerHealth')) || 10;
         this.lastCollisionTime = 0; //Tracks the time of last collision
         this.cannonDamage = parseInt(localStorage.getItem('cannons')) || 1;
         this.inked = false;
         this.rudderAngle = 0;
         this.sailAngle = Math.PI;
+        this.isAlive = true;
 
 
     }
@@ -105,16 +106,18 @@ class Player {
         fill(255, 128, 13);
         translate(this.x - 350, this.y - 250);
         rotate(-this.rudderAngle);
-        rectMode(CENTER);
-        rect(0, 0, 10, 50);
-        rectMode(CORNER);
+        imageMode(CENTER)
+        //image(this.sailImage, 0, 0, this.size, this.size);
+        //imageMode(CORNER)
         pop();
 
         push();
-        fill(255, 255, 255);
+        imageMode(CENTER)
+        //fill(255, 255, 255);
         translate(this.x, this.y);
         rotate(-(this.sailAngle));
-        rect(-2.5, -47.5, 5, 50);
+        image(this.sailImage, 0, 0, this.size+30, this.size+30);
+
         pop();
     }
 
@@ -153,14 +156,14 @@ class Player {
         let newSailAngle = this.sailAngle + this.turningSpeed * sailTurn;
         newSailAngle = (newSailAngle + Math.PI * 2) % (Math.PI * 2);
 
-        if (this.validSailAnglePortside() && this.validSailAngleStarboard()) {
+        //if (this.validSailAnglePortside() && this.validSailAngleStarboard()) {
             this.sailAngle = newSailAngle;
 
-        } else if (!this.validSailAnglePortside()) {
+        /*} else if (!this.validSailAnglePortside()) {
             this.sailAngle += 0.01;
         } else if (!this.validSailAngleStarboard()) {
             this.sailAngle -= 0.01;
-        }
+        }*/
         let a = this.sailAngle;
         let b = this.angle;
         let c = (a - b) - Math.PI / 2;
@@ -314,6 +317,17 @@ class Player {
         return colliding;
     }
 
+    checkCollisionTreasureIslands(islands) {
+        let colliding = false;
+        islands.forEach((island, index) => {
+            if(this.isColliding(island)) {
+                colliding = true;
+                window.location.href = './nurikabe/nurikabeEasy.html';
+            }
+        });
+        return colliding;
+    }
+
     isCollidingEnemy(enemy) {
         //New Formula
         let pf = [this.sizeW / 2, -this.sizeH / 2]
@@ -453,7 +467,14 @@ class Player {
 
     checkPlayerDeath() {
         if (this.health <= 0) {
-            window.location.href = 'gameover.html'; // Navigate to gameover.html
+            console.log("Player has died");
+            const gameOverModal = document.getElementById('gameOverModal');
+            if (gameOverModal) {
+                gameOverModal.style.display = 'block'; // Show game over modal
+                this.isAlive = false;
+            } else {
+                console.error("Game over modal element not found");
+            }
         }
     }
 

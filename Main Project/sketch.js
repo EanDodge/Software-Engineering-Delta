@@ -68,13 +68,14 @@ let bombImage;
 
 
 function preload() {
-	player.playerImage = loadImage('./assets/shiplvl1Top.png');
+	player.playerImage = loadImage('./assets/shiplvl1Base.png');
+	player.sailImage = loadImage('./assets/shiplvl1FrontSail.png')
 	islandImage = loadImage('./assets/islandDock.png');
 	//backgroundImage = loadImage('./assets/sea.png');
-	enemyImage = loadImage('./assets/sharkWater.gif');
+	enemyImage = loadImage('./assets/shark.gif');
 	stormImage = loadImage('./assets/stormWater.png')
 	minionImage = loadImage('./assets/kraken.png');
-	backgroundMusic = loadSound('./music/PirateLoop.wav');
+	backgroundMusic = loadSound('./music/sweetchild.mp4');
 	bombImage = loadImage('./assets/greg.png');
 }
 
@@ -261,6 +262,10 @@ function draw() {
 			enemies.push(enemy);
 			enemyFrameCount = 0;
 		}
+	}
+
+	if (player.isAlive == false) {
+		return;
 	}
 
 	enemies.forEach((enemy, index) => {
