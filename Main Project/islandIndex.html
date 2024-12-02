@@ -156,11 +156,19 @@
 
             <div>
                 <h3>Hint Purchase</h3>
-                <p id="hintsLevel">Current Amount of Hints: 0</p>
+                <p id="hintsLevel">Current Amount of Hints: <span id="hintCount">0</span></p>
                 <button onclick="hintsUpgrade.upgrade()">Buy Hint (10 Coins)</button>
             </div>
         </div>
     </div>
+
+    <script>
+        // Retrieve the number of hints from localStorage
+        const hints = parseInt(localStorage.getItem('hints')) || 0;
+  
+        // Update the HTML to show the hints count
+        document.getElementById('hintCount').innerText = `${hints}`;
+    </script>
 
     <div id="pierOverlay" class="overlay">
         <div class="overlay-content">
