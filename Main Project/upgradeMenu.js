@@ -89,8 +89,6 @@ class SpeedUpgrade extends Upgrade {
     }
 }
 
-
-
 class ErrorUpgrade extends Upgrade{
     constructor() {
         super('error', [25, 50, 100], ["a", "b", "c"]);
@@ -120,6 +118,10 @@ class ErrorUpgrade extends Upgrade{
         console.log('Sudoku Errors increased to tier:', tier);
         let currentError = parseInt(localStorage.getItem('errorNum')) || 3;
         localStorage.setItem('errorNum', ++currentError);
+    }
+}
+
+
 class HintsUpgrade extends Upgrade {
     constructor() {
         super('hints', [], []); // No tier costs or names needed
@@ -150,50 +152,18 @@ class HintsUpgrade extends Upgrade {
     }
 }
 
-/* class hintPurchase extends Upgrade{
-    constructor() {
-        super('error', [25, 50, 100], ["a", "b", "c"]);
-    }
-
-    upgrade() {
-        if (this.value < 3) { // Maximum tier is 3
-            let cost = this.cost[this.value - 1];
-            console.log(cost);
-            if (pirate.buyUpgrade(cost)) {
-                this.value++;
-                localStorage.setItem(this.name, this.value);
-                pirate.updateCoinCount();
-                let tier = this.value;
-                document.getElementById(this.name + 'Level').innerText = 'Tier: ' + tier + ' - ' + this.tierNames[tier - 1];
-                this.applyUpgradeEffect(tier);
-            } else {
-                alert('Not enough coins!');
-            }
-        } else {
-            alert(this.name.charAt(0).toUpperCase() + this.name.slice(1) + ' is already at maximum tier!');
-        }
-    }
-
-    applyUpgradeEffect(tier) {
-        // Specific effect for hints upgrade
-        console.log('Sudoku Errors increased to tier:', tier);
-        let currentError = parseInt(localStorage.getItem('errorNum')) || 3;
-        localStorage.setItem('errorNum', ++currentError);
-    }
-} */
-
-
 // Create instances for each upgrade type
 const armorUpgrade = new ArmorUpgrade();
 const cannonsUpgrade = new CannonsUpgrade();
 const speedUpgrade = new SpeedUpgrade();
-const ammoCapacityUpgrade = new AmmoCapacityUpgrade();
+//const ammoCapacityUpgrade = new AmmoCapacityUpgrade();
+const hintsUpgrade = new HintsUpgrade();
 const errorUpgrade = new ErrorUpgrade();
 
 
 // Function to initialize upgrade values from localStorage
 function initializeUpgrades() {
-    const upgrades = [armorUpgrade, cannonsUpgrade, speedUpgrade, ammoCapacityUpgrade, errorUpgrade];
+    const upgrades = [armorUpgrade, cannonsUpgrade, speedUpgrade, hintsUpgrade, errorUpgrade];
     upgrades.forEach(upgrade => {
         let tier = upgrade.value;
         document.getElementById(upgrade.name + 'Level').innerText = 'Tier: ' + tier + ' - ' + upgrade.tierNames[tier - 1];
