@@ -73,7 +73,7 @@ function preload() {
 	enemyImage = loadImage('./assets/shark.gif');
 	stormImage = loadImage('./assets/stormWater.png')
 	minionImage = loadImage('./assets/kraken.png');
-	backgroundMusic = loadSound('./music/PirateLoop.wav');
+	backgroundMusic = loadSound('./music/sweetchild.mp4');
 	bombImage = loadImage('./assets/greg.png');
 }
 
@@ -260,6 +260,10 @@ function draw() {
 			enemies.push(enemy);
 			enemyFrameCount = 0;
 		}
+	}
+
+	if (player.isAlive == false) {
+		return;
 	}
 
 	enemies.forEach((enemy, index) => {

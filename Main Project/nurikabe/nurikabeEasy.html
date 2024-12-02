@@ -14,7 +14,7 @@
   </head>
 
   <body>
-    <div id="hintDisplay" style="position: absolute; top: 260px; left: 10px; z-index: 1000;">
+    <div id="hintDisplay" style="position: absolute; top: 205px; left: 10px; z-index: 1000;">
       <p>Number of Hints: <span id="hintCount">0</span></p>
     </div>
     <div id="coinCount"></div> <!--Needs to be element under ID "coinCount" for updateCurrency() and gainCurrency() to work-->
@@ -42,23 +42,28 @@
       background-repeat: no-repeat; 
     }
     button { 
-      background-color: slategray;
-      color: black;
+      background-color: whitesmoke;
+      color: rgb(69, 69, 69);
       text-align: center;
       font-size: 16px;
       font-family: monospace;
-      text-decoration: none;
       cursor: pointer;
-      display: inline-block;
-      border: 2px solid lightgray;
-      border-radius: 10px; /*curved corners*/
+      border: 4px solid blue;
       padding: 10px;
+      border-radius: 8px;
       transition-duration: 0.2s;
     }
     button:hover {
-      color: rgb(112, 199, 233);
-      background-color: rgb(130, 148, 168);
-      border: 2px solid gray;
+      color: whitesmoke;
+      background-color: blue;
+      border: 4px solid rgb(120, 120, 120);
+      border-radius: 16px;
+    }
+    canvas {
+      outline: solid;
+      outline-color: white;
+      outline-width: 30px;
+      border-radius: 3px;
     }
 
     h2{font-family: monospace;}

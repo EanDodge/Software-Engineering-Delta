@@ -100,12 +100,12 @@ function setup() {
   restartButton.mousePressed(restart);
 
   // Create a button to restart the puzzle
-  let solveButton = createButton('Solve');
-  solveButton.position(10, 160);
-  solveButton.mousePressed(solve);
+  // let solveButton = createButton('Solve');
+  // solveButton.position(10, 160);
+  // solveButton.mousePressed(solve);
 
   let hintButton = createButton('Hint');
-  hintButton.position(10, 210);
+  hintButton.position(10, 160);
   hintButton.mousePressed(hint);
 
   //Choose random puzzle
@@ -254,12 +254,12 @@ function restart() {
 }
 
 //Set current color state to the solution colors to solve the puzzle
-function solve() {
-  colorState = solution_colors;
-  //freeze canvas after one more loop of draw()
-  redraw();
-  noLoop();
-}
+// function solve() {
+//   colorState = solution_colors;
+//   //freeze canvas after one more loop of draw()
+//   redraw();
+//   noLoop();
+// }
 
 //gives the player a hint
 async function hint() {

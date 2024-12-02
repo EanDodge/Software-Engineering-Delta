@@ -34,6 +34,7 @@ class Player {
         this.inked = false;
         this.rudderAngle = 0;
         this.sailAngle = Math.PI;
+        this.isAlive = true;
 
 
     }
@@ -152,14 +153,14 @@ class Player {
         let newSailAngle = this.sailAngle + this.turningSpeed * sailTurn;
         newSailAngle = (newSailAngle + Math.PI * 2) % (Math.PI * 2);
 
-        if (this.validSailAnglePortside() && this.validSailAngleStarboard()) {
+        //if (this.validSailAnglePortside() && this.validSailAngleStarboard()) {
             this.sailAngle = newSailAngle;
 
-        } else if (!this.validSailAnglePortside()) {
+        /*} else if (!this.validSailAnglePortside()) {
             this.sailAngle += 0.01;
         } else if (!this.validSailAngleStarboard()) {
             this.sailAngle -= 0.01;
-        }
+        }*/
         let a = this.sailAngle;
         let b = this.angle;
         let c = (a - b) - Math.PI / 2;
@@ -313,6 +314,17 @@ class Player {
         return colliding;
     }
 
+    checkCollisionTreasureIslands(islands) {
+        let colliding = false;
+        islands.forEach((island, index) => {
+            if(this.isColliding(island)) {
+                colliding = true;
+                window.location.href = './nurikabe/nurikabeEasy.html';
+            }
+        });
+        return colliding;
+    }
+
     isCollidingEnemy(enemy) {
         //New Formula
         let pf = [this.sizeW / 2, -this.sizeH / 2]
@@ -452,7 +464,14 @@ class Player {
 
     checkPlayerDeath() {
         if (this.health <= 0) {
-            window.location.href = 'gameover.html'; // Navigate to gameover.html
+            console.log("Player has died");
+            const gameOverModal = document.getElementById('gameOverModal');
+            if (gameOverModal) {
+                gameOverModal.style.display = 'block'; // Show game over modal
+                this.isAlive = false;
+            } else {
+                console.error("Game over modal element not found");
+            }
         }
     }
 
