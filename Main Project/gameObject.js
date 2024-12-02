@@ -40,8 +40,20 @@ class GameObject {
             if (currentLevel > highestLevel) {
                 localStorage.setItem("highestLevelBeat", currentLevel.toString());
             }
-            //do this last!!!
-            window.location.href = 'bossFight.html';
+            // Generate a random number between 0 and 1
+            let randomNum = Math.floor(Math.random() * 2);
+
+            // Use a switch statement to handle the different cases
+            switch (randomNum) {
+                case 0:
+                    window.location.href = 'bossFight.html';
+                    break;
+                case 1:
+                    window.location.href = 'cortanaFight.html';
+                    break;
+                default:
+                    console.error('Unexpected random number:', randomNum);
+            }
         }
     }
 }

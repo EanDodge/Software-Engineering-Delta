@@ -143,7 +143,7 @@ function draw() {
 	player.movePlayer();
 	player.checkCollisionEnemies(minions);
 	player.checkCollisionProjectiles(inkProjectiles);
-	player.drawRudderAndSails();
+	//player.drawRudderAndSails();
 	player.checkCollisionTreasureIslands(gameObjects);
 
 	boss.drawBoss();
