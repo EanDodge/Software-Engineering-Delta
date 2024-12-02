@@ -452,8 +452,8 @@ class Player {
 
     checkPlayerDeath() {
         if (this.health <= 0) {
-			console.log("Player has died");
-            window.location.href = 'gameover.html'; // Navigate to gameover.html
+            console.log("Player has died");
+            document.getElementById('gameOverModal').style.display = 'block'; // Show game over modal
         }
     }
 
