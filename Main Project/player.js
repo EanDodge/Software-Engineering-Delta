@@ -28,12 +28,13 @@ class Player {
         // this.playerImage;
         this.hitIsland = false;
         this.playerImage;
-        this.health = parseInt(localStorage.getItem('playerHealth')) || 10;
+        this.health = parseInt(localStorage.getItem('playerHealth')) || 1;
         this.lastCollisionTime = 0; //Tracks the time of last collision
         this.cannonDamage = parseInt(localStorage.getItem('cannons')) || 1;
         this.inked = false;
         this.rudderAngle = 0;
         this.sailAngle = Math.PI;
+        this.isAlive = true;
 
 
     }
@@ -453,7 +454,13 @@ class Player {
     checkPlayerDeath() {
         if (this.health <= 0) {
             console.log("Player has died");
-            document.getElementById('gameOverModal').style.display = 'block'; // Show game over modal
+            const gameOverModal = document.getElementById('gameOverModal');
+            if (gameOverModal) {
+                gameOverModal.style.display = 'block'; // Show game over modal
+                this.isAlive = false;
+            } else {
+                console.error("Game over modal element not found");
+            }
         }
     }
 

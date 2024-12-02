@@ -262,6 +262,10 @@ function draw() {
 		}
 	}
 
+	if (player.isAlive == false) {
+		return;
+	}
+
 	enemies.forEach((enemy, index) => {
 		enemy.drawEnemy();
 		enemy.moveEnemy(player);
