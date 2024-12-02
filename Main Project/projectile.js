@@ -9,6 +9,7 @@ class Projectile {
         this.sign = sign;
         this.extraXMove = playerXMove;
         this.extraYMove = playerYMove;
+		this.image;
     }
 
     drawProjectile() {
