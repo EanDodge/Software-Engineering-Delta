@@ -123,11 +123,11 @@
         <div class="overlay-content">
             <p><b>Level Select</b></p>
             <div class="button-group">
-            <button class="buttons" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '1')">Level 1 </button>
-            <button class="buttons" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '2')">Level 2 </button>
-            <button class="buttons" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '3')">Level 3 </button>
-            <button class="buttons" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '4')">Level 4 </button>
-            <button class="buttons" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '5')">Level 5 </button>
+            <button class="buttons" id="1" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '1')">Level 1 </button>
+            <button class="buttons" id="2" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '2')">Level 2 </button>
+            <button class="buttons" id="3" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '3')">Level 3 </button>
+            <button class="buttons" id="4" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '4')">Level 4 </button>
+            <button class="buttons" id="5" onclick="window.location.href='level1.html'; localStorage.setItem('selectedLevel', '5')">Level 5 </button>
             <!-- <button class="closeOverlayBtn">Close</button> --> 
             <!-- localStorage.setItem("selectedLevel", '1') -->
 
@@ -156,7 +156,7 @@
 
             <div>
                 <h3>Hint Purchase</h3>
-                <p id="hintsLevel">Current Amount of Hints: 0</p>
+                <p id="hintsLevel">Current Amount of Hints: <span id="hintCount">0</span></p>
                 <button onclick="hintsUpgrade.upgrade()">Buy Hint (10 Coins)</button>
             </div>
 
@@ -167,6 +167,14 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Retrieve the number of hints from localStorage
+        const hints = parseInt(localStorage.getItem('hints')) || 0;
+  
+        // Update the HTML to show the hints count
+        document.getElementById('hintCount').innerText = `${hints}`;
+    </script>
 
     <div id="pierOverlay" class="overlay">
         <div class="overlay-content">

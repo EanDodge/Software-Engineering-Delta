@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sailing Points of Sail</title>
+  <style>
+	body{
+            background-image: url('./assets/harbor3.png');
+            background-size: cover;
+        }
+	.container {
+      display: flex;
+      align-items: flex-start;
+    }
+	svg {
+	  background-image: url('./assets/sea.png');
+	  background-size: cover;
+	  background-position: center;
+	}
+	svg text {
+      fill: white;
+    }
+	.instructions {	
+      margin-left: 20px;
+      max-width: 300px;
+      background-color: rgba(0, 0, 0, 0.7); /* Transparent black background */
+      padding: 10px;
+      border-radius: 5px;
+      color: white; 
+    }
+	.practice-button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background-color: #007BFF;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .practice-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Points of Sail</h1>
+  <div class="container">
+	<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg" style="border: 1px solid black;">
+		<!-- Wind direction -->
+		<line x1="250" y1="0" x2="250" y2="500" stroke="black" stroke-width="2" marker-end="url(#arrowhead)" />
+		<text x="260" y="20" font-size="14">Wind Direction</text>
+
+		<!-- No Sail Zone -->
+		<path d="M250,250 L180,100 A100,100 0 0,1 320,100 Z" fill="none" stroke="black" stroke-width="2" />
+		<text x="220" y="130" font-size="14">No Sail Zone</text>
+
+		<!-- Close-hauled lines -->
+		<line x1="250" y1="250" x2="180" y2="100" stroke="black" stroke-dasharray="4" />
+		<line x1="250" y1="250" x2="320" y2="100" stroke="black" stroke-dasharray="4" />
+		<text x="100" y="90" font-size="14">Close-hauled</text>
+		<text x="360" y="90" font-size="14">Close-hauled</text>
+
+		<!-- Beam Reach -->
+		<line x1="250" y1="250" x2="50" y2="250" stroke="black" stroke-width="2" />
+		<line x1="250" y1="250" x2="450" y2="250" stroke="black" stroke-width="2" />
+		<text x="20" y="260" font-size="14">Beam Reach</text>
+		<text x="400" y="260" font-size="14">Beam Reach</text>
+
+		<!-- Run -->
+		<line x1="250" y1="250" x2="250" y2="450" stroke="black" stroke-width="2" />
+		<text x="260" y="470" font-size="14">Run</text>
+
+		<!-- Boats -->
+		<image href="./assets/closeHauled.png" x="300" y="140" width="50" height="50" />
+		<image href="./assets/beamReach.png" x="300" y="240" width="50" height="50" />
+		<image href="./assets/run.png" x="260" y="340" width="50" height="50" />
+
+		<!-- Arrowhead marker -->
+		<defs>
+		<marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+			<polygon points="0 0, 10 3.5, 0 7" fill="black" />
+		</marker>
+		</defs>
+	</svg>
+	<div class="instructions">
+		<ul>
+			<li>In this game the wind is always coming out of the North, so you can use this diagram for proper sail positioning.</li>
+			<li>The sail positions given show the most efficient sail positions for each angle of the boat.</li>
+			<li>As a rule of thumb, the sail should always be on the opposite side of where the wind is hitting your boat.</li>
+			<li>Also, the closer you get to the "No Sail Zone" the closer the sail should be to the middle of the boat.</li>
+		  </ul>
+		  <button class="practice-button" onclick="window.location.href='interactiveTutorial.html'">Let's practice now!</button>
+	</div>
+	</div>
+</body>
+</html>

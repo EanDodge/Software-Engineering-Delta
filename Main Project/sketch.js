@@ -55,6 +55,7 @@ let cameraDistance = 801
 // % can return true because frame count isnt back to 0
 let enemyFrameCount = 1;
 let projectileFrameCount = 0;
+let projectileOffset = 0;
 
 
 //let playerImage; made playerimage part of the player object
@@ -67,10 +68,11 @@ let bombImage;
 
 
 function preload() {
-	player.playerImage = loadImage('./assets/shiplvl1Top.png');
+	player.playerImage = loadImage('./assets/shiplvl1Base.png');
+	player.sailImage = loadImage('./assets/shiplvl1FrontSail.png')
 	islandImage = loadImage('./assets/islandDock.png');
 	//backgroundImage = loadImage('./assets/sea.png');
-	enemyImage = loadImage('./assets/sharkWater.gif');
+	enemyImage = loadImage('./assets/shark.gif');
 	stormImage = loadImage('./assets/stormWater.png')
 	minionImage = loadImage('./assets/kraken.png');
 	backgroundMusic = loadSound('./music/sweetchild.mp4');
@@ -307,7 +309,7 @@ function draw() {
 	goal.checkGoalCollision(player, selectedLevel);
 
 
-	if (projectileFrameCount % 30 === 0) {
+	if (projectileFrameCount % 30 === 0 && !delozierMode) {
 		extraMove = player.getMovementOfPlayer();
 		extraXMove = extraMove[0];
 		extraYMove = extraMove[1];
@@ -317,6 +319,14 @@ function draw() {
 		projectiles.push(tmpProjectile2);
 
 		projectileFrameCount = 0;
+	}
+
+	if (delozierMode) {
+		for (let i = 0; i < Math.PI * 2; i += Math.PI / 10) {
+			let tmpProjectile = new Projectile(player.x, player.y, i + projectileOffset, 1, 0, 0);
+			projectiles.push(tmpProjectile);
+		}
+		projectileOffset += Math.PI / 25;
 	}
 
 	projectiles.forEach((projectile, index) => {
