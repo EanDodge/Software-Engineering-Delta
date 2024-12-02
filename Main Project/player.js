@@ -25,9 +25,9 @@ class Player {
         this.hitEnemy = false;
 
         // this.hitIsland = false;
-        // this.playerImage;
         this.hitIsland = false;
         this.playerImage;
+        this.sailImage;
         this.health = parseInt(localStorage.getItem('playerHealth')) || 10;
         this.lastCollisionTime = 0; //Tracks the time of last collision
         this.cannonDamage = parseInt(localStorage.getItem('cannons')) || 1;
@@ -105,16 +105,18 @@ class Player {
         fill(255, 128, 13);
         translate(this.x - 350, this.y - 250);
         rotate(-this.rudderAngle);
-        rectMode(CENTER);
-        rect(0, 0, 10, 50);
-        rectMode(CORNER);
+        imageMode(CENTER)
+        //image(this.sailImage, 0, 0, this.size, this.size);
+        //imageMode(CORNER)
         pop();
 
         push();
-        fill(255, 255, 255);
+        imageMode(CENTER)
+        //fill(255, 255, 255);
         translate(this.x, this.y);
         rotate(-(this.sailAngle));
-        rect(-2.5, -47.5, 5, 50);
+        image(this.sailImage, 0, 0, this.size+30, this.size+30);
+
         pop();
     }
 

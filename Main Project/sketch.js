@@ -67,10 +67,11 @@ let bombImage;
 
 
 function preload() {
-	player.playerImage = loadImage('./assets/shiplvl1Top.png');
+	player.playerImage = loadImage('./assets/shiplvl1Base.png');
+	player.sailImage = loadImage('./assets/shiplvl1FrontSail.png')
 	islandImage = loadImage('./assets/islandDock.png');
 	//backgroundImage = loadImage('./assets/sea.png');
-	enemyImage = loadImage('./assets/sharkWater.gif');
+	enemyImage = loadImage('./assets/shark.gif');
 	stormImage = loadImage('./assets/stormWater.png')
 	minionImage = loadImage('./assets/kraken.png');
 	backgroundMusic = loadSound('./music/sweetchild.mp4');
