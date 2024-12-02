@@ -70,3 +70,21 @@ canvas {
 .hidden {
   display: none;
 }
+
+.coins {
+  position: fixed; /* Ensure it stays in view */
+  bottom: 10px; /* Adjust as needed */
+  left: 10px; /* Adjust as needed */
+  background-color: rgba(255, 255, 255, 0.8); /* Optional: Add background for better visibility */
+  padding: 5px; /* Optional: Add padding for better appearance */
+  border-radius: 5px; /* Optional: Add border radius for better appearance */
+  z-index: 1000; /* Ensure it is above other elements */
+}
+
+.treasureIsland {
+  position: absolute;
+  top: 50%; /* Adjust as needed */
+  left: 50%; /* Adjust as needed */
+  transform: translate(-50%, -50%); /* Center the image */
+  z-index: 1000; /* Ensure it is above other elements */
+}
