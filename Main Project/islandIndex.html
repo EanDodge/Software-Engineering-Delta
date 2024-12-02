@@ -135,7 +135,7 @@
             
             <p><b>Puzzle Select</b></p>
             <div class="button-group">
-                <button onclick="window.location.href='Sudoku/sudoku.html'">Play Sudoku</button>
+                <button onclick="openSudokuOverlay()">Play Sudoku</button>
                 <button onclick="openNurikabeOverlay()">Play Nurikabe</button>
                 <button onclick="window.location.href='tetris.html'">Play Tetris</button>
 
@@ -158,6 +158,12 @@
                 <h3>Hint Purchase</h3>
                 <p id="hintsLevel">Current Amount of Hints: <span id="hintCount">0</span></p>
                 <button onclick="hintsUpgrade.upgrade()">Buy Hint (10 Coins)</button>
+            </div>
+
+            <div>
+                <h3>Sudoku Errors Given</h3>
+                <p id="errorLevel">Tier: 1</p>
+                <button onclick="errorUpgrade.upgrade()">Upgrade Errors</button>
             </div>
         </div>
     </div>
@@ -230,6 +236,44 @@
             if (pageUrl) {
                 window.location.href = pageUrl;
             }
+        }
+    </script>
+
+    <div id="sudokuOverlay" class="overlay">
+        <div class="overlay-content">
+            <p><b>Select Difficulty for Sudoku</b></p>
+            <div class="button-group">
+                <button onclick="startSudoku('easy')">Easy</button>
+                <button onclick="startSudoku('medium')">Medium</button>
+                <button onclick="startSudoku('hard')">Hard</button>
+            </div>
+            <button onclick="closeSudokuOverlay()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Function to open the Nurikabe difficulty selection overlay
+        function openSudokuOverlay() {
+            document.getElementById('sudokuOverlay').style.display = 'flex';
+        }
+    
+        // Function to close the Nurikabe difficulty selection overlay
+        function closeNurikabeOverlay() {
+            document.getElementById('sudokuOverlay').style.display = 'none';
+        }
+    
+        // Function to start Nurikabe with the selected difficulty
+        function startSudoku(difficulty) {
+            if (difficulty === 'easy') {
+                localStorage.setItem('sudokuDiff', 1);
+            } else if (difficulty === 'medium') {
+                localStorage.setItem('sudokuDiff', 2);
+            } else if (difficulty === 'hard') {
+                localStorage.setItem('sudokuDiff', 3);
+            }
+    
+            // Directs to Sudoku
+            window.location.href = 'sudoku/Sudoku.html';
         }
     </script>
 

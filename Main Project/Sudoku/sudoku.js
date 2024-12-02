@@ -3,21 +3,26 @@ let square_size = 45; //length and height of each square
 let interval = 30;
 
 // Num of errors allowed
-let errorNum = 5;
+let errorNum = parseInt(localStorage.getItem('errorNum')) || 3;
+console.log('error:', errorNum);
+
 let errorCount = 0;
 
 // Here for global, needed for testing
 let incompletedGame = true;
-// Initializes to begin screen
+// Initializes to begin screen2
 let startupDisplay = true;
 // Moving to help display
 let helpDisplay = true;
 
 // Counts number of available hints
-let hintNum = 3;
+let hintNum = parseInt(localStorage.getItem('hints')) || 0;
 
 // Retrieves a random sudoku pattern from 'sudokuPick.js'
-let indexForSudoku = giveSudokuIndex();
+difficulty = parseInt(localStorage.getItem('sudokuDiff')) || 1;
+console.log('diff: ', difficulty);
+let indexForSudoku = giveSudokuIndex(difficulty);
+console.log('index: ', indexForSudoku);
 let sudoku = sudoku_samples[indexForSudoku];
 let sudoku_solution = sudoku_answers[indexForSudoku];
 
@@ -239,8 +244,12 @@ function setup() {
       if (errorNum > 4) document.getElementById('err5').style.display = 'block';
       document.getElementById('helpButton').style.display = 'none';
       document.getElementById('backToIndexButton').style.display = 'block';
-      document.getElementById('completeButton').style.display = 'block';
-      if (hintNum > 0) document.getElementById('hintButton').style.display = 'block';
+      //document.getElementById('completeButton').style.display = 'block';
+      if (hintNum > 0) { 
+        let doc = document.getElementById('hintButton');
+        doc.textContent = `Hint ${hintNum}`;
+        doc.style.display = 'block';
+      }
     }, 100);
   }
 
@@ -387,8 +396,11 @@ function setup() {
     document.getElementById('completeButton').style.display = 'none';
     document.getElementById('hintButton').style.display = 'none';
     document.getElementById('finishButton').style.display = 'block';
+
     let currency = parseInt(localStorage.getItem('playerCurrency'));
-    currency += 500;
+    if (difficulty == 1) currency += 75;
+    else if (difficulty == 2) currency += 110;
+    else if (difficulty == 3) currency += 150;
     localStorage.setItem('playerCurrency', currency);
   }
 
@@ -468,6 +480,8 @@ function setup() {
         break;
     }
     --hintNum;
+    localStorage.setItem('hints', hintNum);
+    document.getElementById('hintButton').textContent = `Hint ${hintNum}`;
     if (hintNum == 0) document.getElementById('hintButton').style.display = 'none';
   }
 

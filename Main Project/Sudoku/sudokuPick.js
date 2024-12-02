@@ -2,11 +2,11 @@
 // Sudoku Templates from:
 //https://www.sudoku-solutions.com/
 
-function giveSudokuIndex() {
+function giveSudokuIndex(difficulty) {
     
     randomIndex = Math.floor(Math.random() * sudoku_samples.length);
     while (usedSudoku.length != sudoku_samples.length) {
-        if (checkStorageIndex(randomIndex) == false) {
+        if (checkStorageIndex(randomIndex) == false || checkDifficultyThreshold(randomIndex, difficulty) == false) {
             randomIndex = Math.floor(Math.random() * sudoku_samples.length);
         } else {
             break;
@@ -23,6 +23,23 @@ function checkStorageIndex(index) {
         }
     }
     usedSudoku.push(index);
+    return true;
+}
+
+function checkDifficultyThreshold(index, difficulty) {
+    const easyThreshold = 9;
+    const mediumThreshold = 19;
+    const hardThreshold = 29; 
+
+    if (difficulty == 1) {
+        if (index > easyThreshold) return false;
+    }
+    if (difficulty == 2) {
+        if (index <= easyThreshold || index > mediumThreshold) return false;
+    }
+    if (difficulty == 3) {
+        if (index < hardThreshold-9 ) return false;
+    }
     return true;
 }
 
