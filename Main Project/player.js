@@ -152,14 +152,14 @@ class Player {
         let newSailAngle = this.sailAngle + this.turningSpeed * sailTurn;
         newSailAngle = (newSailAngle + Math.PI * 2) % (Math.PI * 2);
 
-        if (this.validSailAnglePortside() && this.validSailAngleStarboard()) {
+        //if (this.validSailAnglePortside() && this.validSailAngleStarboard()) {
             this.sailAngle = newSailAngle;
 
-        } else if (!this.validSailAnglePortside()) {
+        /*} else if (!this.validSailAnglePortside()) {
             this.sailAngle += 0.01;
         } else if (!this.validSailAngleStarboard()) {
             this.sailAngle -= 0.01;
-        }
+        }*/
         let a = this.sailAngle;
         let b = this.angle;
         let c = (a - b) - Math.PI / 2;
@@ -452,6 +452,7 @@ class Player {
 
     checkPlayerDeath() {
         if (this.health <= 0) {
+			console.log("Player has died");
             window.location.href = 'gameover.html'; // Navigate to gameover.html
         }
     }
