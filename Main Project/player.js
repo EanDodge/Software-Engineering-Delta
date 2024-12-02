@@ -322,7 +322,22 @@ class Player {
         islands.forEach((island, index) => {
             if(this.isColliding(island)) {
                 colliding = true;
-                window.location.href = './nurikabe/nurikabeEasy.html';
+                const randomNumber = Math.floor(Math.random() * 3);
+
+				// Use a switch statement to set window.location.href
+				switch (randomNumber) {
+					case 0:
+						window.location.href = './nurikabe/nurikabeEasy.html';
+						break;
+					case 1:
+						window.location.href = './Sudoku/sudoku.html';
+						break;
+					case 2:
+						window.location.href = './tetris.html';
+						break;
+					default:
+						console.error('Unexpected random number:', randomNumber);
+				}
             }
         });
         return colliding;

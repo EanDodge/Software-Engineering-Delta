@@ -76,7 +76,7 @@ function preload() {
 	stormImage = loadImage('./assets/stormWater.png')
 	minionImage = loadImage('./assets/kraken.png');
 	backgroundMusic = loadSound('./music/sweetchild.mp4');
-	bombImage = loadImage('./assets/greg.png');
+	bombImage = loadImage('./assets/crag2.png');
 }
 
 
@@ -304,8 +304,8 @@ function draw() {
 	player.checkCollisionEnemies(enemies);
 
 
-
-	goal.drawObject(stormImage);
+	goal.islandImage = stormImage;
+	goal.drawObject();
 	goal.checkGoalCollision(player, selectedLevel);
 
 
