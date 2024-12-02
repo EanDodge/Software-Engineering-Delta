@@ -73,7 +73,7 @@ function preload() {
 	enemyImage = loadImage('./assets/sharkWater.gif');
 	stormImage = loadImage('./assets/stormWater.png')
 	minionImage = loadImage('./assets/kraken.png');
-	backgroundMusic = loadSound('./music/PirateLoop.wav');
+	backgroundMusic = loadSound('./music/sweetchild.mp4');
 	bombImage = loadImage('./assets/greg.png');
 }
 

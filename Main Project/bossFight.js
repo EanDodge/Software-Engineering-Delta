@@ -199,7 +199,7 @@ let projectileFrameCount = 0;
 	 bossImage = loadImage('./assets/krakenDelozier.png');
 	 minionImage = loadImage('./assets/kraken.png');
 	 tentacleImage = loadImage('./assets/tentacle.png');	
-	 backgroundMusic = loadSound('./music/sweetchild.mp4');
+	 backgroundMusic = loadSound('./music/PirateLoop.wav');
 
  }
 
