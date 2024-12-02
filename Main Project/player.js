@@ -314,6 +314,17 @@ class Player {
         return colliding;
     }
 
+    checkCollisionTreasureIslands(islands) {
+        let colliding = false;
+        islands.forEach((island, index) => {
+            if(this.isColliding(island)) {
+                colliding = true;
+                window.location.href = './nurikabe/nurikabeEasy.html';
+            }
+        });
+        return colliding;
+    }
+
     isCollidingEnemy(enemy) {
         //New Formula
         let pf = [this.sizeW / 2, -this.sizeH / 2]

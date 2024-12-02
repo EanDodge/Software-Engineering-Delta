@@ -193,7 +193,7 @@ let projectileFrameCount = 0;
 
  function preload() {
      player.playerImage = loadImage('./assets/shiplvl1Top.png');
-	 islandImage = loadImage('./assets/islandDock.png');
+	 islandImage = loadImage('./assets/island.png');
 	 //backgroundImage = loadImage('./assets/sea.png');
 	 enemyImage = loadImage('./assets/shiplvl2Top.png');
 	 bossImage = loadImage('./assets/krakenDelozier.png');
@@ -228,7 +228,7 @@ function setup() {
     const defeatMessage = document.getElementById('defeat-message');
 
     // Initialize the boss with the new constructor
-    boss = new Boss(300, 300, 10, healthBarContainer, healthBar, defeatMessage); // Example position and health
+    boss = new Boss(300, 300, 1, healthBarContainer, healthBar, defeatMessage); // Example position and health
 	boss.bossImage = bossImage;
 	
 	 setInterval(() => {
@@ -257,14 +257,14 @@ function setup() {
 	frameRate(45);
 
 	//random object to show screen move
-	let island = new GameObject(100, 100);
+	//let island = new GameObject(100, 100);
 	//island.collision = true;
-	gameObjects.push(island);
+	//gameObjects.push(island);
 
 	//random object to show screen move
-	island = new GameObject(250, 100);
+	//island = new GameObject(250, 100);
 	//island.collision = true;
-	gameObjects.push(island);
+	//gameObjects.push(island);
 	loadMusic();
 
 }
@@ -280,6 +280,10 @@ function draw() {
 	line(mapXSize, 0, mapYSize, mapYSize);
 	line(0, 0, mapYSize, 0);
 	stroke(0, 0, 0);
+
+	gameObjects.forEach(gameObject => {
+        gameObject.drawObject();
+    });
 
 	//enemy generation
 	// enemyFrameCount = 200 - (enemySpawnNumber/2)^1.5
@@ -326,6 +330,7 @@ function draw() {
 	player.checkCollisionEnemies(minions);
 	player.checkCollisionProjectiles(inkProjectiles);
 	player.drawRudderAndSails();
+	player.checkCollisionTreasureIslands(gameObjects);
 
 	boss.drawBoss();
 	boss.checkCollisionProjectiles(projectiles);
@@ -406,6 +411,11 @@ function draw() {
 		player.gainCurrency(boss.currencyValue);
 		console.log("Player received " + boss.currencyValue + " currency. Total: " + player.currency);
 		boss.awardReceived = true;
+		
+		 // Create and display the island GameObject
+		 const island = new GameObject(500, 500); // Adjust position as needed
+		 island.islandImage = islandImage; // Assuming GameObject has an image property
+		 gameObjects.push(island);
 	}
 	//moves cam to centered on player, z=800 default
 	//MUST BE 801 FOR 2d LINES TO RENDER ABOVE IMAGES
