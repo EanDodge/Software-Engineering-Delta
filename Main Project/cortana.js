@@ -96,11 +96,11 @@ class Boss {
         return tentacle;
     } */
 
-		harpoonAttack(player, harpoonImage) {
+		harpoonAttack(player, harpoonImage, harpoonArray) {
 			if (this.isDead) return;
 			// Harpoon attack
-			if (!this.harpoon) {
-				this.harpoon = {
+			
+				let harpoon = {
 					x: this.x,
 					y: this.y,
 					length: 300,
@@ -110,17 +110,6 @@ class Boss {
 					hasHit: false,
 					duration: 1000, // Harpoon duration in milliseconds
 					// Set up a timer to remove the tentacle after the specified duration
-					expireTimeout(){
-						setTimeout(() => {
-						this.expire();
-					}, this.duration)
-					},
-					expire() {
-						this.hasHit = false; // Reset hasHit flag
-						// Remove the tentacle from the tentacles array
-						tentacles = tentacles.filter(tentacle => tentacle !== this);
-						clearTimeout(this.expireTimeout); // Clear the timeout
-					},
 					draw: function() {
 						push();
 						translate(this.x, this.y); // Move origin to the harpoon's coordinates
@@ -128,50 +117,22 @@ class Boss {
 						imageMode(CENTER); // Set image mode to CENTER
 						image(harpoonImage, this.length / 2 + 30, -this.width / 2, this.length, this.width); // Draw the harpoon image
 						pop();
-					},
-					hitPlayer(player) {
-						if (!this.hasHit) {
-							// Calculate the end point of the tentacle
-							let endX = this.x + this.length * cos(this.angle);
-							let endY = this.y + this.length * sin(this.angle);
-				
-							// Check if the player is within the tentacle's reach
-							let distance = dist(player.x, player.y, endX, endY);
-							if (distance < player.size / 2) {
-								player.takeDamage(1);
-								this.hasHit = true;
-								return true;
-							}
-						}
-						return false;
-					},
-					isExpired: function() {
-						return millis() - this.creationTime >= this.duration;
-					},
+					},				
 					dragPlayer: function(player) {
 						// Apply a force to drag the player closer to the boss
 						let forceX = (this.x - player.x) * 0.25;
 						let forceY = (this.y - player.y) * 0.25;
 						player.x += forceX;
 						player.y += forceY;
-					},
-					resetHit: function() {
-						setInterval(() => {
-							this.hasHit = false;
-						}, 1000);
 					}
+					
 				};
-			}
-			// Check for collision and drag the player if hit
-			/*if (this.harpoon.hitPlayer()) {
-				this.draw();
-				player.takeDamage(1);
-				this.harpoon.dragPlayer(player);
-			}*/
-			return this.harpoon;
+			
+			harpoonArray.push(harpoon);
+			console.log("harpoon array size in function: " + harpoonArray.length);
 		}
 
-    attack(player, minionImage, tentacleImage, projectilesArray, projectileImage) {
+    attack(player, minionImage, tentacleImage, projectilesArray, projectileImage, harpoonArray) {
 		const currentTime = millis();
         if (currentTime - this.lastAttackTime >= 5000) {
 			this.lastAttackTime = currentTime;
@@ -179,14 +140,17 @@ class Boss {
 			//let attackType = 2;
             switch (attackType) {
                 case 0:
-					console.log("Spawning minions");
-                    return this.spawnMinions(minionImage);
-                case 1:
-					console.log("Shooting ink");
-                    return this.shootInk(player, projectilesArray);
-                case 2:
-					console.log("Tentacle smash");
-                    return this.harpoonAttack(player, tentacleImage);
+					console.log("minions assemble");
+                    return this.spawnMinions(minionImage);					
+                case 1:					
+                    this.shootInk(player, projectilesArray);
+					console.log("cannon attack");
+					break;
+                case 2:					
+                    this.harpoonAttack(player, tentacleImage, harpoonArray);
+					console.log("Harpoon array size in attack: " + harpoonArray.length);
+					break;
+					
             }
             
         }

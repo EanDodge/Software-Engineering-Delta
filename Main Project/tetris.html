@@ -19,7 +19,13 @@
   <body>
     <button onclick="window.location.href='islandIndex.html'" style="position: absolute; top: 10%; left: 10%; transform: translate(-50%, -50%); z-index: 1000;">Back to Game</button>
     <script src="tetris.js"></script>
-
+    <div class = "coins">Dabloons: <span id = "coinCount"></span></div>
+    <script>
+      // Initial update to display the starting currency
+      document.addEventListener('DOMContentLoaded', function() {
+        player.updateCoinCount();
+      });
+    </script>
   </body>
   <style>
     body{

@@ -411,6 +411,46 @@ class Player {
         }
     }
 
+    checkCollisionHarpoon(harpoon) {
+        let hit = false;
+    const currentTime = Date.now();
+    const collisionCooldown = 1000; // Cooldown period in milliseconds (e.g., 1000ms = 1 second)
+
+    // Check for collision along the entire length of the harpoon
+    const numSegments = 10; // Number of segments to check along the harpoon
+    for (let i = 0; i <= numSegments; i++) {
+        let t = i / numSegments;
+        let checkX = harpoon.x + t * harpoon.length * cos(harpoon.angle);
+        let checkY = harpoon.y + t * harpoon.length * sin(harpoon.angle);
+
+        // Check if the player is within the tentacle's reach
+        let distance = dist(player.x, player.y, checkX, checkY);
+        if (distance < player.size / 2) {
+            hit = true;
+            break; // Exit the loop if a collision is detected
+        }
+    }
+
+    if (hit && (currentTime - this.lastCollisionTime) > collisionCooldown) {
+        this.takeDamage(1); // Decrease player health by 1 
+        this.lastCollisionTime = currentTime; // Update the last collision time
+        harpoon.dragPlayer(player);
+    }
+        
+
+        if (hit && this.timer === 0) {
+            this.hitEnemy = true;
+            this.timer = 60;
+        }
+        else {
+            if (this.timer <= 50) {
+                this.hitEnemy = false;
+            }
+            if (this.timer > 0)
+                this.timer--;
+        }
+    }
+
 	updateCoinCount() {
 
         document.getElementById('coinCount').innerText = this.currency;
@@ -589,4 +629,3 @@ if (typeof document !== 'undefined') {
     });
 }
 
-module.exports = Player;

@@ -1,7 +1,12 @@
+
+
+
+
 let keyPressUp = false;
 let keyPressDown = false;
 let keyPressLeft = false;
 let keyPressRight = false;
+let score = 0;
 var shapeList = [
   [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0], // I
   [0, 2, 0, 0, 2, 0, 0, 2, 2], // L
@@ -38,6 +43,9 @@ function setup() {
     palletteMono[i][1] = 255 * gray;
     palletteMono[i][2] = 255 * gray;
   }
+  player = new Player();
+  window.player = player;
+  player.updateCoinCount();
 }
 function draw() {
   if (this.timer.updateStep()) {
@@ -70,6 +78,28 @@ function keyReleased() {
   keyPressLeft ^= keyCode === LEFT_ARROW;
   keyPressRight ^= keyCode === RIGHT_ARROW;
 }
+
+function addScoreToCoins(player) {
+  player.gainCurrency(score);
+  player.updateCoinCount();
+  console.log("Total coins: " + player.currency);
+}
+
+class Player {
+  constructor() {
+    this.currency = parseInt(localStorage.getItem('playerCurrency')) || 100; // Retrieve from localStorage or default to 100
+  }
+  gainCurrency(amount) {
+    this.currency += amount;
+    this.updateCoinCount();
+  }
+
+  updateCoinCount() {
+    document.getElementById('coinCount').innerText = this.currency;
+    localStorage.setItem('playerCurrency', this.currency); // Store in localStorage
+    console.log(player.currency);
+  }
+}
 class Tetris {
   constructor(nx, ny) {
     this.tGrid = new TGrid(nx, ny);
@@ -77,6 +107,7 @@ class Tetris {
     this.restartGame();
     this.shapeNext = undefined;
     this.pickNextShape();
+    this.scoreAdded = false; // Flag to track if score has been added
   }
   restartGame() {
     this.tGrid.clearGrid();
@@ -118,8 +149,12 @@ class Tetris {
     // Game over check
     this.gameOver = this.tGrid.collision(0, 0);
     if (this.gameOver) {
+      if (!this.scoreAdded) {
+          addScoreToCoins(player); // Use the method to add score to coins
+          this.scoreAdded = true; // Set the flag to true to prevent multiple additions
+      }
       return;
-    }
+  }
     // Apply user input: transforms
     if (this.rotate) this.tGrid.rotateShape();
     if (!this.tGrid.collision(this.tx, 0)) this.tGrid.sx += this.tx;
@@ -201,6 +236,7 @@ class Tetris {
     // Game status
     var txtGameStatus = undefined;
     if (this.gameOver) txtGameStatus = "GAME OVER";
+    if (this.gameOver) txtGameStatus = "YOU EARNED " + score + " COINS!";
     if (this.pause) txtGameStatus = "PAUSE";
     if (txtGameStatus !== undefined) {
       canvas.textSize(144);
@@ -435,6 +471,8 @@ class TGrid {
       if (rowCompleted) {
         this.grid.copyWithin(this.nx, 0, gy * this.nx);
         rows++;
+        score++;
+        console.log(score);
       }
     }
     if (rows > 0) {

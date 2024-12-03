@@ -33,7 +33,7 @@ class Enemy {
         image(minionImage, this.x, this.y, this.size, this.size);
         imageMode(CORNER);  //returns draw mode to default
         tint('none');
-		    console.log("Enemy health: " + this.health);
+		    //console.log("Enemy health: " + this.health);
 
 		// fill(255, 0, 0); // Set the fill color to red
         // ellipseMode(CENTER); // Set the ellipse mode to center
@@ -68,7 +68,7 @@ class Enemy {
             // Check if there is a collision
             if (distance < projectile.size / 2 + this.size / 2) {
                 this.health -= player.cannonDamage;
-				console.log("Enemy hit! Health: " + this.health);
+				//console.log("Enemy hit! Health: " + this.health);
                 projectiles.splice(index, 1);
 				
             }
