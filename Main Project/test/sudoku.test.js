@@ -10,7 +10,10 @@ describe('Sudoku Test', () => {
     //let test_sudoku_solution = sudoku_answers[0];
 
     beforeAll(async () => {
-        browser = await puppeteer.launch();
+        browser = await puppeteer.launch({
+            headless: false,
+            slowMo: 209,
+        });
         page = await browser.newPage();
         await page.goto('http://cassini.cs.kent.edu:9024/Sudoku/sudoku.html');
     });
@@ -36,6 +39,7 @@ describe('Sudoku Test', () => {
     // Fails if a pattern is not properly read into the cells.
     test('Testing that a Sudoku pattern is read correctly.', async() =>{
         await page.reload();
+        await page.waitForSelector('canvas');
         // Gets needed arrays/vars
         const {sudoku, numberState, gridSize} = await page.evaluate(() => {
             gridSize = rows*cols;
@@ -48,6 +52,7 @@ describe('Sudoku Test', () => {
     // Fails if entering number into grid results in incorrect behavior
     test('Testing that Sudoku grid is able to take in numbers.', async () => {
         await page.reload();
+        await page.waitForSelector('canvas');
         const {startupDisplay, helpDisplay} = await page.evaluate(() => {
             return {startupDisplay, helpDisplay};
         });
@@ -85,6 +90,7 @@ describe('Sudoku Test', () => {
     // Fails if Fixed Number is given a new value.
     test('Testing that the Fixed Cells are ineditable.', async() =>{
         await page.reload();
+        await page.waitForSelector('canvas');
         // Gets:
         // Coords Array of Cells
         // Editability Array
@@ -117,6 +123,7 @@ describe('Sudoku Test', () => {
     // Testing for acknowledgement of finished game is correct.
     test('Testing game completion is acknowledged.', async() =>{
         await page.reload();
+        await page.waitForSelector('canvas');
         // Gets needed arrays/vars
         await page.evaluate(() => autoComplete());
         await page.evaluate(() => check_sudoku());
