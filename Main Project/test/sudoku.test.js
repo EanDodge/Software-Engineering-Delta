@@ -12,7 +12,7 @@ describe('Sudoku Test', () => {
     beforeAll(async () => {
         browser = await puppeteer.launch();
         page = await browser.newPage();
-        await page.goto('file://' + __dirname + '/../Sudoku/sudoku.html');
+        await page.goto('http://cassini.cs.kent.edu:9024/Sudoku/sudoku.html');
     });
 
     afterAll(async () => {
