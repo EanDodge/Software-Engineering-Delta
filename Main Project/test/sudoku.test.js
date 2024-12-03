@@ -11,7 +11,7 @@ describe('Sudoku Test', () => {
 
     beforeAll(async () => {
         browser = await puppeteer.launch({
-            headless: false,
+            headless: true,
             slowMo: 209,
         });
         page = await browser.newPage();
