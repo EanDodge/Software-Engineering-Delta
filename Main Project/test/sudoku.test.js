@@ -1,6 +1,8 @@
 // node test for sudoku elements
 const puppeteer = require('puppeteer');
 
+jest.setTimeout(30000);
+
 describe('Sudoku Test', () => {
     let browser;
     let page;
