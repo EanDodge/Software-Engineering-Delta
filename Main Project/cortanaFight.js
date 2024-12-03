@@ -33,6 +33,7 @@ let projectileFrameCount = 0;
  let enemyImage; 
  let bossImage;
  let minionImage;
+ let projectileImage;
 
  let inkEffectDuration = 0;
 
@@ -49,6 +50,7 @@ let projectileFrameCount = 0;
 	 tentacleImage = loadImage('./assets/tentacle.png');	
 	 backgroundMusic = loadSound('./music/PirateLoop.wav');
 	 cannonBallImage = loadImage('./assets/cannon.png');
+	 projectileImage = loadImage('./assets/cannon.png');
 
  }
 
@@ -192,9 +194,9 @@ function draw() {
 		extraMove = player.getMovementOfPlayer();
 		extraXMove = extraMove[0];
         extraYMove = extraMove[1];
-		let tmpProjectile1 = new Projectile(player.x, player.y, player.angle, -1, extraXMove, extraYMove);
+		let tmpProjectile1 = new Projectile(player.x, player.y, player.angle, -1, extraXMove, extraYMove, projectileImage);
 		projectiles.push(tmpProjectile1);
-		let tmpProjectile2 = new Projectile(player.x, player.y, player.angle, 1, extraXMove, extraYMove);
+		let tmpProjectile2 = new Projectile(player.x, player.y, player.angle, 1, extraXMove, extraYMove, projectileImage);
 		projectiles.push(tmpProjectile2);
 
 		projectileFrameCount = 0;
