@@ -1,5 +1,5 @@
 class Projectile {
-    constructor(x, y, angle, sign, playerXMove, playerYMove) {
+    constructor(x, y, angle, sign, playerXMove, playerYMove, projectileImage) {
         this.x = x;
         this.y = y;
         this.size = 5;
@@ -9,12 +9,15 @@ class Projectile {
         this.sign = sign;
         this.extraXMove = playerXMove;
         this.extraYMove = playerYMove;
-		this.image;
+		//this.image = loadImage(projectileImage);
+		this.image = projectileImage;
     }
 
     drawProjectile() {
         fill(255, 255, 255);
-        ellipse(this.x, this.y, this.size, this.size);
+        imageMode(CENTER)
+        image(this.image,this.x,this.y,this.size+10,this.size+10);
+        //ellipse(this.x, this.y, this.size, this.size);
     }
 
     outOfRange(mapX, mapY) {
@@ -29,4 +32,4 @@ class Projectile {
     }
 }
 
-//module.exports =  Projectile;
+module.exports =  Projectile;

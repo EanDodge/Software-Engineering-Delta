@@ -43,7 +43,8 @@ let projectileFrameCount = 0;
 
 
  function preload() {
-     player.playerImage = loadImage('./assets/shiplvl1Top.png');
+     player.playerImage = loadImage('./assets/shiplvl1Base.png');
+	 player.sailImage = loadImage('./assets/shiplvl1FrontSail.png');
 	 islandImage = loadImage('./assets/island.png');
 	 //backgroundImage = loadImage('./assets/sea.png');
 	 enemyImage = loadImage('./assets/shiplvl2Top.png');

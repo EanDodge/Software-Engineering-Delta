@@ -188,3 +188,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeUpgrades();
     hintsUpgrade.updateHintDisplay(); // Initialize hints display separately
 });
+
+module.exports = { CannonsUpgrade };

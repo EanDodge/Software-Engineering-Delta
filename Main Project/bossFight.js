@@ -1,7 +1,7 @@
 const mapXSize = 1000;
 const mapYSize = 1000;
 
-let player = new Player(mapXSize/2, mapYSize/2);
+let player = new Player(mapXSize/2 + 100, mapYSize/2 - 100);
 
 let enemies = [];
 
@@ -35,6 +35,7 @@ let projectileOffset = 0;
  let enemyImage; 
  let bossImage;
  let minionImage;
+ let projectileImage;
 
  let inkEffectDuration = 0;
 
@@ -50,7 +51,7 @@ let projectileOffset = 0;
 	 minionImage = loadImage('./assets/kraken.png');
 	 tentacleImage = loadImage('./assets/tentacle.png');	
 	 backgroundMusic = loadSound('./music/PirateLoop.wav');
-
+	 projectileImage = loadImage('./assets/cannon.png');
  }
 
  function loadMusic() {
@@ -223,9 +224,9 @@ function draw() {
 		extraMove = player.getMovementOfPlayer();
 		extraXMove = extraMove[0];
         extraYMove = extraMove[1];
-		let tmpProjectile1 = new Projectile(player.x, player.y, player.angle, -1, extraXMove, extraYMove);
+		let tmpProjectile1 = new Projectile(player.x, player.y, player.angle, -1, extraXMove, extraYMove, projectileImage);
 		projectiles.push(tmpProjectile1);
-		let tmpProjectile2 = new Projectile(player.x, player.y, player.angle, 1, extraXMove, extraYMove);
+		let tmpProjectile2 = new Projectile(player.x, player.y, player.angle, 1, extraXMove, extraYMove, projectileImage);
 		projectiles.push(tmpProjectile2);
 
 		projectileFrameCount = 0;
@@ -233,7 +234,7 @@ function draw() {
 
 	if (delozierMode) {
 		for (let i = 0; i < Math.PI * 2; i += Math.PI / 10) {
-			let tmpProjectile = new Projectile(player.x, player.y, i + projectileOffset, 1, 0, 0);
+			let tmpProjectile = new Projectile(player.x, player.y, i + projectileOffset, 1, 0, 0, projectileImage);
 			projectiles.push(tmpProjectile);
 		}
 		projectileOffset += Math.PI / 25;

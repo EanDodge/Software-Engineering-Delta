@@ -33,14 +33,16 @@ let projectileFrameCount = 0;
  let enemyImage; 
  let bossImage;
  let minionImage;
+ let projectileImage;
 
  let inkEffectDuration = 0;
 
 
 
  function preload() {
-     player.playerImage = loadImage('./assets/shiplvl1Top.png');
-	 islandImage = loadImage('./assets/island.png');
+	player.playerImage = loadImage('./assets/shiplvl1Base.png');
+	player.sailImage = loadImage('./assets/shiplvl1FrontSail.png');
+	islandImage = loadImage('./assets/island.png');
 	 //backgroundImage = loadImage('./assets/sea.png');
 	 enemyImage = loadImage('./assets/shiplvl2Top.png');
 	 bossImage = loadImage('./assets/gregarious.png');
@@ -48,6 +50,7 @@ let projectileFrameCount = 0;
 	 tentacleImage = loadImage('./assets/tentacle.png');	
 	 backgroundMusic = loadSound('./music/PirateLoop.wav');
 	 cannonBallImage = loadImage('./assets/cannon.png');
+	 projectileImage = loadImage('./assets/cannon.png');
 
  }
 
@@ -191,9 +194,9 @@ function draw() {
 		extraMove = player.getMovementOfPlayer();
 		extraXMove = extraMove[0];
         extraYMove = extraMove[1];
-		let tmpProjectile1 = new Projectile(player.x, player.y, player.angle, -1, extraXMove, extraYMove);
+		let tmpProjectile1 = new Projectile(player.x, player.y, player.angle, -1, extraXMove, extraYMove, projectileImage);
 		projectiles.push(tmpProjectile1);
-		let tmpProjectile2 = new Projectile(player.x, player.y, player.angle, 1, extraXMove, extraYMove);
+		let tmpProjectile2 = new Projectile(player.x, player.y, player.angle, 1, extraXMove, extraYMove, projectileImage);
 		projectiles.push(tmpProjectile2);
 
 		projectileFrameCount = 0;
