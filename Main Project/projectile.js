@@ -9,12 +9,14 @@ class Projectile {
         this.sign = sign;
         this.extraXMove = playerXMove;
         this.extraYMove = playerYMove;
-		this.image;
+		this.image = loadImage('./assets/cannon.png');
     }
 
     drawProjectile() {
         fill(255, 255, 255);
-        ellipse(this.x, this.y, this.size, this.size);
+        imageMode(CENTER)
+        image(this.image,this.x,this.y,this.size+10,this.size+10);
+        //ellipse(this.x, this.y, this.size, this.size);
     }
 
     outOfRange(mapX, mapY) {

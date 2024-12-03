@@ -68,6 +68,7 @@ let bombImage;
 
 
 function preload() {
+	//projectiles.image = loadImage('./assets/cannon.png')
 	player.playerImage = loadImage('./assets/shiplvl1Base.png');
 	player.sailImage = loadImage('./assets/shiplvl1FrontSail.png')
 	islandImage = loadImage('./assets/islandDock.png');
