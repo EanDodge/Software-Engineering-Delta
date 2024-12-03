@@ -68,7 +68,7 @@ let bombImage;
 
 
 function preload() {
-	//projectiles.image = loadImage('./assets/cannon.png')
+	projectileImage = loadImage('./assets/cannon.png')
 	player.playerImage = loadImage('./assets/shiplvl1Base.png');
 	player.sailImage = loadImage('./assets/shiplvl1FrontSail.png')
 	islandImage = loadImage('./assets/islandDock.png');
@@ -314,9 +314,9 @@ function draw() {
 		extraMove = player.getMovementOfPlayer();
 		extraXMove = extraMove[0];
 		extraYMove = extraMove[1];
-		let tmpProjectile1 = new Projectile(player.x, player.y, player.angle, -1, extraXMove, extraYMove);
+		let tmpProjectile1 = new Projectile(player.x, player.y, player.angle, -1, extraXMove, extraYMove, projectileImage);
 		projectiles.push(tmpProjectile1);
-		let tmpProjectile2 = new Projectile(player.x, player.y, player.angle, 1, extraXMove, extraYMove);
+		let tmpProjectile2 = new Projectile(player.x, player.y, player.angle, 1, extraXMove, extraYMove, projectileImage);
 		projectiles.push(tmpProjectile2);
 
 		projectileFrameCount = 0;
@@ -324,7 +324,7 @@ function draw() {
 
 	if (delozierMode) {
 		for (let i = 0; i < Math.PI * 2; i += Math.PI / 10) {
-			let tmpProjectile = new Projectile(player.x, player.y, i + projectileOffset, 1, 0, 0);
+			let tmpProjectile = new Projectile(player.x, player.y, i + projectileOffset, 1, 0, 0, projectileImage);
 			projectiles.push(tmpProjectile);
 		}
 		projectileOffset += Math.PI / 25;

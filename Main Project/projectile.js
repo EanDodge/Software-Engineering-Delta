@@ -1,5 +1,5 @@
 class Projectile {
-    constructor(x, y, angle, sign, playerXMove, playerYMove) {
+    constructor(x, y, angle, sign, playerXMove, playerYMove, projectileImage) {
         this.x = x;
         this.y = y;
         this.size = 5;
@@ -9,7 +9,8 @@ class Projectile {
         this.sign = sign;
         this.extraXMove = playerXMove;
         this.extraYMove = playerYMove;
-		this.image = loadImage('./assets/cannon.png');
+		//this.image = loadImage(projectileImage);
+		this.image = projectileImage;
     }
 
     drawProjectile() {
@@ -31,4 +32,4 @@ class Projectile {
     }
 }
 
-//module.exports =  Projectile;
+module.exports =  Projectile;

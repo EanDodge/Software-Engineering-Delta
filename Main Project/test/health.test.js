@@ -21,7 +21,7 @@ describe('Player Health Collision Tests', () => {
     });
 
     test('Player health does not decrease if collision cooldown is active', async () => {
-        await page.goto('file://' + path.resolve(__dirname, '../index.html').replace(/\\/g, '/'));
+        await page.goto('file://' + path.resolve(__dirname, '../level1.html').replace(/\\/g, '/'));
 
         // Set initial player health and simulate collision with cooldown
         const playerHealth = await page.evaluate(() => {
@@ -80,7 +80,7 @@ describe('Player Health Bar Tests', () => {
     });
 
     test('Health bar updates correctly when player takes damage', async () => {
-        await page.goto('file://' + path.resolve(__dirname, '../index.html').replace(/\\/g, '/'));
+        await page.goto('file://' + path.resolve(__dirname, '../level1.html').replace(/\\/g, '/'));
 
         // Set initial player health and simulate taking damage
         const healthBarWidth = await page.evaluate(() => {
@@ -96,7 +96,7 @@ describe('Player Health Bar Tests', () => {
     });
 
     test('Health bar is empty when player health is 0', async () => {
-        await page.goto('file://' + path.resolve(__dirname, '../index.html').replace(/\\/g, '/'));
+        await page.goto('file://' + path.resolve(__dirname, '../level1.html').replace(/\\/g, '/'));
 
         // Set player health to 0 and update health bar
         const healthBarWidth = await page.evaluate(() => {
@@ -110,7 +110,7 @@ describe('Player Health Bar Tests', () => {
     });
 
     test('Health bar is full when player health is 10', async () => {
-        await page.goto('file://' + path.resolve(__dirname, '../index.html').replace(/\\/g, '/'));
+        await page.goto('file://' + path.resolve(__dirname, '../level1.html').replace(/\\/g, '/'));
 
         // Set player health to 10 and update health bar
         const healthBarWidth = await page.evaluate(() => {

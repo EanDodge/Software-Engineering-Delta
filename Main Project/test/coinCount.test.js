@@ -13,8 +13,8 @@ describe('Coin Count Display Test', () => {
         await browser.close();
     });
 
-    test('Coin count in index.html matches player currency', async () => {
-        await page.goto('file://' + __dirname + '/../index.html');
+    test('Coin count in level1.html matches player currency', async () => {
+        await page.goto('file://' + __dirname + '/../level1.html');
         const coinCount = await page.$eval('#coinCount', el => el.innerText);
         const playerCurrency = await page.evaluate(() => {
             return localStorage.getItem('playerCurrency');
@@ -22,9 +22,9 @@ describe('Coin Count Display Test', () => {
         expect(coinCount).toBe(playerCurrency);
     });
 
-    test('Coin count in upgrade.html matches player currency', async () => {
-        await page.goto('file://' + __dirname + '/../upgrade.html');
-        const coinCount = await page.$eval('#coinCount', el => el.innerText);
+    test('Coin count in islandIndex.html matches player currency', async () => {
+        await page.goto('file://' + __dirname + '/../islandIndex.html');
+        const coinCount = await page.$eval('#coinCountBarracks', el => el.innerText);
         const playerCurrency = await page.evaluate(() => {
             return localStorage.getItem('playerCurrency');
         });

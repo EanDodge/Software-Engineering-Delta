@@ -18,6 +18,15 @@ global.document = {
     })
 };
 
+// Mock implementation of loadImage
+global.loadImage = jest.fn().mockImplementation((path) => {
+    return {
+        path: path,
+        width: 100,
+        height: 100,
+    };
+});
+
 describe('Boss Class Tests', () => {
     let boss;
     let player;
@@ -34,7 +43,7 @@ describe('Boss Class Tests', () => {
         boss = new Boss(0, 0, 100, mockHealthBarContainer, mockHealthBar, mockDefeatMessage);
         player = new Player(0, 0);
         player.currency = 0;
-        projectiles = [new Projectile(0, 0, 0, 1, 0, 0)];
+        projectiles = [new Projectile(0, 0, 0, 1, 0, 0, '../assets/cannon.png')];
     });
 
     test('Projectile collision with boss', () => {
