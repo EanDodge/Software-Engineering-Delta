@@ -47,7 +47,7 @@ let projectiles = [];
 let frameCount = 0;
 let enemyHealth = 3;
 
-let windAngle = Math.PI;
+let windVane;
 
 let cameraDistance = 801
 
@@ -65,7 +65,7 @@ let enemyImage;
 let stormImage;
 let minionImage;
 let bombImage;
-
+let windVaneImage;
 
 function preload() {
 	//projectiles.image = loadImage('./assets/cannon.png')
@@ -78,10 +78,15 @@ function preload() {
 	minionImage = loadImage('./assets/kraken.png');
 	backgroundMusic = loadSound('./music/sweetchild.mp4');
 	bombImage = loadImage('./assets/crag2.png');
-}
+	windVaneImage = loadImage('./assets/weathervane.png');
+}	
 
 
 function setup() {
+	//initialize windvane
+	windVane = new WindVane();
+	windVane.img = windVaneImage;
+
 	//createCanvas(mapXSize, mapYSize, WEBGL);
 	//makes canvas size dependent on display size (- values because full display size was to big)
 	createCanvas(displayWidth / 1.5, displayHeight / 1.5, WEBGL);
@@ -223,14 +228,8 @@ function draw() {
 	line(mapXSize, 0, mapXSize, mapYSize);
 	line(0, 0, mapXSize, 0);
 	stroke(0, 0, 0);
-
-
-	push();
-	fill(255, 255, 255);
-	translate(player.x - 425, player.y - 250);
-	rotate(-windAngle);
-	triangle(-25, 25, 0, -25, 25, 25);
-	pop();
+	
+	
 
 	if (selectedLevel == 1 || selectedLevel == 2) {
 		let enemySpawnTimer = 250;
@@ -264,7 +263,6 @@ function draw() {
 			enemyFrameCount = 0;
 		}
 	}
-
 	if (player.isAlive == false) {
 		return;
 	}
@@ -289,7 +287,7 @@ function draw() {
 	if (player.checkCollisionIslands(obstacleIslands)) {
 		player.movePlayer(true);
 	}
-	else { player.movePlayer() }
+	else { player.movePlayer(windVane.windAngle) }
 
 	player.drawRudderAndSails();
 	player.checkCollisionEnemies(enemies);
@@ -350,6 +348,7 @@ function draw() {
 		oIsland.drawObject(grassIslandImage);
 	});
 
+
 	//moves cam to centered on player, z=800 default
 	//MUST BE 801 FOR 2d LINES TO RENDER ABOVE IMAGES
 	cam.setPosition(player.x, player.y, cameraDistance);
@@ -357,6 +356,10 @@ function draw() {
 	frameCount++;
 	projectileFrameCount++;
 	enemyFrameCount++;
+
+	//draw windvane
+	windVane.update();
+	windVane.show();
 }
 
 //debuging function currently

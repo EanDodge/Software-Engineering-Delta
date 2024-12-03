@@ -121,149 +121,56 @@ class Player {
         pop();
     }
 
-    movePlayer() {
-        //used to see if this upcoming move is out of bounds
+    movePlayer(windAngle) {
         let futureX;
         let futureY;
-
-        if ((yMove + vel) < 1 && (yMove + vel) > -1) {// change these numbers for speed
-            yMove += vel;
-        }
-        else {
-            if (yMove < 0) yMove = -1;
-            if (yMove > 0) yMove = 1;
-        }
-        if (anchor) {
-            yMove = 0;
-        }
-
-        //make sure angle is calculated first!
+    
+        // Update the player's angle based on turning
         this.angle += this.turningSpeed * turn;
-        if (this.angle > Math.PI * 2) {
-            this.angle = this.angle - Math.PI * 2;
-        }
-        if (this.angle < 0) {
-            this.angle = this.angle + Math.PI * 2;
-        }
-
-
-
+        this.angle = (this.angle + Math.PI * 2) % (Math.PI * 2);
+    
+        // Update the rudder and sail angles
         this.rudderAngle = Math.min(Math.max(this.rudderAngle + this.turningSpeed * turn / 2, -Math.PI / 4), Math.PI / 4);
-        //this.sailAngle = Math.min(Math.max(this.sailAngle + this.turningSpeed * sailTurn, this.angle + Math.PI / 2), this.angle + Math.PI * 3 / 2);
-        // this is what sets the sail angle. It does not allow the sail to go past the front of the boat
-        // Normalize the sailAngle to be within [0, 2 * Math.PI)
-        this.sailAngle = (this.sailAngle + Math.PI * 2) % (Math.PI * 2);
-        let newSailAngle = this.sailAngle + this.turningSpeed * sailTurn;
-        newSailAngle = (newSailAngle + Math.PI * 2) % (Math.PI * 2);
-
-        //if (this.validSailAnglePortside() && this.validSailAngleStarboard()) {
-            this.sailAngle = newSailAngle;
-
-        /*} else if (!this.validSailAnglePortside()) {
-            this.sailAngle += 0.01;
-        } else if (!this.validSailAngleStarboard()) {
-            this.sailAngle -= 0.01;
-        }*/
-        let a = this.sailAngle;
-        let b = this.angle;
-        let c = (a - b) - Math.PI / 2;
-        let theta = (Math.PI / 2 - c);
-
-        let windCurrent = 1;
-        // if (this.sailAngle <= Math.PI) {
-        //     //console.log("1");
-        //     windCurrent = (Math.PI - this.sailAngle) / (Math.PI / 2);
-        // } else if (this.sailAngle <= Math.PI * 3 / 2) {
-        //     //console.log("2");
-        //     windCurrent = (this.sailAngle - Math.PI) / (Math.PI / 2);
-        // } else if (this.sailAngle <= Math.PI * 2) {
-        //     //console.log("3");
-        //     windCurrent = (Math.PI * 2 - this.sailAngle) / (Math.PI / 2);
-        // } else if (this.sailAngle <= Math.PI * 5 / 2) {
-        //     //console.log("4");
-        //     windCurrent = (this.sailAngle - Math.PI * 2) / (Math.PI / 2);
-        // } else if (this.sailAngle <= Math.PI * 3) {
-        //     //console.log("5");
-        //     windCurrent = (Math.PI * 3 - this.sailAngle) / (Math.PI / 2);
-        // } else if (this.sailAngle <= Math.PI * 7 / 2) {
-        //    // console.log("6");
-        //     windCurrent = (this.sailAngle - Math.PI * 3) / (Math.PI / 2);
-        // }
-
-        let relativeWindAngle = Math.abs(this.sailAngle - this.angle) % (Math.PI * 2);
-
-        // Determine the windCurrent based on the point of sail
-        if (relativeWindAngle <= Math.PI / 4 || relativeWindAngle >= Math.PI * 7 / 4) {
-            // Close Haul (within 45 degrees of the wind direction)
-            windCurrent = 0.5; // Slowest speed
-        } else if (relativeWindAngle >= Math.PI * 3 / 4 && relativeWindAngle <= Math.PI * 5 / 4) {
-            // Run (within 45 degrees of directly downwind)
-            windCurrent = 0.8; // Second fastest speed
-        } else if (relativeWindAngle >= Math.PI / 4 && relativeWindAngle <= Math.PI * 3 / 4) {
+        this.sailAngle = (this.sailAngle + this.turningSpeed * sailTurn + Math.PI * 2) % (Math.PI * 2);
+    
+        // Calculate the relative wind angle
+        let relativeWindAngle = (Math.abs(windAngle - this.sailAngle) + Math.PI * 2) % (Math.PI * 2);
+    
+        // Adjust windCurrent based on the relative angle
+        let windCurrent = 0.5; // Default to slowest speed
+        if (relativeWindAngle <= Math.PI / 4 || relativeWindAngle >= (Math.PI * 7) / 4) {
+            // Close Haul (upwind, within 45 degrees of the wind)
+            windCurrent = 0.5;
+        } else if (relativeWindAngle >= (Math.PI * 3) / 4 && relativeWindAngle <= (Math.PI * 5) / 4) {
+            // Run (downwind, within 45 degrees of opposite wind direction)
+            windCurrent = 0.8;
+        } else if (
+            (relativeWindAngle > Math.PI / 4 && relativeWindAngle < (Math.PI * 3) / 4) ||
+            (relativeWindAngle > (Math.PI * 5) / 4 && relativeWindAngle < (Math.PI * 7) / 4)) 
+        {
             // Beam Reach (perpendicular to the wind)
-            windCurrent = 1.0; // Fastest speed
-        } else if (relativeWindAngle >= Math.PI * 5 / 4 && relativeWindAngle <= Math.PI * 7 / 4) {
-            // Beam Reach (perpendicular to the wind)
-            windCurrent = 1.0; // Fastest speed
+            windCurrent = 1.0;
         }
-
-        //console.log(windCurrent);
-
-
-        let magnitude = windCurrent * Math.sin(theta);
-        let x = magnitude * Math.sin(b);
-        let y = magnitude * Math.cos(b);
-
-
-        /*
-        console.log("a: " + a);
-        console.log("b: " + b);
-        console.log("c: " + c);
-        console.log("theta: " + theta);
-        console.log("magnitude: " + magnitude);
-        console.log("x: " + x);
-        console.log("y: " + y);*/
-
-
-
-        //futureX = this.x + this.speed * sin(this.angle) * yMove;
-        //futureY = this.y + this.speed * cos(this.angle) * yMove;
-
-        //(Math.abs((this.sailAngle - windAngle))) maybe for straight sail
-        if (this.sailAngle <= Math.PI) {
-            futureX = this.x + this.speed * x;
-            futureY = this.y + this.speed * y;
-        } else if (this.sailAngle <= Math.PI * 3 / 2) {
-            futureX = this.x - this.speed * x;
-            futureY = this.y - this.speed * y;
-        } else if (this.sailAngle <= Math.PI * 2) {
-            futureX = this.x - this.speed * x;
-            futureY = this.y - this.speed * y;
-        } else if (this.sailAngle <= Math.PI * 5 / 2) {
-            futureX = this.x + this.speed * x;
-            futureY = this.y + this.speed * y;
-        } else if (this.sailAngle <= Math.PI * 3) {
-            futureX = this.x + this.speed * x;
-            futureY = this.y + this.speed * y;
-        } else if (this.sailAngle <= Math.PI * 7 / 2) {
-            futureX = this.x - this.speed * x;
-            futureY = this.y - this.speed * y;
+        if(relativeWindAngle <= (Math.PI*7)/6 && relativeWindAngle >= (Math.PI*5)/6)
+        {
+            windCurrent = 0.2;
         }
-        /*
-        futureX = this.x + this.speed * x;
-        futureY = this.y + this.speed * y;//*/
-
-
-
-        //check if move is in bounds accounting for size
-        if (futureX <= mapXSize - this.size / 2 && futureX >= 0 + this.size / 2)
-            this.x = futureX;
-        if (futureY <= mapYSize - this.size / 2 && futureY >= 0 + this.size / 2)
-            this.y = futureY;
-
-        //this.updateAnglesDisplay();
+    
+        // Calculate movement based on windCurrent and the sail's position
+        let theta = -this.angle; // Boat's current angle
+        let magnitude = windCurrent * this.speed;
+    
+        let x = magnitude * Math.sin(theta);
+        let y = magnitude * Math.cos(theta);
+    
+        futureX = this.x + x;
+        futureY = this.y - y;
+    
+        // Ensure the boat stays within map boundaries
+        if (futureX <= mapXSize - this.size / 2 && futureX >= 0 + this.size / 2) this.x = futureX;
+        if (futureY <= mapYSize - this.size / 2 && futureY >= 0 + this.size / 2) this.y = futureY;
+    
     }
-
     getMovementOfPlayer() {
         //this.angle += this.turningSpeed * turn;
         if (this.angle > Math.PI * 2) {
