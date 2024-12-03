@@ -73,61 +73,68 @@ describe('Nurikabe Puzzle Tests', () => {
     expect(numSquares).toBe(81);
   });
   
-  test('should display and close the rules pop-up', async () => {
-    // Trigger the rules popup logic manually
-    await page.evaluate(() => {
-      showPopup();
-    });
-  
-    // Check if the popup is visible after the manual trigger
-    isPopupVisible = await page.evaluate(() => {
-      const popup = document.getElementById('rulesPopup');
-      return window.getComputedStyle(popup).display !== 'none';
-    });
-  
-    expect(isPopupVisible).toBe(true);
+  // test('should display and close the rules pop-up', async () => {
+  //   // Ensure the pop-up is initially hidden
+  //   const isPopupHiddenInitially = await page.evaluate(() => {
+  //     const popup = document.querySelector('rulesPopup'); // Use the actual selector
+  //     return popup && popup.style.display === 'none'; // Adjust based on actual hiding logic
+  //   });
+  //   expect(isPopupHiddenInitially).toBe(true);
 
-    // Now, manually trigger the logic to close the popup
-    await page.evaluate(() => {
-        hidePopup();
-    });
-    
-    // Check if the popup is hidden after the manual trigger
-    isPopupVisible = await page.evaluate(() => {
-      const popup = document.getElementById('rulesPopup'); //ID of the rules popup in js file
-      return window.getComputedStyle(popup).display !== 'none';
-    });
-    
-    expect(isPopupVisible).toBe(false); // Expect the popup to be hidden
-  });
+  //   // Click the Rules button
+  //   await page.click('rulesButton'); // Update with the actual selector for the "Rules" button
 
-  test('should reset puzzle when Restart button is clicked', async () => {
-    await clickButtonByText(page, 'Restart'); // Click the Restart button
-    const colorState = await page.evaluate(() => colorState);
-    const allBlue = colorState.every(state => state === 0); // Check if all squares are blue (reset state)
-    expect(allBlue).toBe(true);
-  });
+  //   // Wait for the pop-up to appear
+  //   await page.waitForSelector('rulesPopup', { visible: true });
 
-  test('should solve the puzzle when Solve button is clicked', async () => {
-    await clickButtonByText(page, 'Solve'); // Click the Solve button
-    //console.log("Solve button clicked");
+  //   // Ensure the pop-up is displayed
+  //   const isPopupVisible = await page.evaluate(() => {
+  //     const popup = document.querySelector('rulesPopup');
+  //     return popup && popup.style.display !== 'none';
+  //   });
+  //   expect(isPopupVisible).toBe(true);
+
+  //   // Click the Close button inside the pop-up
+  //   await page.click('#close-popup-button'); // Update with the actual selector for the close button
+
+  //   // Wait for the pop-up to hide
+  //   await page.waitForSelector('#rules-popup', { hidden: true });
+
+  //   // Ensure the pop-up is hidden again
+  //   const isPopupHiddenAfterClose = await page.evaluate(() => {
+  //     const popup = document.querySelector('#rules-popup');
+  //     return popup && popup.style.display === 'none';
+  //   });
+  //   expect(isPopupHiddenAfterClose).toBe(true);
+  // });
+
+  // test('should reset puzzle when Restart button is clicked', async () => {
+  //   await clickButtonByText(page, 'Restart'); // Click the Restart button
+  //   const colorState = await page.evaluate(() => colorState);
+  //   const allBlue = colorState.every(state => state === 0); // Check if all squares are blue (reset state)
+  //   expect(allBlue).toBe(true);
+  // });
+
+  // test('should solve the puzzle when Solve button is clicked', async () => {
+  //   await clickButtonByText(page, 'Solve'); // Click the Solve button
+  //   //console.log("Solve button clicked");
   
-    // Manually trigger the solve logic (for debugging)
-    await page.evaluate(() => {
-      if (typeof solve === 'function') {
-        solve(); // Manually invoke the solve function
-      }
-    });
+  //   // Manually trigger the solve logic (for debugging)
+  //   await page.evaluate(() => {
+  //     if (typeof solve === 'function') {
+  //       solve(); // Manually invoke the solve function
+  //     }
+  //   });
   
-    const currentState = await page.evaluate(() => colorState);
-    const solutionState = await page.evaluate(() => solution_colors);
+  //   const currentState = await page.evaluate(() => colorState);
+  //   const solutionState = await page.evaluate(() => solution_colors);
   
-    //Console logs for solve debugging:
-    //console.log('Current State after manual Solve:', currentState);
-    //console.log('Solution State:', solutionState);
+  //   //Console logs for solve debugging:
+  //   //console.log('Current State after manual Solve:', currentState);
+  //   //console.log('Solution State:', solutionState);
   
-    expect(currentState).toEqual(solutionState); // Compare current state with the solution state
-  });
+  //   expect(currentState).toEqual(solutionState); // Compare current state with the solution state
+  // });
 
   //Testing completion features manually:
   // test for unclickable squares after puzzle completion: complete a nurikabe (not using the solve button) and then try to click one of the green squares

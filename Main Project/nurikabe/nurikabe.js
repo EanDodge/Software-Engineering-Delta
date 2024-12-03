@@ -82,12 +82,12 @@ function setup() {
   rulesPopup.style('display', 'none'); // Hide the pop-up initially
 
   // Create a button to show rules pop-up
-  let rulesButton = createButton('Rules');
+  let rulesButton = createButton('Rules').id('rulesButton');
   rulesButton.position(10, 60);
   rulesButton.mousePressed(showPopup);
 
   // Create a button inside rules pop-up to close it
-  let closeRules = createButton('Close');
+  let closeRules = createButton('Close').id('closePopup');
   closeRules.mousePressed(hidePopup);
   closeRules.parent(rulesPopup); // Attach the button to the pop-up
   closeRules.style('position', 'absolute');
