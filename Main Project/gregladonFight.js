@@ -81,7 +81,7 @@ function setup() {
 
     // Initialize the boss with the new constructor
 
-    boss = new Boss(450, 250, 30, healthBarContainer, healthBar, defeatMessage); // Example position and health
+    boss = new Boss(450, 250, 40, healthBarContainer, healthBar, defeatMessage); // Example position and health
 
 	boss.bossImage = bossImage;
 	boss.gregladonImage = gregladonImage;
