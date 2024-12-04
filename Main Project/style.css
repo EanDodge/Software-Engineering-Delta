@@ -75,7 +75,7 @@ canvas {
   position: fixed; /* Ensure it stays in view */
   bottom: 10px; /* Adjust as needed */
   left: 10px; /* Adjust as needed */
-  background-color: rgba(255, 255, 255, 0.8); /* Optional: Add background for better visibility */
+  background-color: rgba(125, 125, 125, 0.8); /* Optional: Add background for better visibility */
   padding: 5px; /* Optional: Add padding for better appearance */
   border-radius: 5px; /* Optional: Add border radius for better appearance */
   z-index: 1000; /* Ensure it is above other elements */
