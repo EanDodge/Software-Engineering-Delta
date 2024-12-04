@@ -18,12 +18,12 @@ class Enemy {
     }
 
     drawEnemy() {
-        fill(255, 0, 0);
-        imageMode(CENTER);  //sets the image to be drawn ontop of the enemy x, y
-        // circle(this.x, this.y, this.size);
-        image(enemyImage, this.x, this.y, this.sizeW, this.sizeH);
-        imageMode(CORNER);  //returns draw mode to default
-        tint('none');
+        push(); // Save the current drawing state
+        translate(this.x, this.y); // Move the origin to the enemy's position
+        rotate(this.angle+90); // Rotate the canvas by the angle toward the player
+        imageMode(CENTER); // Set the image mode to CENTER
+        image(this.enemyImage, 0, 0, this.sizeW, this.sizeH); // Draw the image at the new origin
+        pop(); // Restore the original drawing state
     }
 
     drawMinion() {

@@ -17,7 +17,7 @@ let inkProjectiles = [];
 let harpoons = [];
 let boss;
 
-
+let windVane;
 
 let enemySpawnNumber = parseInt(localStorage.getItem("enemySpawnNumber")) || 0;
 let enemyHealth = parseInt(localStorage.getItem("enemyHealth")) || 1;
@@ -34,7 +34,7 @@ let projectileFrameCount = 0;
  let bossImage;
  let minionImage;
  let projectileImage;
-
+ let windVaneImage;
  let inkEffectDuration = 0;
 
 
@@ -51,6 +51,7 @@ let projectileFrameCount = 0;
 	 backgroundMusic = loadSound('./music/PirateLoop.wav');
 	 cannonBallImage = loadImage('./assets/cannon.png');
 	 projectileImage = loadImage('./assets/cannon.png');
+	 windVaneImage = loadImage('./assets/weathervane.png');
 
  }
 
@@ -64,6 +65,9 @@ let projectileFrameCount = 0;
     backgroundMusic.setVolume(1, 3, 0.25);
 } 
 function setup() {
+	//initalize wind vane
+	windVane = new WindVane();
+	windVane.img = windVaneImage;
 	//createCanvas(mapXSize, mapYSize, WEBGL);
 	//makes canvas size dependent on display size (- values because full display size was to big)
 	createCanvas(displayWidth, displayHeight, WEBGL);
@@ -122,7 +126,9 @@ function draw() {
         gameObject.drawObject();
     });
 
-	
+	//draw windvane
+	windVane.update();
+	windVane.show();	
 
 	controllerInput();
 
@@ -144,10 +150,10 @@ function draw() {
 	
 
 	player.drawPlayer();
-	player.movePlayer();
+	player.movePlayer(windVane.windAngle);
 	player.checkCollisionEnemies(minions);
 	player.checkCollisionProjectiles(inkProjectiles);
-	//player.drawRudderAndSails();
+	player.drawRudderAndSails();
 	player.checkCollisionTreasureIslands(gameObjects);
 
 	boss.drawBoss();
@@ -248,7 +254,8 @@ function draw() {
 	enemyFrameCount++;
 
 	console.log("Player currency: " + player.currency);
-
+	windVane.update();
+	windVane.show();
 	
 }
 // Function to check collision between ink projectile and player
