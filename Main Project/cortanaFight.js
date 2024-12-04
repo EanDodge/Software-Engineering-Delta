@@ -14,7 +14,7 @@ let frameCount = 0;
 
 let minions = [];
 let inkProjectiles = [];
-let tentacles = [];
+let harpoons = [];
 let boss;
 
 
@@ -79,26 +79,12 @@ function setup() {
     const defeatMessage = document.getElementById('defeat-message');
 
     // Initialize the boss with the new constructor
+
     boss = new Boss(450, 250, 30, healthBarContainer, healthBar, defeatMessage); // Example position and health
+
 	boss.bossImage = bossImage;
 	
-	 setInterval(() => {
-        const attack = boss.attack(player, minionImage, tentacleImage, inkProjectiles, cannonBallImage);
-        if (attack) {
-            if (Array.isArray(attack)) {
-				// for (let i = 0; i < attack.length; i++) {
-				// 	attack[i].playerImage = minionImage;
-				// 	attack[i].string = "minion";
-				// }
-                minions = minions.concat(attack);
-            } else if (attack.move) {
-                inkProjectiles = inkProjectiles.concat(attack);
-            } else if (attack.draw) {
-                tentacles.push(attack);
-            }
-        }
-    }, 5000); // 5000 milliseconds = 5 seconds
-
+	 
 	// Draw and move minions
     
 	//camera to follow player
@@ -123,7 +109,7 @@ function setup() {
 function draw() {
 	background(0, 0, 0, 0);
 	//image(backgroundImage, mapXSize / 2 - mapXSize, mapYSize / 2 - mapYSize, mapXSize * 2, mapYSize * 2);
-
+	//console.log("harpoon size outside attack: " + harpoons.length);
 	//border lines
 	stroke(255, 255, 255);
 	line(0, mapXSize, 0, 0);
@@ -139,6 +125,21 @@ function draw() {
 	
 
 	controllerInput();
+
+	setInterval(() => {
+        const attack = boss.attack(player, minionImage, tentacleImage, inkProjectiles, cannonBallImage, harpoons);
+		//console.log("harpoon array size at attack invocation: " + harpoons.length);
+        if (attack) {
+            if (Array.isArray(attack)) {
+				// for (let i = 0; i < attack.length; i++) {
+				// 	attack[i].playerImage = minionImage;
+				// 	attack[i].string = "minion";
+				// }
+                minions = minions.concat(attack);
+				console.log("Spawning minions");
+            } 
+        }
+    }, 5000); // 5000 milliseconds = 5 seconds
 
 	
 
@@ -163,6 +164,7 @@ function draw() {
 	});
 
 	// Draw and move ink projectiles
+	
 		inkProjectiles.forEach((ink, index) => {
 			ink.image = cannonBallImage;
 			ink.move();
@@ -175,18 +177,15 @@ function draw() {
 				console.log("I've been hit! Health: " + player.health);
 			}
 		});
-
-		// Draw tentacles and remove them after 1 second
-		tentacles.forEach((tentacle, index) => {
-			if (millis() - tentacle.creationTime >= 1000) {
-				console.log("Tentacle expired");
-				tentacles.splice(index, 1); // Remove the tentacle after 1 second
-			} else {
-				console.log("Tentacle hit");
-				tentacle.draw();
-				tentacle.hitPlayer(player);
-				tentacle.dragPlayer(player);
-			}
+		//console.log("harpoon array size: " + harpoons.length);
+		// Draw harpoons and remove them after 1 second
+		
+		harpoons.forEach((harpoon, index) => {
+				harpoon.draw();
+				player.checkCollisionHarpoon(harpoon);
+				setTimeout(() => {
+					harpoons.splice(index, 1);
+				}, 1000);
 		});
 
 
