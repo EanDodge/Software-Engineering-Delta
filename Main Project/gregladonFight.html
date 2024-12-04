@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boss Fight</title>
+    <link rel="stylesheet" href="style.css">
+
+	<!--Necessary for p5.sound to work in http server-->
+	<script src="https://unpkg.com/@free-side/audioworklet-polyfill/dist/audioworklet-polyfill.js" type="text/javascript"></script>
+
+	<script src="libraries/p5.min.js"></script>
+	<script src="libraries/p5.sound.min.js"></script>
+	<script src="libraries/p5.collide2D.js"></script>
+	<script src="gamepad.js"></script>
+    <script  src="enemy.js"></script>
+    <script  src="player.js"></script>
+	<script src="gameObject.js"></script>
+	<script src="projectile.js"></script>
+	<script src="gregladon.js"></script>
+	<script src="gregladonFight.js"></script>
+</head>
+<body>
+    <div id="health-bar-container">
+        <div id="health-bar"></div>
+    </div>
+	<div id="boss-health-bar-container">
+		<div id="boss-health-bar-title">S.S. CORTANA</div>
+		<div id="boss-health-bar"></div>
+	</div>
+	<div id="defeat-message" class="hidden">
+		You have defeated S.S. CORTANA. The skies have cleared and you may now sail to the island.
+	</div>
+	<div class = "coins">Dabloons: <span id = "coinCount"></span></div>
+
+	<!-- Game Over Modal -->
+	<div id="gameOverModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border: 2px solid black; z-index: 1000;">
+		<h2>You have died</h2>
+		<button onclick="goToMainScreen()">Go to Main Screen</button>
+	</div>	
+	
+	<script>
+		// Initial update to display the starting currency
+		document.addEventListener('DOMContentLoaded', function() {
+			player.updateCoinCount();
+		});
+
+		function goToMainScreen() {
+		window.location.href = 'islandIndex.html'; // Redirect to the main screen
+		}
+	  </script>
+</body>
+<style>
+	body{
+	.coins{
+	  color: white;
+	  font-family: Georgia, serif;
+	  font-size: 1.5em;
+	}
+	background-image: url('./assets/stormWater.png');
+	background-size: cover;
+	background-repeat: no-repeat; 
+	transition: background-image 2s ease-in-out;
+  }
+  </style>
+</html>
