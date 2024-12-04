@@ -153,7 +153,7 @@ function draw() {
 	player.movePlayer(windVane.windAngle);
 	player.checkCollisionEnemies(minions);
 	player.checkCollisionProjectiles(inkProjectiles);
-	//player.drawRudderAndSails();
+	player.drawRudderAndSails();
 	player.checkCollisionTreasureIslands(gameObjects);
 
 	boss.drawBoss();

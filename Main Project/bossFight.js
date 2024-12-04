@@ -172,8 +172,7 @@ function draw() {
 
 	// 	enemyFrameCount = 0;
 	//}
-	windVane.update();
-	windVane.show();
+
 		
 
 	controllerInput();

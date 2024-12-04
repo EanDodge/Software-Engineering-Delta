@@ -135,7 +135,7 @@ function setup() {
 	}
 	else if (selectedLevel == 3) {
 		goal = new GameObject(mapXSize - 100, mapYSize / 2, 100, 100);
-		
+			
 	}
 	else if (selectedLevel == 4) {
 		goal = new GameObject(100, mapYSize / 2, 100, 100);
