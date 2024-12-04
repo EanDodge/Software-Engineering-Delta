@@ -7,14 +7,15 @@ class Enemy {
         this.y = y;
         this.speed = 2;
         this.size = 50;     //used for hitbox
-        this.sizeW = 40;
-        this.sizeH = 80;
+        this.sizeW = 60;
+        this.sizeH = 100;
         this.collision = true;
         this.angle = 0;  // Angle the enemy is traveling
         this.health = health;
 		this.currencyValue = 5;							// Currency value of the enemy
         this.enemyImage = enemyImage;
 		this.string;
+		
     }
 
     /*drawEnemy() {
@@ -27,12 +28,14 @@ class Enemy {
     }*/
 
 		drawEnemy() {
+			console.log("not cortana");
 			push(); // Save the current drawing state
 			translate(this.x, this.y); // Move the origin to the enemy's position
-			rotate(this.angle+90); // Rotate the canvas by the angle toward the player
+			rotate(this.angle + 90); // Rotate the canvas by the angle toward the player
 			imageMode(CENTER); // Set the image mode to CENTER
 			image(this.enemyImage, 0, 0, this.sizeW, this.sizeH); // Draw the image at the new origin
 			pop(); // Restore the original drawing state
+			
 		}
 
     /*drawMinion() {

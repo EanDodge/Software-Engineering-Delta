@@ -239,7 +239,7 @@ class Tetris {
     if (this.gameOver) txtGameStatus = "YOU EARNED " + score + " COINS!";
     if (this.pause) txtGameStatus = "PAUSE";
     if (txtGameStatus !== undefined) {
-      canvas.textSize(144);
+      canvas.textSize(72);
       canvas.textAlign(CENTER, CENTER);
       canvas.noStroke();
       canvas.fill(0, 0, 0);

@@ -37,6 +37,7 @@ class Player {
         this.sailAngle = Math.PI;
         this.isAlive = true;
 		this.currentLevel = 1;
+		this.isCortana = false;
 
     }
 
@@ -324,26 +325,23 @@ class Player {
                 colliding = true;
                 
 
-				// Use a switch statement to set window.location.href
-				switch (this.currentLevel) {
-					case 1:
-						console.log('Current level:', this.currentLevel);
-						
-						window.location.href = './Sudoku/sudoku.html';
-						break;
-					case 2:
-						console.log('Current level:', this.currentLevel);
-						
-						window.location.href = './tetris.html';
-						break;
-					case 3:
-						console.log('Current level:', this.currentLevel);
-						
-						window.location.href = './nurikabe/nurikabeEasy.html';
-						break;
-					default:
-						console.error('Unexpected random number:', randomNumber);
-				}
+				// Generate a random number between 0 and 2
+			let randomNum = Math.floor(Math.random() * 3);
+
+			// Use a switch statement to handle the different cases
+			switch (randomNum) {
+				case 0:
+					window.location.href = './Sudoku/sudoku.html';
+					break;
+				case 1:
+					window.location.href = './nurikabe/nurikabeEasy.html';
+					break;
+				case 2:
+					window.location.href = 'tetris.html';
+					break;
+				default:
+					console.error('Unexpected random number:', randomNum);
+			}
             }
         });
         return colliding;

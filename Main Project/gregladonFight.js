@@ -2,7 +2,6 @@ const mapXSize = 1000;
 const mapYSize = 1000;
 
 let player = new Player(450, 650);
-
 let enemies = [];
 
 let gameObjects = [];

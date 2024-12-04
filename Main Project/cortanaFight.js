@@ -3,6 +3,7 @@ const mapYSize = 1000;
 
 let player = new Player(450, 650);
 
+
 let enemies = [];
 
 let gameObjects = [];
@@ -47,7 +48,7 @@ let projectileFrameCount = 0;
 	 //backgroundImage = loadImage('./assets/sea.png');
 	 enemyImage = loadImage('./assets/shiplvl2Top.png');
 	 bossImage = loadImage('./assets/gregarious.png');
-	 minionImage = loadImage('./assets/shiplvl2Side.png');
+	 minionImage = loadImage('./assets/shiplvl2Top.png');
 	 tentacleImage = loadImage('./assets/tentacle.png');	
 	 backgroundMusic = loadSound('./music/PirateLoop.wav');
 	 cannonBallImage = loadImage('./assets/cannon.png');
@@ -180,8 +181,8 @@ function draw() {
 			ink.draw();
 			if (checkCollision(ink, player)) {
 				player.inked = true;
-				inkEffectDuration = 3000; // 3 seconds
-				inkProjectiles.splice(index, 1); // Remove the ink projectile after collision
+				//inkEffectDuration = 3000; // 3 seconds
+				//inkProjectiles.splice(index, 1); // Remove the ink projectile after collision
 				player.takeDamage(ink.damage);
 				console.log("I've been hit! Health: " + player.health);
 			}
