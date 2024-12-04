@@ -14,7 +14,7 @@ describe('Nurikabe Puzzle Tests', () => {
     });
     page = await browser.newPage();
 
-    await page.goto('https://sopatz.github.io/SoftwareEngineering_PersonalFork/Main%20Project/nurikabe/nurikabe.html'); //run live server using default port value for VSC Live Server (until code is hosted, this is the only way I can figure out to test this sh*t with puppeteer)
+    await page.goto('http://cassini.cs.kent.edu/pirate/nurikabe/nurikabe.html'); //run live server using default port value for VSC Live Server (until code is hosted, this is the only way I can figure out to test this sh*t with puppeteer)
 
     //Log console messages
     // page.on('console', msg => {
@@ -26,8 +26,8 @@ describe('Nurikabe Puzzle Tests', () => {
   beforeEach(async () => {
     // Ensure we navigate to the correct page before each test
     const currentUrl = page.url();
-    if (currentUrl !== 'https://sopatz.github.io/SoftwareEngineering_PersonalFork/Main%20Project/nurikabe/nurikabe.html') {
-      await page.goto('https://sopatz.github.io/SoftwareEngineering_PersonalFork/Main%20Project/nurikabe/nurikabe.html');
+    if (currentUrl !== 'http://cassini.cs.kent.edu/pirate/nurikabe/nurikabe.html') {
+      await page.goto('http://cassini.cs.kent.edu/pirate/nurikabe/nurikabe.html');
     }
   });
 
