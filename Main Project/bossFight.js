@@ -2,7 +2,6 @@ const mapXSize = 1000;
 const mapYSize = 1000;
 
 let player = new Player(mapXSize/2 + 100, mapYSize/2 - 100);
-
 let enemies = [];
 
 let gameObjects = [];
@@ -15,6 +14,9 @@ let minions = [];
 let inkProjectiles = [];
 let tentacles = [];
 let boss;
+
+
+
 
 const selectedLevel = parseInt(localStorage.getItem("selectedLevel")) || 1;
 const highestLevelBeat = parseInt(localStorage.getItem("highestLevelBeat")) || 0;
@@ -182,7 +184,7 @@ function draw() {
 	player.checkCollisionProjectiles(inkProjectiles);
 	player.drawRudderAndSails();
 	player.checkCollisionTreasureIslands(gameObjects);
-
+	console.log("on level: " + player.currentLevel);
 	boss.drawBoss();
 	boss.checkCollisionProjectiles(projectiles);
 
@@ -219,6 +221,14 @@ function draw() {
 			}
 		});
 
+
+		if (delozierMode) {
+			for (let i = 0; i < Math.PI * 2; i += Math.PI / 10) {
+				let tmpProjectile = new Projectile(player.x, player.y, i + projectileOffset, 1, 0, 0, projectileImage);
+				projectiles.push(tmpProjectile);
+			}
+			projectileOffset += Math.PI / 25;
+		}
 
 	if (projectileFrameCount % 30 === 0 && !delozierMode) {
 		extraMove = player.getMovementOfPlayer();
