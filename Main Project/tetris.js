@@ -66,6 +66,10 @@ function applyInput(newDelay) {
 function keyPressed() {
   if (keyCode == 32) this.tetris.pause = !this.tetris.pause;
   if (keyCode == 13) this.tetris.restart = true;
+  if (keyCode == 69) {
+    this.tetris.gameOver = true;
+    this.tetris.scoreAdded = false;
+  }
   keyPressUp |= keyCode === UP_ARROW;
   keyPressDown |= keyCode === DOWN_ARROW;
   keyPressLeft |= keyCode === LEFT_ARROW;
@@ -135,6 +139,15 @@ class Tetris {
     if (this.pause) {
       return;
     }
+
+    if (this.gameOver) {
+      if (!this.scoreAdded) {
+        addScoreToCoins(player);
+        this.scoreAdded = true;
+      }
+      return;
+    }
+
     // Spawn new shape
     if (this.spawn) {
       this.pickNextShape();
@@ -142,23 +155,17 @@ class Tetris {
       this.shapesCount++;
       this.spawn = false;
     }
+
     // Update level/rows/difficulty
     this.level += floor(this.rowsCompleted / this.rowsPerLevel);
     this.rowsCompleted %= this.rowsPerLevel;
     this.timer.duration = ceil(800 / sqrt(this.level));
-    // Game over check
-    this.gameOver = this.tGrid.collision(0, 0);
-    if (this.gameOver) {
-      if (!this.scoreAdded) {
-          addScoreToCoins(player); // Use the method to add score to coins
-          this.scoreAdded = true; // Set the flag to true to prevent multiple additions
-      }
-      return;
-  }
+
     // Apply user input: transforms
     if (this.rotate) this.tGrid.rotateShape();
     if (!this.tGrid.collision(this.tx, 0)) this.tGrid.sx += this.tx;
     if (!this.tGrid.collision(0, this.ty)) this.tGrid.sy += this.ty;
+
     // Apply game step
     if (this.timer.updateStep()) {
       if (!this.tGrid.collision(0, 1)) {
@@ -171,6 +178,7 @@ class Tetris {
         this.spawn = true;
       }
     }
+
     // Reset transforms
     this.rotate = false;
     this.tx = this.ty = 0;
@@ -239,7 +247,7 @@ class Tetris {
     if (this.gameOver) txtGameStatus = "YOU EARNED " + score + " COINS!";
     if (this.pause) txtGameStatus = "PAUSE";
     if (txtGameStatus !== undefined) {
-      canvas.textSize(144);
+      canvas.textSize(100);
       canvas.textAlign(CENTER, CENTER);
       canvas.noStroke();
       canvas.fill(0, 0, 0);
@@ -252,6 +260,17 @@ class Tetris {
       var ty = canvasH - 6 * 15 - off;
       var tx1 = x + w + 40;
       var tx2 = tx1 + 70;
+      var boxPadding = 10;
+
+      // box dimensions
+      var boxWidth = tx2 + 120 - tx1;
+      var boxHeight = 15 * 7 + 30;
+
+      // Draw the box
+      canvas.noStroke();
+      canvas.fill(200);
+      canvas.rect(tx1 - boxPadding, ty - 15 - boxPadding, boxWidth + boxPadding * 2, boxHeight + boxPadding * 2);
+
       canvas.textAlign(LEFT);
       canvas.noStroke();
       canvas.textSize(14);
@@ -268,11 +287,14 @@ class Tetris {
       canvas.text("DOWN", tx1, ty);
       canvas.text("- MOVE DOWN", tx2, ty);
       ty += 25;
+      canvas.text("ENTER", tx1, ty);
+      canvas.text("- RESTART", tx2, ty);
+      ty += 15;
       canvas.text("SPACE", tx1, ty);
       canvas.text("- PAUSE", tx2, ty);
       ty += 15;
-      canvas.text("ENTER", tx1, ty);
-      canvas.text("- RESTART", tx2, ty);
+      canvas.text("E", tx1, ty);
+      canvas.text("- END GAME", tx2, ty);
       ty += 15;
     }
   }
@@ -471,7 +493,7 @@ class TGrid {
       if (rowCompleted) {
         this.grid.copyWithin(this.nx, 0, gy * this.nx);
         rows++;
-        score++;
+        score += 10;
         console.log(score);
       }
     }
