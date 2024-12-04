@@ -79,7 +79,7 @@ function setup() {
     const defeatMessage = document.getElementById('defeat-message');
 
     // Initialize the boss with the new constructor
-    boss = new Boss(300, 300, 1, healthBarContainer, healthBar, defeatMessage); // Example position and health
+    boss = new Boss(300, 300, 20, healthBarContainer, healthBar, defeatMessage); // Example position and health
 	boss.bossImage = bossImage;
 	
 	 setInterval(() => {

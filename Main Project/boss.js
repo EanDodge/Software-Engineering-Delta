@@ -4,7 +4,7 @@ class Boss {
        this.x = x;
 	   this.y = y;
         this.size = 150; // Boss size
-        this.currencyValue = 50; // Boss currency value
+        this.currencyValue = 100; // Boss currency value
         this.attackCooldown = 0; // Cooldown for attacks
 		this.lastAttackTime = 0;
 		this.bossImage;
