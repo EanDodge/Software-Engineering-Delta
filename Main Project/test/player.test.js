@@ -1,4 +1,4 @@
-const Player = require('../player');
+const { Player } = require('../player.js');
 const GameObject = require('../gameObject');
 const Enemy = require('../enemy');
 const puppeteer = require('puppeteer');

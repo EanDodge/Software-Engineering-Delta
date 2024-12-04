@@ -121,9 +121,16 @@ function setup() {
 
 	if (selectedLevel == 1 || selectedLevel == 2) {
 		goal = new GameObject(mapXSize / 2, mapYSize - 100, 100, 100);
+		if (selectedLevel == 1) {
+			goal.battle = "./cortanaFight.html";
+		}
+		if (selectedLevel == 2) {
+			goal.battle = "./bossFight.html";
+		}
 	}
 	else if (selectedLevel == 3) {
 		goal = new GameObject(mapXSize - 100, mapYSize / 2, 100, 100);
+		
 	}
 	else if (selectedLevel == 4) {
 		goal = new GameObject(100, mapYSize / 2, 100, 100);

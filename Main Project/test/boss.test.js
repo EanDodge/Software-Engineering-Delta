@@ -1,5 +1,5 @@
 const  Boss  = require('../boss');
-const  Player  = require('../player');
+const { Player } = require('../player.js');
 const  Projectile  = require('../projectile');
 
 // Mock localStorage

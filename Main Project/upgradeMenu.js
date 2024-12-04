@@ -32,7 +32,7 @@ class Upgrade {
 
 class ArmorUpgrade extends Upgrade {
     constructor() {
-        super('armor', [1, 2, 3, 4, 5, 6], ["a", "b", "c", "d", "e", "f"]);
+        super('armor', [10, 15, 20, 25, 30, 35], ["a", "b", "c", "d", "e", "f"]);
     }
 
     applyUpgradeEffect(tier) {
@@ -43,7 +43,7 @@ class ArmorUpgrade extends Upgrade {
 
 class CannonsUpgrade extends Upgrade {
     constructor() {
-        super('cannons', [2, 3, 4, 5, 6, 7], ["a", "b", "c", "d", "e", "f"]);
+        super('cannons', [10, 15, 20, 25, 30, 35], ["a", "b", "c", "d", "e", "f"]);
     }
 
     applyUpgradeEffect(tier) {
@@ -68,7 +68,7 @@ class CannonsUpgrade extends Upgrade {
 
 class AmmoCapacityUpgrade extends Upgrade {
     constructor() {
-        super('ammo', [4, 5, 6, 7, 8, 9], ["a", "b", "c", "d", "e", "f"]);
+        super('ammo', [10, 15, 20, 25, 30, 35], ["a", "b", "c", "d", "e", "f"]);
     }
 
     applyUpgradeEffect(tier) {
@@ -79,7 +79,7 @@ class AmmoCapacityUpgrade extends Upgrade {
 
 class SpeedUpgrade extends Upgrade {
     constructor() {
-        super('speed', [3, 4, 5, 6, 7, 8], ["a", "b", "c", "d", "e", "f"]);
+        super('speed', [10, 15, 20, 25, 30, 35], ["a", "b", "c", "d", "e", "f"]);
     }
 
     applyUpgradeEffect(tier) {

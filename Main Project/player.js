@@ -629,3 +629,6 @@ if (typeof document !== 'undefined') {
     });
 }
 
+
+module.exports = { Player };
+

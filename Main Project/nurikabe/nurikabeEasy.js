@@ -354,7 +354,7 @@ async function winnerText() {
   winner = createDiv(`
     <h2>Congrats!</h2>
     <p>You have opened the treasure chest.</p>
-    <p>You've earned ${coins_earned} doubloons!</p>
+    <p>You've earned ${50} doubloons!</p>
   `).id(`completionText`);
   // After creating the element, add an id to it
   winner.style('font-size', '16px');
@@ -384,7 +384,7 @@ async function winnerText() {
 
   await new Promise(r => setTimeout(r, 5000)); //wait a sec or two
 
-  player.gainCurrency(coins_earned); //give player their currency
+  player.gainCurrency(50); //give player their currency
   player.updateCoinCount();
   window.location.href = "../islandIndex.html"; //send user back to upgrade island
 }
