@@ -15,7 +15,7 @@ let minions = [];
 let inkProjectiles = [];
 let tentacles = [];
 let boss;
-
+let windVane;
 const selectedLevel = parseInt(localStorage.getItem("selectedLevel")) || 1;
 const highestLevelBeat = parseInt(localStorage.getItem("highestLevelBeat")) || 0;
 
@@ -36,9 +36,8 @@ let projectileOffset = 0;
  let bossImage;
  let minionImage;
  let projectileImage;
-
+ let windVaneImage;
  let inkEffectDuration = 0;
-
 
 
  function preload() {
@@ -52,6 +51,7 @@ let projectileOffset = 0;
 	 tentacleImage = loadImage('./assets/tentacle.png');	
 	 backgroundMusic = loadSound('./music/PirateLoop.wav');
 	 projectileImage = loadImage('./assets/cannon.png');
+	 windVaneImage = loadImage('./assets/weathervane.png');
  }
 
  function loadMusic() {
@@ -99,6 +99,9 @@ function setup() {
         }
     }, 5000); // 5000 milliseconds = 5 seconds
 
+	//initialize wind vane
+	windVane = new WindVane();
+	windVane.img = windVaneImage;
 	// Draw and move minions
     
 	//camera to follow player
@@ -169,15 +172,16 @@ function draw() {
 
 	// 	enemyFrameCount = 0;
 	//}
-
-	
+	windVane.update();
+	windVane.show();
+		
 
 	controllerInput();
 
 	
 
 	player.drawPlayer();
-	player.movePlayer();
+	player.movePlayer(windVane.windAngle);
 	player.checkCollisionEnemies(minions);
 	player.checkCollisionProjectiles(inkProjectiles);
 	player.drawRudderAndSails();
@@ -291,7 +295,8 @@ function draw() {
 
 	console.log("Player currency: " + player.currency);
 
-	
+	windVane.update();
+	windVane.show();	
 }
 // Function to check collision between ink projectile and player
 function checkCollision(ink, player) {
