@@ -471,7 +471,7 @@ class TGrid {
       if (rowCompleted) {
         this.grid.copyWithin(this.nx, 0, gy * this.nx);
         rows++;
-        score++;
+        score += 10;
         console.log(score);
       }
     }

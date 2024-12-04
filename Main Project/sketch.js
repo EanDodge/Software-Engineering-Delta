@@ -118,7 +118,8 @@ function setup() {
 
 	//sets the standard frame rate to 45fps
 	frameRate(45);
-
+	
+	
 	if (selectedLevel == 1 || selectedLevel == 2) {
 		goal = new GameObject(mapXSize / 2, mapYSize - 100, 100, 100);
 		if (selectedLevel == 1) {
@@ -129,8 +130,9 @@ function setup() {
 		}
 	}
 	else if (selectedLevel == 3) {
+		console.log("in level 3");
 		goal = new GameObject(mapXSize - 100, mapYSize / 2, 100, 100);
-		
+		goal.battle = "./gregladonFight.html";
 	}
 	else if (selectedLevel == 4) {
 		goal = new GameObject(100, mapYSize / 2, 100, 100);
@@ -238,8 +240,14 @@ function draw() {
 	rotate(-windAngle);
 	triangle(-25, 25, 0, -25, 25, 25);
 	pop();
-
+	console.log("selected level: " + player.currentLevel);
 	if (selectedLevel == 1 || selectedLevel == 2) {
+		if(selectedLevel == 1){
+			player.currentLevel = 1;
+		}
+		if(selectedLevel == 2){
+			player.currentLevel = 2;
+		}
 		let enemySpawnTimer = 250;
 		if (enemyFrameCount % enemySpawnTimer === 0) {
 			let enemy = new Enemy(Math.random() * mapXSize, player.y + 350, enemyHealth, enemyImage);
@@ -248,6 +256,7 @@ function draw() {
 		}
 	}
 	if (selectedLevel == 3) {
+		player.currentLevel = 3;
 		let enemySpawnTimer = 250;
 		if (enemyFrameCount % enemySpawnTimer === 0) {
 			let enemy = new Enemy(player.x + 500, Math.random() * mapYSize, enemyHealth, enemyImage);

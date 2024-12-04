@@ -16,6 +16,7 @@ let minions = [];
 let inkProjectiles = [];
 let harpoons = [];
 let boss;
+let projectileOffset = 0;
 
 
 
@@ -34,6 +35,7 @@ let projectileFrameCount = 0;
  let bossImage;
  let minionImage;
  let projectileImage;
+ let gregladonImage;
 
  let inkEffectDuration = 0;
 
@@ -51,7 +53,7 @@ let projectileFrameCount = 0;
 	 backgroundMusic = loadSound('./music/PirateLoop.wav');
 	 cannonBallImage = loadImage('./assets/sharkTooth.png');
 	 projectileImage = loadImage('./assets/cannon.png');
-
+	 gregladonImage = loadImage('./assets/gregladon.png');
  }
 
  function loadMusic() {
@@ -83,6 +85,7 @@ function setup() {
     boss = new Boss(450, 250, 30, healthBarContainer, healthBar, defeatMessage); // Example position and health
 
 	boss.bossImage = bossImage;
+	boss.gregladonImage = gregladonImage;
 	
 	 
 	// Draw and move minions
@@ -128,6 +131,7 @@ function draw() {
 
 	setInterval(() => {
         const attack = boss.attack(player, minionImage, tentacleImage, inkProjectiles, cannonBallImage, harpoons);
+		//console.log("porjectile count" + inkProjectiles.length);
 		//console.log("harpoon array size at attack invocation: " + harpoons.length);
         if (attack) {
             if (Array.isArray(attack)) {
@@ -141,7 +145,13 @@ function draw() {
         }
     }, 5000); // 5000 milliseconds = 5 seconds
 
-	
+	if (delozierMode) {
+		for (let i = 0; i < Math.PI * 2; i += Math.PI / 10) {
+			let tmpProjectile = new Projectile(player.x, player.y, i + projectileOffset, 1, 0, 0, projectileImage);
+			projectiles.push(tmpProjectile);
+		}
+		projectileOffset += Math.PI / 25;
+	}
 
 	player.drawPlayer();
 	player.movePlayer();
@@ -150,9 +160,11 @@ function draw() {
 	player.drawRudderAndSails();
 	player.checkCollisionTreasureIslands(gameObjects);
 
+	boss.moveBoss(player, gregladonImage);
 	boss.drawBoss();
-	boss.moveBoss(player);
 	boss.checkCollision(projectiles, player);
+	
+	
 	
 
 	minions.forEach((minion, index) => {
@@ -166,15 +178,16 @@ function draw() {
 	});
 
 	// Draw and move ink projectiles
-	
+		//console.log("Ink projectile array size: " + inkProjectiles.length);
 		inkProjectiles.forEach((ink, index) => {
 			ink.image = cannonBallImage;
-			ink.move();
 			ink.draw();
+			ink.move();
+			
 			if (checkCollision(ink, player)) {
 				player.inked = true;
-				inkEffectDuration = 3000; // 3 seconds
-				inkProjectiles.splice(index, 1); // Remove the ink projectile after collision
+				//inkEffectDuration = 3000; // 3 seconds
+				//inkProjectiles.splice(index, 1); // Remove the ink projectile after collision
 				player.takeDamage(ink.damage);
 				console.log("I've been hit! Health: " + player.health);
 			}
@@ -243,7 +256,13 @@ function draw() {
 	//MUST BE 801 FOR 2d LINES TO RENDER ABOVE IMAGES
 	cam.setPosition(player.x, player.y, 801);
 
-	player.checkPlayerDeath();
+	player.checkPlayerDeath(true);
+	if (!player.isAlive) {
+		setTimeout(() => {
+			noLoop(); // Stop the draw loop after 3 seconds
+			console.log("Game stopped after 3 seconds");
+		}, 3000); // 3000 milliseconds = 3 seconds
+	}
 
 	frameCount++;
 	projectileFrameCount++;

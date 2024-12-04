@@ -10,6 +10,7 @@ let gameObjects = [];
 let projectiles = [];
 
 let frameCount = 0;
+let projectileOffset = 0;
 
 
 let minions = [];
@@ -147,7 +148,7 @@ function draw() {
 	player.movePlayer();
 	player.checkCollisionEnemies(minions);
 	player.checkCollisionProjectiles(inkProjectiles);
-	//player.drawRudderAndSails();
+	player.drawRudderAndSails();
 	player.checkCollisionTreasureIslands(gameObjects);
 
 	boss.drawBoss();
@@ -162,6 +163,14 @@ function draw() {
 			player.gainCurrency(minion.currencyValue);
 		}
 	});
+
+	if (delozierMode) {
+		for (let i = 0; i < Math.PI * 2; i += Math.PI / 10) {
+			let tmpProjectile = new Projectile(player.x, player.y, i + projectileOffset, 1, 0, 0, projectileImage);
+			projectiles.push(tmpProjectile);
+		}
+		projectileOffset += Math.PI / 25;
+	}
 
 	// Draw and move ink projectiles
 	
