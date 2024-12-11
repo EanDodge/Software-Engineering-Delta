@@ -1,7 +1,7 @@
 const mapXSize = 1000;
 const mapYSize = 1000;
 
-let player = new Player(mapXSize/2 + 100, mapYSize/2 - 100);
+let player = new Player(450, 650);
 let enemies = [];
 
 let gameObjects = [];
@@ -10,16 +10,13 @@ let projectiles = [];
 
 let frameCount = 0;
 
+
 let minions = [];
 let inkProjectiles = [];
-let tentacles = [];
+let harpoons = [];
 let boss;
+let projectileOffset = 0;
 
-
-
-
-const selectedLevel = parseInt(localStorage.getItem("selectedLevel")) || 1;
-const highestLevelBeat = parseInt(localStorage.getItem("highestLevelBeat")) || 0;
 
 
 let enemySpawnNumber = parseInt(localStorage.getItem("enemySpawnNumber")) || 0;
@@ -29,7 +26,6 @@ let enemyHealth = parseInt(localStorage.getItem("enemyHealth")) || 1;
 // % can return true because frame count isnt back to 0
 let enemyFrameCount = 0;
 let projectileFrameCount = 0;
-let projectileOffset = 0;
 
  //let playerImage; made playerimage part of the player object
  let islandImage;
@@ -38,22 +34,25 @@ let projectileOffset = 0;
  let bossImage;
  let minionImage;
  let projectileImage;
+ let gregladonImage;
 
  let inkEffectDuration = 0;
 
 
 
  function preload() {
-     player.playerImage = loadImage('./assets/shiplvl1Base.png');
-	 player.sailImage = loadImage('./assets/shiplvl1FrontSail.png')
-	 islandImage = loadImage('./assets/island.png');
+	player.playerImage = loadImage('./assets/shiplvl1Base.png');
+	player.sailImage = loadImage('./assets/shiplvl1FrontSail.png');
+	islandImage = loadImage('./assets/island.png');
 	 //backgroundImage = loadImage('./assets/sea.png');
 	 enemyImage = loadImage('./assets/shiplvl2Top.png');
-	 bossImage = loadImage('./assets/krakenDelozier.png');
-	 minionImage = loadImage('./assets/kraken.png');
+	 bossImage = loadImage('./assets/gregladonSide.png');
+	 minionImage = loadImage('./assets/shark.gif');
 	 tentacleImage = loadImage('./assets/tentacle.png');	
 	 backgroundMusic = loadSound('./music/PirateLoop.wav');
+	 cannonBallImage = loadImage('./assets/sharkTooth.png');
 	 projectileImage = loadImage('./assets/cannon.png');
+	 gregladonImage = loadImage('./assets/gregladon.png');
  }
 
  function loadMusic() {
@@ -81,26 +80,13 @@ function setup() {
     const defeatMessage = document.getElementById('defeat-message');
 
     // Initialize the boss with the new constructor
-    boss = new Boss(300, 300, 40, healthBarContainer, healthBar, defeatMessage); // Example position and health
-	boss.bossImage = bossImage;
-	
-	 setInterval(() => {
-        const attack = boss.attack(player, minionImage, tentacleImage);
-        if (attack) {
-            if (Array.isArray(attack)) {
-				// for (let i = 0; i < attack.length; i++) {
-				// 	attack[i].playerImage = minionImage;
-				// 	attack[i].string = "minion";
-				// }
-                minions = minions.concat(attack);
-            } else if (attack.move) {
-                inkProjectiles.push(attack);
-            } else if (attack.draw) {
-                tentacles.push(attack);
-            }
-        }
-    }, 5000); // 5000 milliseconds = 5 seconds
 
+    boss = new Boss(450, 250, 40, healthBarContainer, healthBar, defeatMessage); // Example position and health
+
+	boss.bossImage = bossImage;
+	boss.gregladonImage = gregladonImage;
+	
+	 
 	// Draw and move minions
     
 	//camera to follow player
@@ -125,7 +111,7 @@ function setup() {
 function draw() {
 	background(0, 0, 0, 0);
 	//image(backgroundImage, mapXSize / 2 - mapXSize, mapYSize / 2 - mapYSize, mapXSize * 2, mapYSize * 2);
-
+	//console.log("harpoon size outside attack: " + harpoons.length);
 	//border lines
 	stroke(255, 255, 255);
 	line(0, mapXSize, 0, 0);
@@ -138,45 +124,33 @@ function draw() {
         gameObject.drawObject();
     });
 
-	//enemy generation
-	// enemyFrameCount = 200 - (enemySpawnNumber/2)^1.5
-	// y = 200 - (x/2)^1.5 if want to graph
-	//let enemySpawnTimer = 200 - Math.ceil(Math.pow(enemySpawnNumber, 2));
-	// if (enemyFrameCount % enemySpawnTimer === 0) {
-	// 	let generateXFirst = Math.random() > 0.5;
-	// 	let rand1;
-	// 	let rand2;
-	// 	if (generateXFirst) {
-	// 		rand1 = Math.random() * mapXSize;
-	// 		rand2 = Math.random() > 0.5 ? mapYSize + 20 : -20;
-	// 	}
-	// 	else {
-	// 		rand2 = Math.random() * mapYSize;
-	// 		rand1 = Math.random() > 0.5 ? mapXSize + 20 : -20;
-	// 	}
-	// 	let enemy = new Enemy(rand1, rand2, enemyHealth, enemyImage);
-	// 	enemies.push(enemy);
-
-	// 	// parabolic generation
-	// 	// cap of spawn every 100 frames (can be generated into less)
-	// 	if (enemySpawnTimer > 100) {
-	// 		enemySpawnNumber++;
-	// 	} else {
-	// 		enemyHealth++;
-	// 		enemySpawnNumber = 0;
-	// 	}
-
-	// 	localStorage.setItem("enemySpawnNumber", enemySpawnNumber);
-	// 	localStorage.setItem("enemyHealth", enemyHealth);
-
-	// 	enemyFrameCount = 0;
-	//}
-
 	
 
 	controllerInput();
 
-	
+	setInterval(() => {
+        const attack = boss.attack(player, minionImage, tentacleImage, inkProjectiles, cannonBallImage, harpoons);
+		//console.log("porjectile count" + inkProjectiles.length);
+		//console.log("harpoon array size at attack invocation: " + harpoons.length);
+        if (attack) {
+            if (Array.isArray(attack)) {
+				// for (let i = 0; i < attack.length; i++) {
+				// 	attack[i].playerImage = minionImage;
+				// 	attack[i].string = "minion";
+				// }
+                minions = minions.concat(attack);
+				console.log("Spawning minions");
+            } 
+        }
+    }, 5000); // 5000 milliseconds = 5 seconds
+
+	if (delozierMode) {
+		for (let i = 0; i < Math.PI * 2; i += Math.PI / 10) {
+			let tmpProjectile = new Projectile(player.x, player.y, i + projectileOffset, 1, 0, 0, projectileImage);
+			projectiles.push(tmpProjectile);
+		}
+		projectileOffset += Math.PI / 25;
+	}
 
 	player.drawPlayer();
 	player.movePlayer();
@@ -184,9 +158,13 @@ function draw() {
 	player.checkCollisionProjectiles(inkProjectiles);
 	player.drawRudderAndSails();
 	player.checkCollisionTreasureIslands(gameObjects);
-	console.log("on level: " + player.currentLevel);
+
+	boss.moveBoss(player, gregladonImage);
 	boss.drawBoss();
-	boss.checkCollisionProjectiles(projectiles);
+	boss.checkCollision(projectiles, player);
+	
+	
+	
 
 	minions.forEach((minion, index) => {
 		minion.drawMinion();
@@ -199,38 +177,33 @@ function draw() {
 	});
 
 	// Draw and move ink projectiles
+		//console.log("Ink projectile array size: " + inkProjectiles.length);
 		inkProjectiles.forEach((ink, index) => {
-			ink.move();
+			ink.image = cannonBallImage;
 			ink.draw();
+			ink.move();
+			
 			if (checkCollision(ink, player)) {
 				player.inked = true;
-				inkEffectDuration = 3000; // 3 seconds
-				inkProjectiles.splice(index, 1); // Remove the ink projectile after collision
+				//inkEffectDuration = 3000; // 3 seconds
+				//inkProjectiles.splice(index, 1); // Remove the ink projectile after collision
 				player.takeDamage(ink.damage);
 				console.log("I've been hit! Health: " + player.health);
 			}
 		});
-
-		// Draw tentacles and remove them after 1 second
-		tentacles.forEach((tentacle, index) => {
-			if (tentacle.isExpired()) {
-				tentacles.splice(index, 1); // Remove the tentacle after 1 second
-			} else {
-				tentacle.draw();
-				tentacle.hitPlayer();
-			}
+		//console.log("harpoon array size: " + harpoons.length);
+		// Draw harpoons and remove them after 1 second
+		
+		harpoons.forEach((harpoon, index) => {
+				harpoon.draw();
+				player.checkCollisionHarpoon(harpoon);
+				setTimeout(() => {
+					harpoons.splice(index, 1);
+				}, 1000);
 		});
 
 
-		if (delozierMode) {
-			for (let i = 0; i < Math.PI * 2; i += Math.PI / 10) {
-				let tmpProjectile = new Projectile(player.x, player.y, i + projectileOffset, 1, 0, 0, projectileImage);
-				projectiles.push(tmpProjectile);
-			}
-			projectileOffset += Math.PI / 25;
-		}
-
-	if (projectileFrameCount % 30 === 0 && !delozierMode) {
+	if (projectileFrameCount % 30 === 0) {
 		extraMove = player.getMovementOfPlayer();
 		extraXMove = extraMove[0];
         extraYMove = extraMove[1];
@@ -240,14 +213,6 @@ function draw() {
 		projectiles.push(tmpProjectile2);
 
 		projectileFrameCount = 0;
-	}
-
-	if (delozierMode) {
-		for (let i = 0; i < Math.PI * 2; i += Math.PI / 10) {
-			let tmpProjectile = new Projectile(player.x, player.y, i + projectileOffset, 1, 0, 0, projectileImage);
-			projectiles.push(tmpProjectile);
-		}
-		projectileOffset += Math.PI / 25;
 	}
 
 	projectiles.forEach((projectile, index) => {
@@ -280,12 +245,9 @@ function draw() {
 		player.gainCurrency(boss.currencyValue);
 		console.log("Player received " + boss.currencyValue + " currency. Total: " + player.currency);
 		boss.awardReceived = true;
-		if (selectedLevel == highestLevelBeat + 1) {
-			localStorage.setItem('highestLevelBeat', toString(highestLevelBeat + 1))
-		}
 		
 		 // Create and display the island GameObject
-		 const island = new GameObject(500, 500); // Adjust position as needed
+		 const island = new GameObject(450, 150); // Adjust position as needed
 		 island.islandImage = islandImage; // Assuming GameObject has an image property
 		 gameObjects.push(island);
 	}
@@ -293,7 +255,13 @@ function draw() {
 	//MUST BE 801 FOR 2d LINES TO RENDER ABOVE IMAGES
 	cam.setPosition(player.x, player.y, 801);
 
-	player.checkPlayerDeath();
+	player.checkPlayerDeath(true);
+	if (!player.isAlive) {
+		setTimeout(() => {
+			noLoop(); // Stop the draw loop after 3 seconds
+			console.log("Game stopped after 3 seconds");
+		}, 3000); // 3000 milliseconds = 3 seconds
+	}
 
 	frameCount++;
 	projectileFrameCount++;

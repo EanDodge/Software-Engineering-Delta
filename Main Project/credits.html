@@ -21,6 +21,11 @@
           background-image: url('./assets/harbor3.png');
           background-size: cover;
           background-repeat: no-repeat; 
+          margin: 0;
+          padding: 0;
+          font-family: Arial, sans-serif;
+          color: white; /* White text for contrast */
+          text-align: center;
         } 
         button {
             display: block;
@@ -39,7 +44,160 @@
         button:hover {
             background-color: #2c1f04;
         }
+        .main-container {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            color: white;
+            padding-left: 100px;
+            padding-right: 100px;
+            padding-top: 20px;
+            padding-bottom: 50px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 4rem; /* Make the title large */
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5); /* Add a shadow for pop */
+            margin-bottom: 30px;
+        }
+
+        .credits-list {
+            list-style: none; /* Remove bullet points */
+            padding: 0;
+            margin: 0;
+            font-size: 1.5rem; /* Increase font size */
+            line-height: 1.5; /* Add spacing between names */
+        }
+
+        .credits-list li {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+            transition: transform 0.3s, color 0.3s; /* Add hover effects */
+            cursor: pointer;
+        }
+
+        .credits-list li:hover {
+            color: #ffde59; /* Highlight name on hover */
+            transform: scale(1.1); /* Slightly enlarge the name */
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* On top of everything */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.8); /* Black with transparency */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            padding-bottom: 69px; /* Nice */
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .modal-content h3 {
+            font-size: 1.5rem;
+            margin: 10px 0;
+            padding: 0;
+        }
+
+        .modal-content p {
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
+
+    <div class="main-container">
+      <h1>Credits</h1>
+      <h2 style="font-size: 2rem; margin-bottom: 10px"><u>Team Members:</u></h2>
+      <ul class="credits-list">
+          <li data-accomplishment="Movement, Collision, Test Framework, Upgrade Island Team">Matthew Crosby</li>
+          <li data-accomplishment="Tetris Puzzle">Sharon Dasari</li>
+          <li data-accomplishment="Worked GitHub, Main Screen/Tutorial, Bug Fixing">Ean Dodge</li>
+          <li data-accomplishment="Architectural Documentation, UML Diagram">Evan Kidd</li>
+          <li data-accomplishment="Wind Dynamics, Other Cosmetics">Keegan Knapp</li>
+          <li data-accomplishment="Controller/Gamepad Support">Moamen Mahmoud</li>
+          <li data-accomplishment="Art Assets, Asset Architecture, CSS Puzzle Styling ">Maxim Mamotlivi</li>
+          <li data-accomplishment="Nurikabe Puzzle, Music, Weekly Burndown Chart, Weekly Documentation, Hint Upgrade, Credits Page">Seth Opatz</li>
+          <li data-accomplishment="Sudoku Puzzle, Server Hosting">Brody Peelman</li>
+          <li data-accomplishment="Level Design/Implementation, Wind Implementation Help">Brent Warring</li>
+          <li data-accomplishment="Wind Implementation, Boss Design/Implementation">Jacob Welch</li>
+          <li data-accomplishment="Upgrade / Main Island lead">Nick Widmer</li>
+          <h2 style="font-size: 2rem; margin-bottom: 10px"><u>Special Thanks:</u></h2>
+          <li data-accomplishment="Stakeholder/Test Subject, QA Tester, Feedback">MK2 Geoffrey Kansa USCG</li>
+      </ul>
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="popupModal" class="modal">
+      <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2 id="modalName"></h2>
+          <h3 style="color: black">Contributions:</h3>
+          <p id="modalAccomplishment"></p>
+      </div>
+    </div>
+
+    <script>// Get all list items and the modal elements
+        const names = document.querySelectorAll('.credits-list li');
+        const modal = document.getElementById('popupModal');
+        const modalName = document.getElementById('modalName');
+        const modalAccomplishment = document.getElementById('modalAccomplishment');
+        const closeModal = document.querySelector('.close');
+        
+        // Add a click event to each name
+        names.forEach((name) => {
+            name.addEventListener('click', () => {
+                const accomplishment = name.getAttribute('data-accomplishment');
+                modalName.textContent = name.textContent; // Set the name in the modal
+                modalAccomplishment.textContent = accomplishment; // Set the accomplishment
+                modal.style.display = 'block'; // Show the modal
+            });
+        });
+        
+        // Close the modal when the close button is clicked
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+        
+        // Close the modal when clicking outside of it
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+      </script>
 </body>
 
 </html>

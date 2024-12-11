@@ -36,7 +36,8 @@ class Player {
         this.rudderAngle = 0;
         this.sailAngle = Math.PI;
         this.isAlive = true;
-
+		this.currentLevel = 1;
+		this.isCortana = false;
 
     }
 
@@ -322,22 +323,25 @@ class Player {
         islands.forEach((island, index) => {
             if(this.isColliding(island)) {
                 colliding = true;
-                const randomNumber = Math.floor(Math.random() * 3);
+                
 
-				// Use a switch statement to set window.location.href
-				switch (randomNumber) {
-					case 0:
-						window.location.href = './nurikabe/nurikabeEasy.html';
-						break;
-					case 1:
-						window.location.href = './Sudoku/sudoku.html';
-						break;
-					case 2:
-						window.location.href = './tetris.html';
-						break;
-					default:
-						console.error('Unexpected random number:', randomNumber);
-				}
+				// Generate a random number between 0 and 2
+			let randomNum = Math.floor(Math.random() * 3);
+
+			// Use a switch statement to handle the different cases
+			switch (randomNum) {
+				case 0:
+					window.location.href = './Sudoku/sudoku.html';
+					break;
+				case 1:
+					window.location.href = './nurikabe/nurikabeEasy.html';
+					break;
+				case 2:
+					window.location.href = 'tetris.html';
+					break;
+				default:
+					console.error('Unexpected random number:', randomNum);
+			}
             }
         });
         return colliding;
@@ -520,18 +524,24 @@ class Player {
         });
     }
 
-    checkPlayerDeath() {
+    checkPlayerDeath(isGregladon) {
         if (this.health <= 0) {
             console.log("Player has died");
             const gameOverModal = document.getElementById('gameOverModal');
             if (gameOverModal) {
-                gameOverModal.style.display = 'block'; // Show game over modal
-                this.isAlive = false;
-            } else {
-                console.error("Game over modal element not found");
-            }
-        }
-    }
+				if (isGregladon) {
+					setTimeout(() => {
+						gameOverModal.style.display = 'block'; // Show game over modal after 2 seconds
+					}, 2000); // 2000 milliseconds = 2 seconds
+				} else {
+					gameOverModal.style.display = 'block'; // Show game over modal immediately
+				}
+				this.isAlive = false;
+			} else {
+				console.error("Game over modal element not found");
+			}
+		}
+	}
 
     updateAnglesDisplay() {
         document.getElementById('sailAngleDisplay').innerText = `Sail Angle: ${this.sailAngle.toFixed(2)}`;

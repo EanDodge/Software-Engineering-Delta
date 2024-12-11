@@ -3,6 +3,7 @@ const mapYSize = 1000;
 
 let player = new Player(450, 650);
 
+
 let enemies = [];
 
 let gameObjects = [];
@@ -10,6 +11,7 @@ let gameObjects = [];
 let projectiles = [];
 
 let frameCount = 0;
+let projectileOffset = 0;
 
 
 let minions = [];
@@ -46,7 +48,7 @@ let projectileFrameCount = 0;
 	 //backgroundImage = loadImage('./assets/sea.png');
 	 enemyImage = loadImage('./assets/shiplvl2Top.png');
 	 bossImage = loadImage('./assets/gregarious.png');
-	 minionImage = loadImage('./assets/shiplvl2Side.png');
+	 minionImage = loadImage('./assets/shiplvl2Top.png');
 	 tentacleImage = loadImage('./assets/tentacle.png');	
 	 backgroundMusic = loadSound('./music/PirateLoop.wav');
 	 cannonBallImage = loadImage('./assets/cannon.png');
@@ -147,7 +149,7 @@ function draw() {
 	player.movePlayer();
 	player.checkCollisionEnemies(minions);
 	player.checkCollisionProjectiles(inkProjectiles);
-	//player.drawRudderAndSails();
+	player.drawRudderAndSails();
 	player.checkCollisionTreasureIslands(gameObjects);
 
 	boss.drawBoss();
@@ -163,6 +165,14 @@ function draw() {
 		}
 	});
 
+	if (delozierMode) {
+		for (let i = 0; i < Math.PI * 2; i += Math.PI / 10) {
+			let tmpProjectile = new Projectile(player.x, player.y, i + projectileOffset, 1, 0, 0, projectileImage);
+			projectiles.push(tmpProjectile);
+		}
+		projectileOffset += Math.PI / 25;
+	}
+
 	// Draw and move ink projectiles
 	
 		inkProjectiles.forEach((ink, index) => {
@@ -171,8 +181,8 @@ function draw() {
 			ink.draw();
 			if (checkCollision(ink, player)) {
 				player.inked = true;
-				inkEffectDuration = 3000; // 3 seconds
-				inkProjectiles.splice(index, 1); // Remove the ink projectile after collision
+				//inkEffectDuration = 3000; // 3 seconds
+				//inkProjectiles.splice(index, 1); // Remove the ink projectile after collision
 				player.takeDamage(ink.damage);
 				console.log("I've been hit! Health: " + player.health);
 			}
